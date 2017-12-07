@@ -22,9 +22,10 @@
             android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:text="@string/text_area_fragment" />
+            android:gravity="center"
+            android:text="@string/text_area_fragment"
+            android:textColor="?android:attr/textColorAlertDialogListItem" />
 
         <Space
             android:layout_width="0dp"
@@ -35,46 +36,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
             android:background="@android:color/transparent"
-            android:src="@android:drawable/btn_star" />
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:src="@mipmap/ic_fragment_area_search_2" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_area_recyclerview_recommend"
-        android:layout_width="0dp"
-        android:layout_height="130dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_area_linearlayout_actionbar" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="121dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="16dp"
-        android:paddingLeft="@dimen/area_fragment_textview_paddingleft"
-        android:text="@string/text_area_fragment"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_area_recyclerview_recommend" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/area_fragment_recyclerview_partition"
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/fragment_area_pullrefresh_refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_area_linearlayout_actionbar">
+
+        <include layout="@layout/fragment_area_item_recommend" />
+    </com.baoyz.widget.PullRefreshLayout>
 
 </android.support.constraint.ConstraintLayout>

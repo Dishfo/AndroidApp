@@ -4,10 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.dishfo.androidapp.R;
 
 /**
@@ -27,6 +29,8 @@ public class AreaFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private PullRefreshLayout mPullRefreshLayout=null;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +69,26 @@ public class AreaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_area, container, false);
+        View view=inflater.inflate(R.layout.fragment_area, container, false);
+        mPullRefreshLayout=view.findViewById(R.id.fragment_area_pullrefresh_refresh);
+        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPullRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+
+        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_RING);
+        return view;
+    }
+
+    private void initContent(View view){
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
