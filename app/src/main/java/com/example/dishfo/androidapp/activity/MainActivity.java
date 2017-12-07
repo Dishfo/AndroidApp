@@ -1,7 +1,9 @@
-package com.example.dishfo.androidapp;
+package com.example.dishfo.androidapp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.dishfo.androidapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
