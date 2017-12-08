@@ -9,19 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.bumptech.glide.Glide;
+
 
 /**
  * Created by apple on 2017/12/7.
  */
 
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity {
 
     private boolean mIsFullScreen = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setImmerseMode(this);
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -31,30 +33,38 @@ public abstract class BaseActivity extends AppCompatActivity{
         initView();
         initData();
     }
+
     public abstract void initView();
+
     public abstract void initData();
 
     public void setImmerseMode(Activity activity) {
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = activity.getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             decorView.setSystemUiVisibility(option);
             activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
-    public void fullScreen(){
-        if(mIsFullScreen){
+
+    public void fullScreen() {
+        if (mIsFullScreen) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
-    public void setIsFullScreen(boolean isFullScreen){
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Glide.get(this).clearMemory();
+    }
+
+    public void setIsFullScreen(boolean isFullScreen) {
         this.mIsFullScreen = isFullScreen;
     }
 
-    public <T extends View> T findView(int id){
+    public <T extends View> T findView(int id) {
         return (T) findViewById(id);
     }
 }
