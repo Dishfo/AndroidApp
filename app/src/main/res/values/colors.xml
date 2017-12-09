@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAreaActionBar">#2fc0ed</color>
-
+    <color name="colorAreaRecycleViewDivider">#d7d4d4</color>
 </resources>

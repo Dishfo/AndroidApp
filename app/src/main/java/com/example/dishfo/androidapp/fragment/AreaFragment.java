@@ -1,16 +1,36 @@
 package com.example.dishfo.androidapp.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.baoyz.widget.RefreshDrawable;
+import com.baoyz.widget.SmartisanDrawable;
 import com.example.dishfo.androidapp.R;
+import com.example.dishfo.androidapp.decoration.GridRecyclerViewDecoration;
+
+import java.util.List;
+
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,16 +45,28 @@ public class AreaFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int RECOMMEND_COUNT=1;
+    private static final int MODULE_COUNT=12;
+    private static final String[] MODULE_TITLE=new String[]{"我关注的人",
+    "我关注的专区","学习天堂","运动广场","旅游天地",
+    "游戏","娱乐","明星","阅读","美食","动漫",""};
+    private  static final int[] MODULE_IC=new int[]{R.mipmap.abc_btn_radio_to_on_mtrl_015};
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private PullRefreshLayout mPullRefreshLayout=null;
-
+    private ListView mListViewRecommend=null;
+    private ListAdapter mListAdapter=null;
+    private ScrollView mScrollView=null;
+    private RecyclerViewAdapter mRecyclerViewAdapter=null;
+    private ImageButton mButtonSearch=null;
+    private RecyclerView mRecyclerViewModule=null;
 
     private OnFragmentInteractionListener mListener;
 
     public AreaFragment() {
+
         // Required empty public constructor
     }
 
@@ -70,24 +102,39 @@ public class AreaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_area, container, false);
-        mPullRefreshLayout=view.findViewById(R.id.fragment_area_pullrefresh_refresh);
-        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPullRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPullRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
-            }
-        });
-
-        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_RING);
+        initContent(view);
         return view;
     }
 
     private void initContent(View view){
+        mScrollView=view.findViewById(R.id.fragment_area_scrollview_container);
+        mListViewRecommend=view.findViewById(R.id.fragment_area_listview_recommend);
+
+        mListAdapter=new ListAdapter(getContext());
+        mRecyclerViewAdapter=new RecyclerViewAdapter(getContext());
+
+        mListViewRecommend.setAdapter(mListAdapter);
+
+        mRecyclerViewModule=view.findViewById(R.id.fragment_area_recyclerview_module);
+        mButtonSearch=view.findViewById(R.id.fragment_area_imagebutton_search);
+
+        mRecyclerViewModule.setLayoutManager(new GridLayoutManager(getContext(),2){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        mRecyclerViewModule.setItemAnimator(new DefaultItemAnimator());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mRecyclerViewModule.addItemDecoration(
+                    new GridRecyclerViewDecoration(R.drawable.recyclerview_divider_dark1,
+                            2,getContext()));
+        }
+        mRecyclerViewModule.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewModule.setScrollContainer(false);
+        mScrollView.setVerticalScrollBarEnabled(false);
+        OverScrollDecoratorHelper.setUpOverScroll(mScrollView);
+
 
     }
 
@@ -113,6 +160,93 @@ public class AreaFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public static class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
+
+        private Context context;
+
+        public RecyclerViewAdapter(Context context){
+            this.context=context;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            MyViewHolder holder=new MyViewHolder(LayoutInflater.
+                    from(context).
+                    inflate(R.layout.recyclerview_item_area_module,parent,false));
+
+            return holder;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            holder.textView.setText(MODULE_TITLE[position]);
+            if(position!=11)
+            holder.imageView.setImageDrawable(context.getDrawable(R.mipmap.abc_btn_radio_to_on_mtrl_015));
+        }
+
+        @Override
+        public int getItemCount() {
+            return MODULE_COUNT;
+        }
+
+        public class MyViewHolder extends  RecyclerView.ViewHolder{
+            TextView textView=null;
+            ImageView imageView=null;
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                textView=itemView.findViewById(R.id.fragment_area_textview_module_label);
+                imageView=itemView.findViewById(R.id.fragment_area_imageview_module_label);
+            }
+        }
+
+    }
+
+    public static class ListAdapter extends BaseAdapter{
+
+        private Context context;
+
+        public ListAdapter(Context context){
+            this.context=context;
+        }
+
+        @Override
+        public int getCount() {
+            return RECOMMEND_COUNT;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView==null){
+                convertView=LayoutInflater.from(context).
+                        inflate(R.layout.listview_item_area_recommend,parent,false);
+            }
+            else{
+
+            }
+            return convertView;
+        }
+
+        class ViewHolder
+        {
+            View itemview;
+            public ViewHolder(View itemview){
+                this.itemview=itemview;
+            }
+        }
     }
 
     /**
