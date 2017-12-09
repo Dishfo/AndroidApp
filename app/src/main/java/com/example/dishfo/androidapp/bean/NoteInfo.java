@@ -13,6 +13,15 @@ public class NoteInfo {
     private String mAppreciateNumber = null;
     private String mReadNumber = null;
     private String mDiscussNumber = null;
+    private String mAreaName = null;
+
+    public String getmAreaName() {
+        return mAreaName;
+    }
+
+    public void setmAreaName(String mAreaName) {
+        this.mAreaName = mAreaName;
+    }
 
     public String getmHeadUrl() {
         return mHeadUrl;
