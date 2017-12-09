@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAreaActionBar">#2fc0ed</color>
     <color name="colorAreaRecycleViewDivider">#d7d4d4</color>
+    <color name="colorLoginActivityButtonLogin_normal">#2fc0ed</color>
+    <color name="colorLoginActivityButtonLogin_pressed">#0cc9f2</color>
+    <color name="colorToolBar">#2fc0ed</color>
+
 </resources>
