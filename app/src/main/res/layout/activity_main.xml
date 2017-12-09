@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.dishfo.androidapp.activity.MainActivity">
 
+
     <EditText
         android:id="@+id/editText"
         android:layout_width="238dp"
@@ -31,4 +32,10 @@
         app:layout_constraintHorizontal_bias="0.583"
         app:layout_constraintStart_toEndOf="@+id/editText"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="368dp"
+        android:layout_height="431dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="72dp" />
 </android.support.constraint.ConstraintLayout>

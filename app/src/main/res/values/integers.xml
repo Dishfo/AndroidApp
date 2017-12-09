@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="actionbar_height">60dp</dimen>
+    <dimen name="area_fragment_textview_paddingleft">8dp</dimen>
+    <dimen name="area_fragment_textview_paddingtop">5dp</dimen>
+</resources>
