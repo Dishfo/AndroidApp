@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAreaActionBar">#2fc0ed</color>
-
+    <color name="colorLoginActivityButtonLogin_normal">#2fc0ed</color>
+    <color name="colorLoginActivityButtonLogin_pressed">#0cc9f2</color>
 </resources>
