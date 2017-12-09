@@ -1,7 +1,6 @@
 package com.example.dishfo.androidapp.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,13 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.ajguan.library.EasyRefreshLayout;
-import com.baoyz.widget.PullRefreshLayout;
+import com.ajguan.library.LoadModel;
 import com.example.dishfo.androidapp.R;
-import com.example.dishfo.androidapp.adapter.NoteAdapter;
-import com.example.dishfo.androidapp.bean.NoteInfo;
+import com.example.dishfo.androidapp.adapter.MineMultipleAdapter;
+import com.example.dishfo.androidapp.bean.MineInfo;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 
 import java.util.ArrayList;
@@ -27,30 +25,30 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FoundFragment.OnFragmentInteractionListener} interface
+ * {@link MineFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FoundFragment#newInstance} factory method to
+ * Use the {@link MineFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FoundFragment extends Fragment{
+public class MineFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final int ITEMCOUNT=10;
     // TODO: Rename and change types of parameters
+    private List<MineInfo> mDatas=null;
     private String mParam1;
     private String mParam2;
-
-    private List<NoteInfo> mDatas;
-
-    private NoteAdapter mNoteAdapter=null;
+    private ImageButton mImageButtonSetting=null;
     private ImageButton mImageButtonSearch=null;
-    private RecyclerView mRecyclerViewList=null;
     private EasyRefreshLayout mEasyRefreshLayout=null;
+    private RecyclerView mRecyclerView=null;
+    private MineMultipleAdapter mMineMultipleAdapter=null;
+
     private OnFragmentInteractionListener mListener;
 
-    public FoundFragment() {
+    public MineFragment() {
         // Required empty public constructor
     }
 
@@ -60,11 +58,11 @@ public class FoundFragment extends Fragment{
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FoundFragment.
+     * @return A new instance of fragment MineFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FoundFragment newInstance(String param1, String param2) {
-        FoundFragment fragment = new FoundFragment();
+    public static MineFragment newInstance(String param1, String param2) {
+        MineFragment fragment = new MineFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -85,47 +83,60 @@ public class FoundFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_found, container, false);
+        View view=inflater.inflate(R.layout.fragment_mine, container, false);
         initData();
-        initContent(view);
-
+        initContentView(view);
         return view;
+    }
+
+    private void initContentView(View view) {
+        mEasyRefreshLayout=view.findViewById(R.id.fragment_mine_refreshlayout_refresh);
+        mImageButtonSearch=view.findViewById(R.id.fragment_mine_imagebutton_search);
+        mImageButtonSetting=view.findViewById(R.id.fragment_mine_imagebutton_setting);
+        mRecyclerView=view.findViewById(R.id.fragment_mine_recylerview_setting);
+        mMineMultipleAdapter=new MineMultipleAdapter(mDatas);
+
+
+        mEasyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            @Override
+            public void onLoadMore() {
+
+            }
+
+            @Override
+            public void onRefreshing() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEasyRefreshLayout.refreshComplete();
+                    }
+                },2000);
+            }
+        });
+        mEasyRefreshLayout.setLoadMoreModel(LoadModel.NONE);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
+                R.drawable.recyclerview_divider_dark3, LinearLayoutManager.VERTICAL));
+        mRecyclerView.setAdapter(mMineMultipleAdapter);
     }
 
     private void initData() {
         mDatas=new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            NoteInfo noteInfo = new NoteInfo();
-            noteInfo.setmHeadUrl("http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg");
-            noteInfo.setmNickName("pby");
-            noteInfo.setmTime("2017-12-20");
-            noteInfo.setmContent("这是我的第一张帖子");
-            noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
-            noteInfo.setmAppreciateNumber("120");
-            noteInfo.setmReadNumber("100");
-            noteInfo.setmDiscussNumber("56");
-            noteInfo.setmAreaName("动漫");
-            mDatas.add(noteInfo);
-          //  mNoteAdapter.notifyItemInserted(mDatas.size() - 1);
+        MineInfo mineInfo=null;
+        for(int i=0;i<ITEMCOUNT;i++){
+
+            if(i==0){
+                mineInfo=new MineInfo(1);
+            }else if(i==1){
+                mineInfo=new MineInfo(2);
+            }else if(i==2||i==6){
+                mineInfo=new MineInfo(3);
+            }else{
+                mineInfo=new MineInfo(4);
+            }
+            mDatas.add(mineInfo);
         }
-    }
-
-
-    private void initContent(View view){
-
-        mEasyRefreshLayout=view.findViewById(R.id.fragment_found_pullrefresh_refresh);
-        mEasyRefreshLayout.addEasyEvent(new MyEasyEvent());
-        mImageButtonSearch=view.findViewById(R.id.fragment_found_imagebutton_search);
-        mRecyclerViewList=view.findViewById(R.id.fragment_found_recyclerview_list);
-
-        mNoteAdapter=new NoteAdapter(R.layout.recyclerview_item_note,mDatas);
-
-        mRecyclerViewList.setLayoutManager(
-                new LinearLayoutManager(getContext(),
-                        LinearLayoutManager.VERTICAL,false));
-        mRecyclerViewList.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
-                R.drawable.recyclerview_divider_dark2,LinearLayoutManager.VERTICAL));
-        mRecyclerViewList.setAdapter(mNoteAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -141,8 +152,8 @@ public class FoundFragment extends Fragment{
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-           // throw new RuntimeException(context.toString()
-                   // + " must implement OnFragmentInteractionListener");
+         //   throw new RuntimeException(context.toString()
+              //      + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -150,29 +161,6 @@ public class FoundFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    public class MyEasyEvent implements EasyRefreshLayout.EasyEvent {
-
-        @Override
-        public void onLoadMore() {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    FoundFragment.this.mEasyRefreshLayout.loadMoreComplete();
-                }
-            },3000);
-        }
-
-        @Override
-        public void onRefreshing() {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    FoundFragment.this.mEasyRefreshLayout.refreshComplete();
-                }
-            },3000);
-        }
     }
 
     /**

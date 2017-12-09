@@ -46,6 +46,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/text_area_fragment"
+            android:paddingTop="10dp"
             android:textColor="?android:attr/detailsElementBackground"
             android:textSize="16sp" />
 
@@ -61,8 +62,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:src="@mipmap/ic_fragment_area_search_2" />
+            android:paddingTop="10dp"
+            android:src="@mipmap/imageview_search" />
     </LinearLayout>
 
 

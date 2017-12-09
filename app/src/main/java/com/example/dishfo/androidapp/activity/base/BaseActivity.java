@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
  * Created by apple on 2017/12/7.
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity{
 
     private boolean mIsFullScreen = false;
 

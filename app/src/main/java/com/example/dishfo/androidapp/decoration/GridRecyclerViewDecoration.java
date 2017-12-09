@@ -28,7 +28,7 @@ public class GridRecyclerViewDecoration extends RecyclerView.ItemDecoration {
         this.mResId=resId;
         this.context=context;
         mDivider=context.getResources().
-                getDrawable(R.drawable.recyclerview_divider_dark1,null);
+                getDrawable(mResId,null);
         mSpancount=spancount;
     }
 

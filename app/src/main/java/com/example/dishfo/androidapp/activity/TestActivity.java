@@ -1,28 +1,41 @@
 package com.example.dishfo.androidapp.activity;
 
 import android.graphics.Color;
+import android.hardware.Camera;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.example.dishfo.androidapp.R;
+import com.example.dishfo.androidapp.activity.base.BaseActivity;
+import com.example.dishfo.androidapp.adapter.MessageAdapter;
 import com.example.dishfo.androidapp.fragment.AreaFragment;
 import com.example.dishfo.androidapp.fragment.FoundFragment;
+import com.example.dishfo.androidapp.fragment.MessageFragment;
+import com.example.dishfo.androidapp.fragment.MineFragment;
 
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_test);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+
 
         FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.container, FoundFragment.newInstance("",""));
+        transaction.add(R.id.container, MineFragment.newInstance("",""));
         transaction.commit();
+    }
+
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+
     }
 }

@@ -53,7 +53,8 @@
             <ImageView
                 android:id="@+id/recyclerView_item_note_imageView_close"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:scaleType="centerInside" />
 
             <TextView
                 android:id="@+id/recyclerView_item_note_textView_time"

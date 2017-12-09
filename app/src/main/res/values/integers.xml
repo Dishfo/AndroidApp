@@ -3,4 +3,8 @@
     <dimen name="actionbar_height">60dp</dimen>
     <dimen name="area_fragment_textview_paddingleft">8dp</dimen>
     <dimen name="area_fragment_textview_paddingtop">5dp</dimen>
+    <dimen name="mine_headr_height">100dp</dimen>
+    <dimen name="mine_second_height">60dp</dimen>
+    <dimen name="mine_space_height">55dp</dimen>
+    <dimen name="mine_view_height">55dp</dimen>
 </resources>

@@ -17,8 +17,18 @@ import java.util.List;
  */
 
 public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
+
+    private int mFunctionIcon=-1;
+    private boolean useDeafultIcon=true;
+
+
     public NoteAdapter(int layoutResId, @Nullable List<NoteInfo> data) {
         super(layoutResId, data);
+    }
+
+    public void setFunctionIcon(int resid){
+        this.mFunctionIcon=resid;
+        useDeafultIcon=false;
     }
 
     @Override
@@ -27,7 +37,6 @@ public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
         Glide.with(mContext).load(item.getmHeadUrl()).apply(RequestOptions.circleCropTransform()).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_head));
         helper.setText(R.id.recyclerView_item_note_textView_nickName, item.getmNickName());
         helper.setText(R.id.recyclerView_item_note_textView_area, item.getmAreaName());
-        Glide.with(mContext).load(R.mipmap.imageview_close).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_close));
         helper.setText(R.id.recyclerView_item_note_textView_time, item.getmTime());
         helper.setText(R.id.recyclerView_item_note_textView_content, item.getmContent());
         Glide.with(mContext).load(item.getmImageUrl()).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_image));
@@ -38,6 +47,13 @@ public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
         Glide.with(mContext).load(R.mipmap.imageview_discuss).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_discuss));
         helper.setText(R.id.recyclerView_item_note_textView_discuss, item.getmDiscussNumber());
 
+        if(!useDeafultIcon) {
+            Glide.with(mContext).load(R.mipmap.imageview_refresh).
+                    into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_close));
 
+        }else{
+            Glide.with(mContext).load(R.mipmap.imageview_close).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_close));
+
+        }
     }
 }
