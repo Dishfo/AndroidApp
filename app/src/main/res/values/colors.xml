@@ -7,4 +7,6 @@
     <color name="colorAreaRecycleViewDivider">#d7d4d4</color>
     <color name="colorLoginActivityButtonLogin_normal">#2fc0ed</color>
     <color name="colorLoginActivityButtonLogin_pressed">#0cc9f2</color>
+    <color name="colorReplyedBackground">#D9D9D9</color>
+    <color name="colorPictureTextColor">#A9A9A9</color>
 </resources>

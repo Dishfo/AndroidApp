@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorAreaActionBar">
+
+        <ImageView
+            android:id="@+id/activity_area_imageView_back"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:src="@mipmap/imageview_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="返回"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/activity_area_imageView_back" />
+
+        <ImageView
+            android:id="@+id/activity_area_imageView_search"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:src="@mipmap/ic_fragment_area_search_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <com.ajguan.library.EasyRefreshLayout
+        android:id="@+id/activity_area_easyRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_area_recyclerView_area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+    </com.ajguan.library.EasyRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_area_linearLayout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/activity_area_imageView_toTop"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/imageview_totop" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/activity_area_imageView_newNote"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/imageview_new_note" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/activity_area_imageView_update"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/imageview_update" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
