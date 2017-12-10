@@ -40,11 +40,22 @@
     <com.ajguan.library.EasyRefreshLayout
         android:id="@+id/activity_note_easyRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/activity_note_recyclerView_note"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     </com.ajguan.library.EasyRefreshLayout>
+
+    <Button
+        android:id="@+id/activity_note_button_discuss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/button_background_round"
+        android:text="评论"
+        android:textColor="#FFFFFF" />
 </LinearLayout>

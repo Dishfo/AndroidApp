@@ -66,6 +66,14 @@
         android:layout_height="40dp"
         android:layout_marginTop="20dp">
 
+        <TextView
+            android:id="@+id/recyclerView_head_note_textView_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:text="2017-112-10" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

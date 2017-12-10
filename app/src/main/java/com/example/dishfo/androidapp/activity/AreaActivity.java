@@ -173,4 +173,5 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
+
 }

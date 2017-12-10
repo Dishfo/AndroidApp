@@ -15,7 +15,7 @@ public class ScreenUtils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
     }
 
-    public static float pxTpdp(Context context, float pxValue) {
+    public static float pxTodp(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (pxValue / scale + 0.5f);
     }

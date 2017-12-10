@@ -4,32 +4,43 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center_vertical">
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/recyclerView_item_discuss_imageView_head"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/recyclerView_item_discuss_textView_nickName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/recyclerView_item_discuss_imageView_head"
             android:text="name" />
 
         <ImageView
             android:id="@+id/recyclerView_item_discuss_imageView_level"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/recyclerView_item_discuss_textView_nickName" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="回复" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/recyclerView_item_discuss_textView_replyed"
@@ -41,8 +52,17 @@
         android:background="@color/colorReplyedBackground"
         android:text="这个是原来的评论" />
 
+    <TextView
+        android:id="@+id/recyclerView_item_discuss_textView_replayContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="这个是评论的内容" />
+
     <LinearLayout
-        android:id="@+id/recyclerView_iteM_discuss_linearLayout"
+        android:id="@+id/recyclerView_item_discuss_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -50,10 +70,16 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/recyclerView_item_discuss_textView_replayContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="这个是评论的内容" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/recyclerView_item_discuss_textView_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="2017-12-10" />
 </LinearLayout>
