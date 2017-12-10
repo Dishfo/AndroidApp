@@ -27,13 +27,6 @@
         <activity android:name=".activity.SetPasswordActivity" />
         <activity android:name=".activity.FindPasswordActivity" />
         <activity android:name=".activity.TestActivity"/>
-
-        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
-
-        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 
 </manifest>

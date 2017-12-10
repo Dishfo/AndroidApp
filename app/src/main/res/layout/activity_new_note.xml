@@ -12,13 +12,13 @@
 
         <include layout="@layout/toolbar_back" />
 
-        <com.example.dishfo.androidapp.customview.RichEditText
+        <EditText
             android:id="@+id/activity_new_note_editText_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/edittext_no_border"
-
+            android:lineSpacingMultiplier="1.4"
             android:gravity="left"
             android:hint="输入内容,5~200个字符"
             android:paddingLeft="5dp"

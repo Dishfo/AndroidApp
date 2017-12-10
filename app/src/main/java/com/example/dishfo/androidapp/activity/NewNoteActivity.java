@@ -13,6 +13,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
 import com.example.dishfo.androidapp.control.BitmapCache;
+import com.example.dishfo.androidapp.customview.MyImageSpan;
 import com.example.dishfo.androidapp.customview.RichEditText;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -41,7 +43,7 @@ import java.util.List;
 public class NewNoteActivity extends BaseActivity implements View.OnClickListener, BaseQuickAdapter.OnItemChildClickListener {
     private ImageView mImageViewBack = null;
     private RecyclerView mRecyclerViewPicture = null;
-    private RichEditText mEditTextContent = null;
+    private EditText mEditTextContent = null;
     private ImageView mImageViewExpression = null;
     private ImageView mImageViewPicture = null;
     private Button mButtonOk = null;
@@ -152,9 +154,11 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
         switch (view.getId()) {
             case R.id.recyclerView_item_expression_imageView_expression: {
                 appendExpression(mExpressions.get(position));
+                break;
             }
             case R.id.recyclerView_item_picture_imageView_close: {
                 mPictureAdapter.remove(position);
+                break;
             }
         }
     }
@@ -165,11 +169,13 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
             bitmap = mBitmapCache.get(info.getName());
         } else {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
+            options.inDensity = 300;
+            options.inScaled = true;
             bitmap = BitmapFactory.decodeResource(getResources(), info.getId(), options);
             mBitmapCache.put(info.getName(), bitmap);
         }
         ImageSpan imageSpan = new ImageSpan(this, bitmap);
+
         SpannableString spannableString = new SpannableString("," + info.getName() + ",");
         spannableString.setSpan(imageSpan, 0, info.getName().length() + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         Editable editable = mEditTextContent.getText();
