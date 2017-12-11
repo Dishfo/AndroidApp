@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ajguan.library.EasyRefreshLayout;
 import com.baoyz.widget.PullRefreshLayout;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
+import com.example.dishfo.androidapp.adapter.NoteAdapter;
+import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +33,8 @@ import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
  * Use the {@link FoundFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FoundFragment extends Fragment {
+public class FoundFragment extends Fragment implements
+        BaseQuickAdapter.OnItemChildClickListener,BaseQuickAdapter.OnItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,11 +43,13 @@ public class FoundFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private List<NoteInfo> mDatas;
+
+    private NoteAdapter mNoteAdapter=null;
     private ImageButton mImageButtonSearch=null;
     private RecyclerView mRecyclerViewList=null;
-    private MyRecyclerViewAdapter mRecyclerViewAdapter=null;
-    private PullRefreshLayout mPullRefreshLayout=null;
-
+    private EasyRefreshLayout mEasyRefreshLayout=null;
     private OnFragmentInteractionListener mListener;
 
     public FoundFragment() {
@@ -77,39 +88,48 @@ public class FoundFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_found, container, false);
+        initData();
         initContent(view);
+
         return view;
     }
 
+    private void initData() {
+        mDatas=new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            NoteInfo noteInfo = new NoteInfo();
+            noteInfo.setmHeadUrl("http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg");
+            noteInfo.setmNickName("pby");
+            noteInfo.setmTime("2017-12-20");
+            noteInfo.setmContent("这是我的第一张帖子");
+            noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
+            noteInfo.setmAppreciateNumber("120");
+            noteInfo.setmReadNumber("100");
+            noteInfo.setmDiscussNumber("56");
+            noteInfo.setmAreaName("动漫");
+            mDatas.add(noteInfo);
+          //  mNoteAdapter.notifyItemInserted(mDatas.size() - 1);
+        }
+    }
+
+
     private void initContent(View view){
-        mPullRefreshLayout=view.findViewById(R.id.fragment_found_pullrefresh_refresh);
-        mPullRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
-        int color= Color.parseColor("#2fc0ed");
-        int colorback=Color.parseColor("#FF4081");
-        mPullRefreshLayout.setColorSchemeColors(color,colorback,color,colorback);;
-        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPullRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPullRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
-            }
-        });
-   //     Log.d("test","11111111111111111111");
+
+        mEasyRefreshLayout=view.findViewById(R.id.fragment_found_pullrefresh_refresh);
+        mEasyRefreshLayout.addEasyEvent(new MyEasyEvent());
         mImageButtonSearch=view.findViewById(R.id.fragment_found_imagebutton_search);
         mRecyclerViewList=view.findViewById(R.id.fragment_found_recyclerview_list);
 
-        mRecyclerViewAdapter=new MyRecyclerViewAdapter(getContext());
-      //  Log.d("test","222222222222222222222");
+        mNoteAdapter=new NoteAdapter(R.layout.recyclerview_item_note,mDatas);
+
         mRecyclerViewList.setLayoutManager(
                 new LinearLayoutManager(getContext(),
                         LinearLayoutManager.VERTICAL,false));
         mRecyclerViewList.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
                 R.drawable.recyclerview_divider_dark2,LinearLayoutManager.VERTICAL));
-        mRecyclerViewList.setAdapter(mRecyclerViewAdapter);
+        mNoteAdapter.setOnItemChildClickListener(this);
+        mNoteAdapter.setOnItemClickListener(this);
+        mRecyclerViewList.setAdapter(mNoteAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -136,41 +156,36 @@ public class FoundFragment extends Fragment {
         mListener = null;
     }
 
-    public static class MyRecyclerViewAdapter extends
-            RecyclerView.Adapter<MyRecyclerViewAdapter.MyViewHolder>{
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
 
-        private Context context;
+    }
 
-        public MyRecyclerViewAdapter(Context context){
-            this.context=context;
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+    }
+
+    public class MyEasyEvent implements EasyRefreshLayout.EasyEvent {
+
+        @Override
+        public void onLoadMore() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    FoundFragment.this.mEasyRefreshLayout.loadMoreComplete();
+                }
+            },3000);
         }
 
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder holder=new MyViewHolder(LayoutInflater.
-                    from(context).
-                    inflate(R.layout.listview_item_area_recommend,parent,false));
-       //s     Log.d("test","11111111111111111111");
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.textViewTitle.setText(""+(position+1));
-        }
-
-        @Override
-        public int getItemCount() {
-            return 10;
-        }
-
-        class MyViewHolder extends  RecyclerView.ViewHolder{
-
-            TextView textViewTitle=null;
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                textViewTitle=itemView.findViewById(R.id.fragment_area_textview_module);
-            }
+        public void onRefreshing() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    FoundFragment.this.mEasyRefreshLayout.refreshComplete();
+                }
+            },3000);
         }
     }
 

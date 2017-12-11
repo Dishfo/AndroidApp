@@ -45,6 +45,8 @@ public class LinearRecyclerViewDecoration extends RecyclerView.ItemDecoration {
             right=view.getRight()+params.leftMargin;
             top=view.getBottom()+params.bottomMargin;
             bottom=top+mDivider.getIntrinsicHeight();
+            if(count-1==i)
+                break;
             mDivider.setBounds(left,top,right,bottom);
             mDivider.draw(c);
         }
@@ -70,9 +72,6 @@ public class LinearRecyclerViewDecoration extends RecyclerView.ItemDecoration {
         int left=0;
         int right=0;
         int bottom=mDivider.getIntrinsicHeight();
-
-
-
         outRect.set(left,top,right,bottom);
 
     }
