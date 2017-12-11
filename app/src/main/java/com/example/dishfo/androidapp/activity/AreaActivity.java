@@ -171,6 +171,9 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener {
                 mImageViewUpdate.startAnimation(mRotateInfinite);
                 break;
             }
+            case R.id.activity_area_imageView_back:
+                onBackPressed();
+                break;
         }
     }
 

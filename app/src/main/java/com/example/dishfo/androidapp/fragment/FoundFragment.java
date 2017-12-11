@@ -21,6 +21,7 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
+import com.example.dishfo.androidapp.listener.FragmentSendListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +41,15 @@ public class FoundFragment extends Fragment implements
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static final  int ENTER_FOUND_NOTE=3;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private List<NoteInfo> mDatas;
 
+    private FragmentSendListener mFragmentSendListener=null;
     private NoteAdapter mNoteAdapter=null;
     private ImageButton mImageButtonSearch=null;
     private RecyclerView mRecyclerViewList=null;
@@ -142,6 +146,11 @@ public class FoundFragment extends Fragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        if(context instanceof FragmentSendListener){
+            mFragmentSendListener= (FragmentSendListener) context;
+        }
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -163,7 +172,7 @@ public class FoundFragment extends Fragment implements
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+        mFragmentSendListener.action(ENTER_FOUND_NOTE,null);
     }
 
     public class MyEasyEvent implements EasyRefreshLayout.EasyEvent {

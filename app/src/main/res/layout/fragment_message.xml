@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.dishfo.androidapp.fragment.MessageFragment">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/fragment_mine_linearlayout_actionbar"
         android:layout_width="0dp"
         android:layout_height="@dimen/actionbar_height"
         android:background="@color/colorAreaActionBar"
-        android:orientation="horizontal"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,39 +18,46 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
             android:layout_weight="1"
             android:gravity="center"
             android:paddingTop="10dp"
             android:text="@string/text_msg_fragment"
             android:textColor="?android:attr/detailsElementBackground"
-            android:textSize="16sp" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/fragment_msg_imagebutton_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginBottom="17dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="18dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:paddingLeft="5dp"
-            android:paddingTop="10dp"
-            android:src="@mipmap/imageview_msgsetting" />
+            android:src="@mipmap/imageview_msgsetting"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_msg_imagebutton_search"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/fragment_msg_imagebutton_search"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:paddingLeft="5dp"
-            android:paddingTop="10dp"
-            android:src="@mipmap/imageview_search" />
-    </LinearLayout>
+            android:src="@mipmap/imageview_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_msg_recyclerview_function"

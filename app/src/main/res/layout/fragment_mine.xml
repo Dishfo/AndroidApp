@@ -6,12 +6,11 @@
 
     tools:context="com.example.dishfo.androidapp.fragment.MineFragment">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/fragment_mine_linearlayout_actionbar"
         android:layout_width="0dp"
         android:layout_height="@dimen/actionbar_height"
         android:background="@color/colorAreaActionBar"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,39 +19,51 @@
             android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginBottom="19dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="19dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingTop="10dp"
             android:text="@string/text_mine_fragment"
             android:textColor="?android:attr/detailsElementBackground"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
 
         <ImageButton
             android:id="@+id/fragment_mine_imagebutton_setting"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="15dp"
+
+            android:layout_marginStart="241dp"
+            android:layout_marginTop="13dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:paddingLeft="5dp"
-            android:paddingTop="10dp"
-            android:maxHeight="30dp"
-            android:maxWidth="30dp"
-            android:src="@mipmap/image_setting" />
+            android:src="@mipmap/image_setting"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_mine_imagebutton_search"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/fragment_mine_imagebutton_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-
-            android:src="@mipmap/imageview_search" />
-    </LinearLayout>
+            android:src="@mipmap/imageview_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <com.ajguan.library.EasyRefreshLayout
         android:id="@+id/fragment_mine_refreshlayout_refresh"

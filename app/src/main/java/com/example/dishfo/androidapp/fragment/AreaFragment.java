@@ -26,6 +26,7 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.GridRecyclerViewDecoration;
+import com.example.dishfo.androidapp.listener.FragmentSendListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,8 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         ,BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    public static final int ENTER_RECOMMEND= 1;
+    public static final int ENTER_MODULE= 2;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int RECOMMEND_COUNT=1;
@@ -55,6 +58,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     private List<NoteInfo> mDatas=null;
 
     // TODO: Rename and change types of parameters
+    private FragmentSendListener mFragmentSendListener=null;
     private String mParam1;
     private String mParam2;
     private RecyclerView mRecyclerViewRecommend=null;
@@ -166,7 +170,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         int id=v.getId();
         Toast.makeText(getContext(),"module 点击事件",Toast.LENGTH_SHORT).show();
-
+        mFragmentSendListener.action(ENTER_MODULE,null);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -179,6 +183,9 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(context instanceof  FragmentSendListener){
+            mFragmentSendListener= (FragmentSendListener) context;
+        }
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -196,6 +203,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         Toast.makeText(getContext()," recommend 点击事件",Toast.LENGTH_SHORT).show();
+        mFragmentSendListener.action(ENTER_RECOMMEND,null);
     }
 
     @Override
@@ -225,6 +233,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             holder.textView.setText(MODULE_TITLE[position]);
+            holder.itemView.setTag(position);
             if(position!=11)
             holder.imageView.setImageDrawable(context.getDrawable(R.mipmap.abc_btn_radio_to_on_mtrl_015));
         }

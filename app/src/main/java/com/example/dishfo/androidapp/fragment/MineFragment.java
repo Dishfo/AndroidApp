@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.MineMultipleAdapter;
 import com.example.dishfo.androidapp.bean.MineInfo;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
+import com.example.dishfo.androidapp.listener.FragmentSendListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,9 @@ import java.util.List;
 public class MineFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    public static final int ENTER_SETTING=10;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int ITEMCOUNT=10;
@@ -46,6 +51,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     private static final String[] LABELS=new String[]{"收藏的帖子",
             "喜欢的帖子","关注的专区","浏览记录",
     "我的评论","我的点赞"};
+
+    private FragmentSendListener mFragmentSendListener=null;
 
     // TODO: Rename and change types of parameters
     private List<MineInfo> mDatas=null;
@@ -102,11 +109,13 @@ public class MineFragment extends Fragment implements View.OnClickListener{
 
     private void initContentView(View view) {
         mEasyRefreshLayout=view.findViewById(R.id.fragment_mine_refreshlayout_refresh);
+
         mImageButtonSearch=view.findViewById(R.id.fragment_mine_imagebutton_search);
         mImageButtonSetting=view.findViewById(R.id.fragment_mine_imagebutton_setting);
         mRecyclerView=view.findViewById(R.id.fragment_mine_recylerview_setting);
         mMineMultipleAdapter=new MineMultipleAdapter(mDatas,this);
 
+        mImageButtonSetting.setOnClickListener(this);
 
         mEasyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             @Override
@@ -174,6 +183,11 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        if(context instanceof FragmentSendListener){
+            mFragmentSendListener= (FragmentSendListener) context;
+        }
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -191,7 +205,15 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Toast.makeText(getContext(),"item click",Toast.LENGTH_SHORT).show();
-        Log.d("test", (String) ((TextView)(v.findViewById(R.id.textview_label))).getText());
+//        Log.d("test", (String) ((TextView)(v.findViewById(R.id.textview_label))).getText());
+        switch (v.getId()){
+            case R.id.fragment_mine_imagebutton_setting:
+                mFragmentSendListener.action(ENTER_SETTING,null);
+                break;
+            case R.id.fragment_mine_imagebutton_search:
+                break;
+
+        }
     }
 
     /**

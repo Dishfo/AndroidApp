@@ -30,7 +30,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private List<SettingInfo> mDatas=null;
     private ImageView mImageViewBack = null;
-    private Button mButtonExit=null;
     private RecyclerView mRecyclerView=null;
    // private ScrollView container=null;
     private SettingAdapter mSettingAdapter=null;
@@ -70,6 +69,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        mImageViewBack.setOnClickListener(this);
 //        container.requestDisallowInterceptTouchEvent(false);
         mRecyclerView.addItemDecoration(new LinearRecyclerViewDecoration(this,
                 R.drawable.recyclerview_divider_dark3,LinearLayoutManager.VERTICAL));
@@ -93,8 +93,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(this,"item click",Toast.LENGTH_SHORT).show();
+        switch (v.getId()){
+            case R.id.toolBar_back_imageView_back:
+                onBackPressed();
+                break;
+        }
     }
+
+
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
