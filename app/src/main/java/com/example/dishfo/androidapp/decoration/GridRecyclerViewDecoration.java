@@ -7,10 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-
-import com.example.dishfo.androidapp.R;
 
 /**
  * Created by dishfo on 17-12-8.
@@ -28,7 +25,7 @@ public class GridRecyclerViewDecoration extends RecyclerView.ItemDecoration {
         this.mResId=resId;
         this.context=context;
         mDivider=context.getResources().
-                getDrawable(R.drawable.recyclerview_divider_dark1,null);
+                getDrawable(resId,null);
         mSpancount=spancount;
     }
 

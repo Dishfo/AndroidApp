@@ -14,6 +14,15 @@ public class NoteInfo {
     private String mReadNumber = null;
     private String mDiscussNumber = null;
     private String mAreaName = null;
+    private boolean isAppreciate = false;
+
+    public boolean isAppreciate() {
+        return isAppreciate;
+    }
+
+    public void setAppreciate(boolean appreciate) {
+        isAppreciate = appreciate;
+    }
 
     public String getmAreaName() {
         return mAreaName;
