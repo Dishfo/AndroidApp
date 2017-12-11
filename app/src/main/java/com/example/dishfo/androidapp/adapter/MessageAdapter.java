@@ -26,8 +26,8 @@ public class MessageAdapter extends BaseQuickAdapter<MessageInfo,BaseViewHolder>
 
     @Override
     protected void convert(BaseViewHolder helper, MessageInfo item) {
-        Glide.with(mContext).load(R.mipmap.ic_launcher_round).
-                apply(RequestOptions.circleCropTransform()).
+        Glide.with(mContext).load(item.imageheadUrl).
+                apply(RequestOptions.centerInsideTransform()).
                 into((ImageView) helper.getView(R.id.recyclerview_item_msg_headimage));
 
         ((TextView)helper.getView(R.id.recyclerview_item_msg_content)).setText(item.content);

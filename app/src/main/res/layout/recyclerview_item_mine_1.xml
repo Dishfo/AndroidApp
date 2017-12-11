@@ -27,6 +27,7 @@
         android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:text="TextView"
+        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/recyclerview_imageview_head"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,6 +40,7 @@
         android:layout_marginStart="32dp"
         android:gravity="center_vertical"
         android:text="TextView"
+        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/recyclerview_imageview_head" />

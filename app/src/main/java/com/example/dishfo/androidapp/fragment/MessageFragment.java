@@ -113,6 +113,7 @@ public class MessageFragment extends Fragment implements
             info.username="sxh";
             info.date="2017-07-15";
             info.content="asdfgh......";
+            info.imageheadUrl="http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg";
             mDatas.add(info);
         }
         numbers=new ArrayList<>();

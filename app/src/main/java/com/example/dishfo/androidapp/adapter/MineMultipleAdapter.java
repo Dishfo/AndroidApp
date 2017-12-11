@@ -2,7 +2,11 @@ package com.example.dishfo.androidapp.adapter;
 
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -43,12 +47,33 @@ public class MineMultipleAdapter extends BaseMultiItemQuickAdapter<MineInfo,Base
     protected void convert(BaseViewHolder helper, MineInfo item) {
         switch (item.getItemType()){
             case MineInfo.FIRST_TYPE:
+                Glide.with(mContext).load(item.headimageUrl).
+                        apply(RequestOptions.centerInsideTransform()).into((ImageView)
+                        helper.getView(R.id.recyclerview_imageview_head));
+                ((TextView)helper.getView(R.id.recyclerview_textview_name)).
+                        setText(item.name);
+                ((TextView)helper.getView(R.id.recyclerview_textview_autograph)).
+                        setText(item.autograph);
                 break;
             case MineInfo.SECOND_TYPE:
+                ((TextView)helper.getView(R.id.textview_notes)).
+                        setText(item.notes+"");
+                ((TextView)helper.getView(R.id.textview_follow)).
+                        setText(item.follow+"");
+                ((TextView)helper.getView(R.id.textview_fensi)).
+                        setText(item.fans+"");
                 break;
             case MineInfo.THIRD_TYPE:
                 break;
             case MineInfo.FOURTH_TYPE:
+                Glide.with(mContext).load(item.imageresid).
+                        apply(RequestOptions.centerInsideTransform()).into((ImageView)
+                        helper.getView(R.id.imageview_label));
+                ((TextView)helper.getView(R.id.textview_label)).
+                        setText(item.label);
+                ((TextView)helper.getView(R.id.textview_number)).
+                        setText(item.number+"");
+
                 helper.itemView.setOnClickListener(mItemlistener);
                 helper.itemView.setTag(item.label);
                 break;

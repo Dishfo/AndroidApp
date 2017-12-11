@@ -3,8 +3,11 @@ package com.example.dishfo.androidapp.adapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.dishfo.androidapp.R;
@@ -58,7 +61,9 @@ public class SettingAdapter extends BaseMultiItemQuickAdapter<SettingInfo,BaseVi
             case SECOND_TYPE:
                 helper.itemView.setOnClickListener(mListener);
                 ((TextView)helper.getView(R.id.recyclerview_item_textview)).setText(item.label);
-               // ((TextView)helper.getView(R.id.recyclerview_item_textview)).setText(item.label);
+                Glide.with(mContext).load(item.imageurl).
+                        apply(RequestOptions.circleCropTransform()).
+                        into((ImageView)helper.getView(R.id.recyclerview_item_iamgeview));
                 break;
             case THRID_TYPE:
                 helper.itemView.setOnClickListener(mListener);

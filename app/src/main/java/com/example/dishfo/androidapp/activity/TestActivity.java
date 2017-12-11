@@ -34,15 +34,6 @@ public class TestActivity extends BaseActivity {
         setContentView(R.layout.activity_test);
     }
 
-    @Override
-    public void initView() {
-    }
-
-    @Override
-    public void initData() {
-    }
-
-
 
     @Override
     public void initView() {

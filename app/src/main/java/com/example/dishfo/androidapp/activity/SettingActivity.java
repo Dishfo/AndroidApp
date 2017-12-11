@@ -37,7 +37,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private SettingInfo[] settingInfos=new SettingInfo[]{
       new SettingInfo("通用设置",FIRST_TYPE),
-            new SettingInfo(" 个人头像",SECOND_TYPE,""),
+            new SettingInfo(" 个人头像",SECOND_TYPE,"http://img3.imgtn.bdimg." +
+                    "com/it/u=4217792878,3100855251&fm=11&gp=0.jpg"),
             new SettingInfo(" 个人昵称","昵称",THRID_TYPE),
             new SettingInfo(" 个人简介",FIRST_TYPE),
             new SettingInfo(" 密码管理",FIRST_TYPE),

@@ -7,10 +7,12 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
@@ -37,6 +39,14 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int ITEMCOUNT=10;
+    private static final int[] RESIDS=new int[]{R.mipmap.image_mine_collect,
+    R.mipmap.image_mine_like,R.mipmap.image_mine_follow,
+            R.mipmap.image_mine_history,R.mipmap.image_mine_words,
+            R.mipmap.image_mine_good};
+    private static final String[] LABELS=new String[]{"收藏的帖子",
+            "喜欢的帖子","关注的专区","浏览记录",
+    "我的评论","我的点赞"};
+
     // TODO: Rename and change types of parameters
     private List<MineInfo> mDatas=null;
     private String mParam1;
@@ -118,23 +128,37 @@ public class MineFragment extends Fragment implements View.OnClickListener{
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
-                R.drawable.recyclerview_divider_dark3, LinearLayoutManager.VERTICAL));
+                R.drawable.recyclerview_divider_dark1, LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mMineMultipleAdapter);
     }
 
     private void initData() {
         mDatas=new ArrayList<>();
         MineInfo mineInfo=null;
+        int k=0;
         for(int i=0;i<ITEMCOUNT;i++){
 
             if(i==0){
                 mineInfo=new MineInfo(1);
+                mineInfo.headimageUrl="http://img3.imgtn.bdimg.com/it/u" +
+                        "=4217792878,3100855251&fm=11&gp=0.jpg";
+                mineInfo.name="sxh";
+                mineInfo.autograph="test";
+
             }else if(i==1){
                 mineInfo=new MineInfo(2);
+                mineInfo.notes=12;
+                mineInfo.fans=45;
+                mineInfo.follow=8;
             }else if(i==2||i==6){
                 mineInfo=new MineInfo(3);
             }else{
                 mineInfo=new MineInfo(4);
+                mineInfo.label=LABELS[k];
+                mineInfo.imageresid=RESIDS[k];
+                Log.d("test",mineInfo.label+" "+mineInfo.imageresid);
+                mineInfo.number=7;
+                k++;
             }
             mDatas.add(mineInfo);
         }
@@ -167,6 +191,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Toast.makeText(getContext(),"item click",Toast.LENGTH_SHORT).show();
+        Log.d("test", (String) ((TextView)(v.findViewById(R.id.textview_label))).getText());
     }
 
     /**
