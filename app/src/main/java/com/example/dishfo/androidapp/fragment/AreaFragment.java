@@ -1,7 +1,6 @@
 package com.example.dishfo.androidapp.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,25 +8,26 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.baoyz.widget.PullRefreshLayout;
-import com.baoyz.widget.RefreshDrawable;
-import com.baoyz.widget.SmartisanDrawable;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
+import com.example.dishfo.androidapp.adapter.NoteAdapter;
+import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.GridRecyclerViewDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
@@ -40,7 +40,8 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
  * Use the {@link AreaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AreaFragment extends Fragment {
+public class AreaFragment extends Fragment implements View.OnClickListener
+        ,BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -51,13 +52,13 @@ public class AreaFragment extends Fragment {
     "我关注的专区","学习天堂","运动广场","旅游天地",
     "游戏","娱乐","明星","阅读","美食","动漫",""};
     private  static final int[] MODULE_IC=new int[]{R.mipmap.abc_btn_radio_to_on_mtrl_015};
-
+    private List<NoteInfo> mDatas=null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private ListView mListViewRecommend=null;
-    private ListAdapter mListAdapter=null;
+    private RecyclerView mRecyclerViewRecommend=null;
+    private NoteAdapter mNoteAdapter=null;
     private ScrollView mScrollView=null;
     private RecyclerViewAdapter mRecyclerViewAdapter=null;
     private ImageButton mButtonSearch=null;
@@ -102,18 +103,41 @@ public class AreaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_area, container, false);
+        initData();
         initContent(view);
         return view;
     }
 
+    private void initData() {
+        mDatas=new ArrayList<>();
+        NoteInfo noteInfo=new NoteInfo();
+        noteInfo.setmHeadUrl("http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg");
+        noteInfo.setmNickName("pby");
+        noteInfo.setmTime("2017-12-20");
+        noteInfo.setmContent("这是我的第一张帖子");
+        noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
+        noteInfo.setmAppreciateNumber("120");
+        noteInfo.setmReadNumber("100");
+        noteInfo.setmDiscussNumber("56");
+        noteInfo.setmAreaName("动漫");
+        mDatas.add(noteInfo);
+    }
+
     private void initContent(View view){
         mScrollView=view.findViewById(R.id.fragment_area_scrollview_container);
-        mListViewRecommend=view.findViewById(R.id.fragment_area_listview_recommend);
+        mRecyclerViewRecommend=view.findViewById(R.id.fragment_area_recyclerview_recommend);
 
-        mListAdapter=new ListAdapter(getContext());
+        mNoteAdapter=new NoteAdapter(R.layout.recyclerview_item_note,mDatas);
+        mNoteAdapter.setFunctionIcon(R.mipmap.imageview_refresh);
         mRecyclerViewAdapter=new RecyclerViewAdapter(getContext());
 
-        mListViewRecommend.setAdapter(mListAdapter);
+        mRecyclerViewRecommend.setLayoutManager(new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return  false;
+            }
+        });
+        mRecyclerViewRecommend.setAdapter(mNoteAdapter);
 
         mRecyclerViewModule=view.findViewById(R.id.fragment_area_recyclerview_module);
         mButtonSearch=view.findViewById(R.id.fragment_area_imagebutton_search);
@@ -133,8 +157,15 @@ public class AreaFragment extends Fragment {
         mRecyclerViewModule.setAdapter(mRecyclerViewAdapter);
         mRecyclerViewModule.setScrollContainer(false);
         mScrollView.setVerticalScrollBarEnabled(false);
+        mNoteAdapter.setOnItemClickListener(this);
+        mNoteAdapter.setOnItemChildClickListener(this);
         OverScrollDecoratorHelper.setUpOverScroll(mScrollView);
+    }
 
+    @Override
+    public void onClick(View v) {
+        int id=v.getId();
+        Toast.makeText(getContext(),"module 点击事件",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -162,7 +193,17 @@ public class AreaFragment extends Fragment {
         mListener = null;
     }
 
-    public static class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(getContext()," recommend 点击事件",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(getContext()," child 点击事件",Toast.LENGTH_SHORT).show();
+    }
+
+    public  class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
 
         private Context context;
 
@@ -176,7 +217,7 @@ public class AreaFragment extends Fragment {
             MyViewHolder holder=new MyViewHolder(LayoutInflater.
                     from(context).
                     inflate(R.layout.recyclerview_item_area_module,parent,false));
-
+            holder.itemView.setOnClickListener(AreaFragment.this);
             return holder;
         }
 
@@ -205,50 +246,6 @@ public class AreaFragment extends Fragment {
 
     }
 
-    public static class ListAdapter extends BaseAdapter{
-
-        private Context context;
-
-        public ListAdapter(Context context){
-            this.context=context;
-        }
-
-        @Override
-        public int getCount() {
-            return RECOMMEND_COUNT;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView==null){
-                convertView=LayoutInflater.from(context).
-                        inflate(R.layout.listview_item_area_recommend,parent,false);
-            }
-            else{
-
-            }
-            return convertView;
-        }
-
-        class ViewHolder
-        {
-            View itemview;
-            public ViewHolder(View itemview){
-                this.itemview=itemview;
-            }
-        }
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -260,7 +257,7 @@ public class AreaFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 }

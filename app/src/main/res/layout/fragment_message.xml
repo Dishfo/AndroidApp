@@ -1,0 +1,105 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    tools:context="com.example.dishfo.androidapp.fragment.MessageFragment">
+
+    <LinearLayout
+        android:id="@+id/fragment_mine_linearlayout_actionbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/colorAreaActionBar"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="@string/text_msg_fragment"
+            android:textColor="?android:attr/detailsElementBackground"
+            android:textSize="16sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
+
+        <ImageButton
+            android:id="@+id/fragment_msg_imagebutton_setting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:src="@mipmap/imageview_msgsetting" />
+
+        <ImageButton
+            android:id="@+id/fragment_msg_imagebutton_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:src="@mipmap/imageview_search" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_msg_recyclerview_function"
+        android:layout_width="match_parent"
+        android:layout_height="189dp"
+        android:background="@drawable/sapce_background_drak1"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_mine_linearlayout_actionbar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.ajguan.library.EasyRefreshLayout
+        android:id="@+id/fragment_msg_refreshlayout_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_msg_recyclerview_function">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_msg_recyclerview_container"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.ajguan.library.EasyRefreshLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/sapce_background_drak1"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:text="消息"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_msg_refreshlayout_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_msg_recyclerview_function"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+</android.support.constraint.ConstraintLayout>
