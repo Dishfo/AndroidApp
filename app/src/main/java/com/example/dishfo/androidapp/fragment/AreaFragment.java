@@ -19,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.bean.NoteInfo;
@@ -38,7 +40,8 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
  * Use the {@link AreaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AreaFragment extends Fragment {
+public class AreaFragment extends Fragment implements View.OnClickListener
+        ,BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -154,8 +157,15 @@ public class AreaFragment extends Fragment {
         mRecyclerViewModule.setAdapter(mRecyclerViewAdapter);
         mRecyclerViewModule.setScrollContainer(false);
         mScrollView.setVerticalScrollBarEnabled(false);
+        mNoteAdapter.setOnItemClickListener(this);
+        mNoteAdapter.setOnItemChildClickListener(this);
         OverScrollDecoratorHelper.setUpOverScroll(mScrollView);
+    }
 
+    @Override
+    public void onClick(View v) {
+        int id=v.getId();
+        Toast.makeText(getContext(),"module 点击事件",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -183,7 +193,17 @@ public class AreaFragment extends Fragment {
         mListener = null;
     }
 
-    public static class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(getContext()," recommend 点击事件",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(getContext()," child 点击事件",Toast.LENGTH_SHORT).show();
+    }
+
+    public  class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
 
         private Context context;
 
@@ -197,7 +217,7 @@ public class AreaFragment extends Fragment {
             MyViewHolder holder=new MyViewHolder(LayoutInflater.
                     from(context).
                     inflate(R.layout.recyclerview_item_area_module,parent,false));
-
+            holder.itemView.setOnClickListener(AreaFragment.this);
             return holder;
         }
 
@@ -237,7 +257,7 @@ public class AreaFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 }

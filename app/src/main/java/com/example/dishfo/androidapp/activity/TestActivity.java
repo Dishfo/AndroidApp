@@ -15,6 +15,9 @@ import com.example.dishfo.androidapp.fragment.FoundFragment;
 import com.example.dishfo.androidapp.fragment.MessageFragment;
 import com.example.dishfo.androidapp.fragment.MineFragment;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class TestActivity extends BaseActivity {
 
     @Override
@@ -28,6 +31,8 @@ public class TestActivity extends BaseActivity {
         transaction.add(R.id.container, MineFragment.newInstance("",""));
         transaction.commit();
     }
+
+
 
     @Override
     public void initView() {

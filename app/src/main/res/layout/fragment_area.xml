@@ -24,8 +24,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_found_linearlayout_actionbar">
-
+        
         <include layout="@layout/fragment_area_item_recommend"/>
+            
+
     </ScrollView>
     </LinearLayout>
 

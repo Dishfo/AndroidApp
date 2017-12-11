@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
 import com.ajguan.library.LoadModel;
@@ -38,7 +39,8 @@ import java.util.List;
  * Use the {@link MessageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment implements
+        BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -159,6 +161,12 @@ public class MessageFragment extends Fragment {
         mRecyclerViewMsg.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerViewMsg.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
                 R.drawable.recyclerview_divider_dark1,LinearLayoutManager.VERTICAL));
+
+        myRecyclerViewAdapter.setOnItemClickListener(this);
+        mMessageAdapter.setOnItemClickListener(this);
+        mMessageAdapter.setOnItemChildClickListener(this);
+
+
         mRecyclerViewFunction.setAdapter(myRecyclerViewAdapter);
         mRecyclerViewMsg.setAdapter(mMessageAdapter);
     }
@@ -188,6 +196,16 @@ public class MessageFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Log.d("test","111111111111111");
+        Toast.makeText(getContext(),"ITEM",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(getContext(),"delete",Toast.LENGTH_LONG).show();
+    }
 
 
     class MyRecyclerViewAdapter extends BaseQuickAdapter<Integer,BaseViewHolder>{

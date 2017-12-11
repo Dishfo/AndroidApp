@@ -33,5 +33,8 @@ public class MessageAdapter extends BaseQuickAdapter<MessageInfo,BaseViewHolder>
         ((TextView)helper.getView(R.id.recyclerview_item_msg_content)).setText(item.content);
         ((TextView)helper.getView(R.id.recyclerview_item_msg_date)).setText(item.date);
         ((TextView)helper.getView(R.id.recyclerview_item_msg_name)).setText(item.username);
+
+        helper.addOnClickListener(R.id.right_menu);
+        helper.addOnClickListener(R.id.conten_view);
     }
 }

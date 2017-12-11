@@ -9,8 +9,9 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 public class SettingInfo implements MultiItemEntity {
 
     public static final int FIRST_TYPE=1;
-    public static final int SECOND_TYPE=1;
-    public static final int THRID_TYPE=1;
+    public static final int SECOND_TYPE=2;
+    public static final int THRID_TYPE=3;
+    public static final int FOURTH_TYPE=4;
 
     public String label;
     public String essue;

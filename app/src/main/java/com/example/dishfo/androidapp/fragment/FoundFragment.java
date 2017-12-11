@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.ajguan.library.EasyRefreshLayout;
 import com.baoyz.widget.PullRefreshLayout;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.bean.NoteInfo;
@@ -32,7 +33,8 @@ import java.util.List;
  * Use the {@link FoundFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FoundFragment extends Fragment{
+public class FoundFragment extends Fragment implements
+        BaseQuickAdapter.OnItemChildClickListener,BaseQuickAdapter.OnItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -125,6 +127,8 @@ public class FoundFragment extends Fragment{
                         LinearLayoutManager.VERTICAL,false));
         mRecyclerViewList.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
                 R.drawable.recyclerview_divider_dark2,LinearLayoutManager.VERTICAL));
+        mNoteAdapter.setOnItemChildClickListener(this);
+        mNoteAdapter.setOnItemClickListener(this);
         mRecyclerViewList.setAdapter(mNoteAdapter);
     }
 
@@ -150,6 +154,16 @@ public class FoundFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
     }
 
     public class MyEasyEvent implements EasyRefreshLayout.EasyEvent {

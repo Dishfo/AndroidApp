@@ -32,6 +32,8 @@ public abstract class BaseActivity extends AppCompatActivity{
         fullScreen();
         initView();
         initData();
+
+
     }
 
     public abstract void initView();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,45 +7,23 @@
     android:orientation="vertical"
     tools:context="com.example.dishfo.androidapp.activity.SettingActivity">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/toolbar_back"/>
-    </LinearLayout>
-    <ScrollView
-        android:id="@+id/container"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.constraint.ConstraintLayout
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/actionbar_height" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/activity_setting_recyclertview_setting"
-                android:layout_width="0dp"
-                android:layout_height="364dp"
-                android:layout_marginBottom="163dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <include layout="@layout/actvity_setting_item"/>
 
-            <Button
-                android:id="@+id/activity_setting_button_exit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+    </LinearLayout>
+  
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/toolbar_back"/>
+    </LinearLayout>
+    
 
-                android:layout_marginEnd="32dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/button_background_round"
-                android:text="退出帐号"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_setting_recyclertview_setting"
-                app:layout_constraintVertical_bias="0.08" />
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
-
-</LinearLayout>
+</FrameLayout>

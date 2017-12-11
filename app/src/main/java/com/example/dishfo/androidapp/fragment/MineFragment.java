@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
 import com.ajguan.library.LoadModel;
@@ -30,7 +31,7 @@ import java.util.List;
  * Use the {@link MineFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MineFragment extends Fragment {
+public class MineFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -94,7 +95,7 @@ public class MineFragment extends Fragment {
         mImageButtonSearch=view.findViewById(R.id.fragment_mine_imagebutton_search);
         mImageButtonSetting=view.findViewById(R.id.fragment_mine_imagebutton_setting);
         mRecyclerView=view.findViewById(R.id.fragment_mine_recylerview_setting);
-        mMineMultipleAdapter=new MineMultipleAdapter(mDatas);
+        mMineMultipleAdapter=new MineMultipleAdapter(mDatas,this);
 
 
         mEasyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
@@ -161,6 +162,11 @@ public class MineFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getContext(),"item click",Toast.LENGTH_SHORT).show();
     }
 
     /**
