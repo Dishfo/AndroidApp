@@ -46,7 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity{
             int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             decorView.setSystemUiVisibility(option);
-            activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
+//            activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }

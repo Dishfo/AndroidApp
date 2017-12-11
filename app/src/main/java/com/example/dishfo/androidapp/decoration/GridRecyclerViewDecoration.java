@@ -7,10 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-
-import com.example.dishfo.androidapp.R;
 
 /**
  * Created by dishfo on 17-12-8.

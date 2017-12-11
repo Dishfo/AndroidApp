@@ -40,7 +40,7 @@ public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
         helper.setText(R.id.recyclerView_item_note_textView_time, item.getmTime());
         helper.setText(R.id.recyclerView_item_note_textView_content, item.getmContent());
         Glide.with(mContext).load(item.getmImageUrl()).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_image));
-        Glide.with(mContext).load(R.mipmap.imageview_appreciate).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_appreciate));
+        Glide.with(mContext).load(item.isAppreciate() ? R.mipmap.imageview_appreciate2 : R.mipmap.imageview_appreciate).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_appreciate));
         helper.setText(R.id.recyclerView_item_note_textView_appreciate, item.getmAppreciateNumber());
         Glide.with(mContext).load(R.mipmap.imageview_read).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_read));
         helper.setText(R.id.recyclerView_item_note_textView_read, item.getmReadNumber());
@@ -55,5 +55,9 @@ public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
             Glide.with(mContext).load(R.mipmap.imageview_close).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_close));
 
         }
+
+        helper.addOnClickListener(R.id.recyclerView_item_note_imageView_close);
+        helper.addOnClickListener(R.id.recyclerView_item_note_imageView_appreciate);
+
     }
 }
