@@ -24,8 +24,6 @@ import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
 import com.example.dishfo.androidapp.control.BitmapCache;
-import com.example.dishfo.androidapp.customview.MyImageSpan;
-import com.example.dishfo.androidapp.customview.RichEditText;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
