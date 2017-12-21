@@ -21,11 +21,13 @@
 		{
 			"name":"user.id",
 			"value":"note.Userid",
+			"type":"",
 			"className":"user"
 		},
 		{
 			"name":"note.id",
 			"value":"1111",
+			"type":"",
 			"className":"note"
 		}
 	]
