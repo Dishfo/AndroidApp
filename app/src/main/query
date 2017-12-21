@@ -1,0 +1,32 @@
+{
+	"className":[
+		{
+			"className":"a"
+		},
+		{
+			"className":"b"
+		}
+	],
+	"field":[
+		{
+			"name":"a",
+			"className":"a"
+		},
+		{
+			"name":"b",
+			"className":"b"
+		}
+	],
+	"condition":[
+		{
+			"name":"user.id",
+			"value":"note.Userid",
+			"className":"user"
+		},
+		{
+			"name":"note.id",
+			"value":"1111",
+			"className":"note"
+		}
+	]
+}

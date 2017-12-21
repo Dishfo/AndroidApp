@@ -1,0 +1,22 @@
+{
+    "className": "",
+    "updateFiled": [
+        {
+            "name": "a",
+            "value": "a+1",
+            "type": "int"
+        },
+        {
+            "name": "pby",
+            "value": "11",
+            "type": "string"
+        }
+    ],
+    "select": [
+        {
+            "name": "pby",
+            "value": "11",
+            "type": "111"
+        }
+    ]
+}

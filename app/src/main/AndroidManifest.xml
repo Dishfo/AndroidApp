@@ -16,7 +16,7 @@
         <activity android:name=".activity.MainActivity">
 
         </activity>
-        <activity android:name=".activity.TestActivity">
+        <activity android:name=".activity.NewNoteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,8 +29,6 @@
         <activity android:name=".activity.FindPasswordActivity" />
         <activity android:name=".activity.SettingActivity">
 
-        </activity>
-        <activity android:name=".activity.NewNoteActivity">
         </activity>
 
 
