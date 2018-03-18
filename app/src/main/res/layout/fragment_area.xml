@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/activity_talk_textview_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="19dp"

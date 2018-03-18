@@ -21,9 +21,6 @@ public class RefreshHeaderView extends FrameLayout implements IRefreshHeader {
     private Animation mRotateDown;
     private Animation mRotateInfinite;
     private TextView mTextView;
-    private View mArrowIcon;
-    private View mSuccessIcon;
-    private View mLoadingIcon;
 
     public RefreshHeaderView(Context context) {
         this(context, null);
@@ -39,20 +36,12 @@ public class RefreshHeaderView extends FrameLayout implements IRefreshHeader {
 
         inflate(context, R.layout.recyclerview_refresh_header, this);
 
-        mTextView = findViewById(R.id.recyclerView_refresh_header_textView_text);
-        mArrowIcon = findViewById(R.id.recyclerView_refresh_header_imageView_arrow);
-        mSuccessIcon = findViewById(R.id.recyclerView_refresh_header_view_success);
-        mLoadingIcon = findViewById(R.id.recyclerView_refresh_header_spinKitView_load);
+
     }
 
     @Override
     public void reset() {
-        mTextView.setText(getResources().getText(R.string.header_reset));
-        mSuccessIcon.setVisibility(INVISIBLE);
-        mArrowIcon.setVisibility(VISIBLE);
-        mArrowIcon.clearAnimation();
-        mLoadingIcon.setVisibility(INVISIBLE);
-        mLoadingIcon.clearAnimation();
+
     }
 
     @Override
@@ -62,40 +51,16 @@ public class RefreshHeaderView extends FrameLayout implements IRefreshHeader {
 
     @Override
     public void refreshing() {
-        mArrowIcon.setVisibility(INVISIBLE);
-        mLoadingIcon.setVisibility(VISIBLE);
-        mTextView.setText(getResources().getText(R.string.header_refreshing));
-        mArrowIcon.clearAnimation();
-        mLoadingIcon.startAnimation(mRotateInfinite);
+
     }
 
     @Override
     public void onPositionChange(float currentPos, float lastPos, float refreshPos, boolean isTouch, State state) {
-        // 往上拉
-        if (currentPos < refreshPos && lastPos >= refreshPos) {
-            Log.i("", ">>>>up");
-            if (isTouch && state == State.PULL) {
-                mTextView.setText(getResources().getText(R.string.header_pull));
-                mArrowIcon.clearAnimation();
-                mArrowIcon.startAnimation(mRotateDown);
-            }
-            // 往下拉
-        } else if (currentPos > refreshPos && lastPos <= refreshPos) {
-            Log.i("", ">>>>down");
-            if (isTouch && state == State.PULL) {
-                mTextView.setText(getResources().getText(R.string.header_pull_over));
-                mArrowIcon.clearAnimation();
-                mArrowIcon.startAnimation(mRotateUp);
-            }
-        }
+
     }
 
     @Override
     public void complete() {
-        mLoadingIcon.setVisibility(INVISIBLE);
-        mLoadingIcon.clearAnimation();
-        mArrowIcon.clearAnimation();
-        mSuccessIcon.setVisibility(VISIBLE);
-        mTextView.setText(getResources().getText(R.string.header_completed));
+
     }
 }

@@ -2,22 +2,27 @@ package com.example.dishfo.androidapp.activity;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
+import android.widget.PopupWindow;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
+import com.example.dishfo.androidapp.bean.MessageInfo;
+import com.example.dishfo.androidapp.bean.NoteInfo;
+import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.fragment.AreaFragment;
 import com.example.dishfo.androidapp.fragment.FoundFragment;
-import com.example.dishfo.androidapp.fragment.MessageFragment;
 import com.example.dishfo.androidapp.fragment.MineFragment;
+import com.example.dishfo.androidapp.fragment.TalkFragment;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
+import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.OnTabSelectListener;
 import com.jpeng.jptabbar.animate.AnimationType;
+
+import java.io.Serializable;
 
 public class MainActivity extends BaseActivity implements
         OnTabSelectListener,FragmentSendListener{
@@ -25,12 +30,13 @@ public class MainActivity extends BaseActivity implements
 
     private Fragment[] fragments=new Fragment[4];
     private JPTabBar mJpTabBar=null;
-    private int mPosition=0;
+    private int mPosition=-1;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setIsFullScreen(true);
+       // setIsFullScreen(true);
         setContentView(R.layout.activity_main);
     }
 
@@ -68,7 +74,35 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onTabSelect(int index) {
-        changeFrament(index);
+        if(mPosition!=-1){
+            changeFrament(index);
+        }
+        else{
+            addFragment(index);
+        }
+    }
+
+    private void addFragment(int index){
+        switch (index){
+            case 0:
+                fragments[index]=AreaFragment.newInstance("","");
+                break;
+            case 1:
+                fragments[index]= FoundFragment.newInstance("","");
+                break;
+            case 2:
+                fragments[index]= TalkFragment.newInstance("","");
+                break;
+            case 3:
+                fragments[index]= MineFragment.newInstance("","");
+                break;
+        }
+
+        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.activity_main_fragment_container,fragments[index]);
+        mPosition=index;
+        transaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
+        transaction.commit();
     }
 
     private void changeFrament(int index){
@@ -82,11 +116,12 @@ public class MainActivity extends BaseActivity implements
                     fragments[index]= FoundFragment.newInstance("","");
                     break;
                 case 2:
-                    fragments[index]= MessageFragment.newInstance("","");
+                    fragments[index]= TalkFragment.newInstance("","");
                     break;
                 case 3:
                     fragments[index]= MineFragment.newInstance("","");
                     break;
+
             }
         }
 
@@ -94,20 +129,23 @@ public class MainActivity extends BaseActivity implements
         transaction.hide(fragments[mPosition]);
         transaction.replace(R.id.activity_main_fragment_container,fragments[index]);
         mPosition=index;
-        transaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
         transaction.commit();
     }
 
     @Override
     public void action(int tag,Object arg) {
         Intent intent=null;
+
         switch (tag){
             case AreaFragment.ENTER_RECOMMEND:
                 intent=new Intent(this,NoteActivity.class);
+                NoteInfo info= (NoteInfo) arg;
+                intent.putExtra(NOTEID,info);
                 startActivity(intent);
                 break;
             case AreaFragment.ENTER_MODULE:
                 intent=new Intent(this,AreaActivity.class);
+                intent.putExtra(AREANAME, (String) arg);
                 startActivity(intent);
                 break;
             case FoundFragment.ENTER_FOUND_NOTE:
@@ -116,7 +154,30 @@ public class MainActivity extends BaseActivity implements
                 break;
             case MineFragment.ENTER_SETTING:
                 intent=new Intent(this,SettingActivity.class);
+                intent.putExtra(USERINFO,(Serializable) arg);
                 startActivity(intent);
+                break;
+            case TalkFragment.START_TALK:
+                UserInfo minfo= (UserInfo) arg;
+                intent=new Intent(this,TalkActivity.class);
+                intent.putExtra(USERINFO,minfo);
+                startActivity(intent);
+                break;
+            case DARKWINDOW:
+                mPopupWindow=getWaitingWindow();
+                mPopupWindow.showAsDropDown(getWindow().getDecorView(),0,0);
+                darkBackground();
+                break;
+            case LIGHTWINDOW:
+                mPopupWindow.dismiss();
+                lightBackground();
+                break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LongConService.close();
     }
 }

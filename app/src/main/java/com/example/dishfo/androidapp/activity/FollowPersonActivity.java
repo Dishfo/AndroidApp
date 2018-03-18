@@ -66,7 +66,7 @@ public class FollowPersonActivity extends BaseActivity implements BaseQuickAdapt
             noteInfo.setmNickName("pby");
             noteInfo.setmTime("2017-12-20");
             noteInfo.setmContent("这是我的第一张帖子");
-            noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
+           // noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
             noteInfo.setmAppreciateNumber("120");
             noteInfo.setmReadNumber("100");
             noteInfo.setmDiscussNumber("56");

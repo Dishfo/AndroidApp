@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.SettingInfo;
 
@@ -40,7 +41,6 @@ public class SettingAdapter extends BaseMultiItemQuickAdapter<SettingInfo,BaseVi
         addItemType(SECOND_TYPE, R.layout.recyclerview_item_setting_2);
         addItemType(THRID_TYPE, R.layout.recyclerview_item_setting_3);
         addItemType(FOURTH_TYPE, R.layout.recyclerview_item_setting_4);
-        Log.d("test","lllllllllllllllllllll");
     }
 
 
@@ -55,24 +55,23 @@ public class SettingAdapter extends BaseMultiItemQuickAdapter<SettingInfo,BaseVi
 
         switch (item.getItemType()){
             case FIRST_TYPE:
-
                 ((TextView)helper.getView(R.id.recyclerview_item_textview)).setText(item.label);
                 break;
             case SECOND_TYPE:
-                helper.itemView.setOnClickListener(mListener);
                 ((TextView)helper.getView(R.id.recyclerview_item_textview)).setText(item.label);
-                Glide.with(mContext).load(item.imageurl).
+                GlideApp.with(mContext).load(item.imageurl).placeholder(R.mipmap.placeholder)
+                        .error(R.mipmap.placeholder).
                         apply(RequestOptions.circleCropTransform()).
                         into((ImageView)helper.getView(R.id.recyclerview_item_iamgeview));
+                helper.addOnClickListener(R.id.recyclerview_item_iamgeview);
                 break;
             case THRID_TYPE:
-                helper.itemView.setOnClickListener(mListener);
                 ((TextView)helper.getView(R.id.recyclerview_item_textview)).setText(item.label);
                 ((TextView)helper.getView(R.id.recyclerview_item_textview2)).setText(item.essue);
                 break;
             case FOURTH_TYPE:
-                helper.getView(R.id.recyclerview_item_button).setOnClickListener(mListener);
                 ((Button)helper.getView(R.id.recyclerview_item_button)).setText(item.label);
+                helper.addOnClickListener(R.id.recyclerview_item_button);
                 break;
         }
     }

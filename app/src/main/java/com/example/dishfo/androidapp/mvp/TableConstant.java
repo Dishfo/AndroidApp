@@ -1,0 +1,84 @@
+package com.example.dishfo.androidapp.mvp;
+
+/**
+ * Created by dishfo on 18-2-22.
+ */
+
+public class TableConstant {
+    public static String notestar="notestar";
+    public static String notestarrev="declared";
+    public static String sendnote="sendnote";
+    public static String sendnoterev="haiti";
+    public static String areacomic="areacomic";
+    public static String areacomicrev="russia";
+    public static String noteate="noteate";
+    public static String noteaterev="emoji";
+    public static String discussentertainment="discussentertainment";
+    public static String discussentertainmentrev="ukraine";
+    public static String discusscomic="discusscomic";
+    public static String discusscomicrev="brazil";
+    public static String areaentertainment="areaentertainment";
+    public static String areaentertainmentrev="japan";
+    public static String notesport="notesport";
+    public static String notesportrev="bankrupt";
+    public static String areastudy="areastudy";
+    public static String areastudyrev="india";
+    public static String Note="Note";
+    public static String Noterev="mistake";
+    public static String discussstudy="discussstudy";
+    public static String discussstudyrev="ireland";
+    public static String discuss="discuss";
+    public static String discussrev="noodle";
+    public static String discussstar="discussstar";
+    public static String discussstarrev="finland";
+    public static String areastar="areastar";
+    public static String areastarrev="italy";
+    public static String followArea="followArea";
+    public static String followArearev="canada";
+    public static String discuessread="discuessread";
+    public static String discuessreadrev="poland";
+    public static String followuser="followuser";
+    public static String followuserrev="mexico";
+    public static String notetour="notetour";
+    public static String notetourrev="disapproval";
+    public static String notecomic="notecomic";
+    public static String notecomicrev="evaporation";
+    public static String noteread="noteread";
+    public static String notereadrev="whether";
+    public static String Area="Area";
+    public static String Arearev="china";
+    public static String notegame="notegame";
+    public static String notegamerev="dreams";
+    public static String fans="fans";
+    public static String fansrev="egypt";
+    public static String likeNote="likeNote";
+    public static String likeNoterev="cuba";
+    public static String user="user";
+    public static String userrev="chengdu";
+    public static String noteentertainment="noteentertainment";
+    public static String noteentertainmentrev="drawn";
+    public static String notestudy="notestudy";
+    public static String notestudyrev="conformity";
+    public static String collection="collection";
+    public static String collectionrev="libya";
+    public static String areasport="areasport";
+    public static String areasportrev="germany";
+    public static String discusstour="discusstour";
+    public static String discusstourrev="mod";
+    public static String discussgame="discussgame";
+    public static String discussgamerev="caused";
+    public static String discusssport="discusssport";
+    public static String discusssportrev="netherlands";
+    public static String areatour="areatour";
+    public static String areatourrev="australia";
+    public static String arearead="arearead";
+    public static String areareadrev="britain";
+    public static String areagame="areagame";
+    public static String areagamerev="korea";
+    public static String discusscate="discusscate";
+    public static String discusscaterev="syria";
+    public static String areacate="areacate";
+    public static String areacaterev="america";
+    public static String discussread="discussread";
+    public static String discussreadrev="chastise";
+}

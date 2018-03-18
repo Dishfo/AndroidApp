@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.MineInfo;
 
@@ -47,7 +48,8 @@ public class MineMultipleAdapter extends BaseMultiItemQuickAdapter<MineInfo,Base
     protected void convert(BaseViewHolder helper, MineInfo item) {
         switch (item.getItemType()){
             case MineInfo.FIRST_TYPE:
-                Glide.with(mContext).load(item.headimageUrl).
+                GlideApp.with(mContext).load(item.headimageUrl).placeholder(R.mipmap.placeholder)
+                        .error(R.mipmap.placeholder).
                         apply(RequestOptions.centerInsideTransform()).into((ImageView)
                         helper.getView(R.id.recyclerview_imageview_head));
                 ((TextView)helper.getView(R.id.recyclerview_textview_name)).

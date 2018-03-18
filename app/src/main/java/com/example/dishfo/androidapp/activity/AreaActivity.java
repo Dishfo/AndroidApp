@@ -1,44 +1,56 @@
 package com.example.dishfo.androidapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
+import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.customview.CustomHorizontalProgressBar;
 import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
+import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesContract;
+import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesModelImpl;
+import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesPresentImpl;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by apple on 2017/12/9.
  */
 
-public class AreaActivity extends BaseActivity implements View.OnClickListener {
+public class AreaActivity extends BaseActivity implements View.OnClickListener
+        ,AreaModulesContract.AreaModulesView,BaseQuickAdapter.OnItemClickListener{
 
-    private LinearLayout mLinearLayoutSign = null;
     private ImageView mImageViewAreaHead = null;
-    private ImageView mImageViewLevel = null;
-    private TextView mTextViewSign = null;
     private TextView mTextViewAreaName = null;
-    private CustomHorizontalProgressBar mCustomHorizontalProgressBarExperience = null;
-
 
     private ImageView mImageViewBack = null;
     private ImageView mImageViewSearch = null;
@@ -46,135 +58,199 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener {
     private RecyclerView mRecyclerViewNote = null;
     private NoteAdapter mAdapter = null;
     private List<NoteInfo> mDatas = null;
-
-
-    private LinearLayout mLinearLayoutBottom = null;
-    private ImageView mImageViewToTop = null;
-    private ImageView mImageViewNewNote = null;
-    private ImageView mImageViewUpdate = null;
+    private FloatingActionButton mFloatingActionButton;
+    private TextView mTextViewFollow=null;
 
     private Animation mRotateInfinite = null;
+
+    private AreaModulesContract.AreaModulesPresent present;
+    private AreaInfo info;
 
     @Override
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent=getIntent();
+        info=new AreaInfo();
+        info.name=intent.getStringExtra(AREANAME);
         setContentView(R.layout.activity_area);
     }
 
     @Override
     public void initView() {
+
         mImageViewBack = findView(R.id.activity_area_imageView_back);
         mImageViewSearch = findView(R.id.activity_area_imageView_search);
         mRecyclerViewNote = findView(R.id.activity_area_recyclerView_area);
         mEasyRefreshLayout = findView(R.id.activity_area_easyRefreshLayout);
-        mLinearLayoutBottom = findView(R.id.activity_area_linearLayout_bottom);
-        mImageViewToTop = findView(R.id.activity_area_imageView_toTop);
-        mImageViewNewNote = findView(R.id.activity_area_imageView_newNote);
-        mImageViewUpdate = findView(R.id.activity_area_imageView_update);
+        mFloatingActionButton=findViewById(R.id.activity_area_floatbutton);
+        mFloatingActionButton.setOnClickListener(this);
 
         mEasyRefreshLayout.setRefreshHeadView(new RefreshHeaderView(this));
         mEasyRefreshLayout.setLoadMoreView(new LoadMoreFooterView(this));
         mDatas = new ArrayList<>();
         mAdapter = new NoteAdapter(R.layout.recyclerview_item_note, mDatas);
+        mAdapter.setOnItemClickListener(this);
         mAdapter.addHeaderView(getHeaderView());
         mRecyclerViewNote.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerViewNote.setAdapter(mAdapter);
         mRecyclerViewNote.addItemDecoration(new LinearRecyclerViewDecoration(this, R.drawable.recyclerview_divider_dark1, LinearRecyclerViewDecoration.VERTIACL));
-
         mRotateInfinite = AnimationUtils.loadAnimation(this, R.anim.rotate_infinite);
 
-        mImageViewToTop.setOnClickListener(this);
-        mImageViewNewNote.setOnClickListener(this);
-        mImageViewUpdate.setOnClickListener(this);
+        new AreaModulesPresentImpl(new AreaModulesModelImpl(),this);
+        present.start(info.name);
+        Handler handler=new Handler(Looper.getMainLooper());
     }
 
     @Override
     public void initData() {
-        for (int i = 0; i < 10; i++) {
-            NoteInfo noteInfo = new NoteInfo();
-            noteInfo.setmHeadUrl("http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg");
-            noteInfo.setmNickName("pby");
-            noteInfo.setmTime("2017-12-20");
-            noteInfo.setmContent("这是我的第一张帖子");
-            noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
-            noteInfo.setmAppreciateNumber("120");
-            noteInfo.setmReadNumber("100");
-            noteInfo.setmDiscussNumber("56");
-            noteInfo.setmAreaName("动漫");
-            mDatas.add(noteInfo);
-            mAdapter.notifyItemInserted(mDatas.size() - 1);
-        }
-        Glide.with(this).load("http://img4.imgtn.bdimg.com/it/u=2303225764,948824682&fm=200&gp=0.jpg").into(mImageViewAreaHead);
-
+        mEasyRefreshLayout.setLoadMoreModel(null);
         mEasyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mEasyRefreshLayout.loadMoreComplete();
-                    }
-                }, 200);
+
             }
 
             @Override
             public void onRefreshing() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mEasyRefreshLayout.refreshComplete();
-                        mImageViewUpdate.clearAnimation();
-                    }
-                }, 2000);
+                present.start(info.name);
             }
         });
 
-        mRecyclerViewNote.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                //向上
-                if (dy < 0) {
-                    mLinearLayoutBottom.setVisibility(View.VISIBLE);
-                } else {
-                    mLinearLayoutBottom.setVisibility(View.GONE);
-                }
-            }
-        });
     }
 
     private View getHeaderView() {
         View headView = getLayoutInflater().inflate(R.layout.recyclerview_head_area, null);
-
+        mTextViewFollow=headView.findViewById(R.id.recyclerView_head_area_textView_follow);
         mImageViewAreaHead = headView.findViewById(R.id.recyclerView_head_area_imageView_areaHead);
         mTextViewAreaName = headView.findViewById(R.id.recyclerView_head_area_textView_areaName);
-        mImageViewLevel = headView.findViewById(R.id.recyclerView_head_area_imageView_level);
-        mCustomHorizontalProgressBarExperience = headView.findViewById(R.id.recyclerView_head_area_customHorizontalProgressBar_experience);
-        mLinearLayoutSign = headView.findViewById(R.id.recyclerView_head_area_linearLayout_sign);
-        mTextViewSign = headView.findViewById(R.id.recyclerView_head_area_textView_sign);
+
+        mTextViewFollow.setOnClickListener(this);
+       // AndroidSchedulers.mainThread()
         return headView;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_area_imageView_toTop: {
-                mRecyclerViewNote.smoothScrollToPosition(0);
-                break;
-            }
-            case R.id.activity_area_imageView_newNote: {
-                break;
-            }
-            case R.id.activity_area_imageView_update: {
-                mRecyclerViewNote.smoothScrollToPosition(0);
-                mEasyRefreshLayout.autoRefresh();
-                mImageViewUpdate.startAnimation(mRotateInfinite);
+            case R.id.activity_area_floatbutton: {
+                Intent intent=new Intent(this,NewNoteActivity.class);
+                intent.putExtra(AREANAME,info);
+                startActivity(intent);
                 break;
             }
             case R.id.activity_area_imageView_back:
                 onBackPressed();
                 break;
+            case R.id.recyclerView_head_area_textView_follow:
+                onFollowArea(this.info);
+                break;
         }
     }
 
+    public void loadArea(AreaInfo areaInfo){
+        GlideApp.with(this).load(areaInfo.head).placeholder(R.mipmap.placeholder)
+                .error(R.mipmap.placeholder)
+                .into(mImageViewAreaHead);
+        mTextViewAreaName.setText(areaInfo.name);
+        if(areaInfo.isFollow){
+            mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal_org));
+        }else {
+            mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal));
+        }
+    }
+
+    @Override
+    public void setPresent(AreaModulesContract.AreaModulesPresent present) {
+        this.present=present;
+    }
+
+    @Override
+    public void waitToCompete() {
+
+    }
+
+    @Override
+    public void compete(Object... args) {
+        int code= (int) args[0];
+        sendMessage(code,AreaModulesContract.SUCCEED,args[1]);
+    }
+
+    @Override
+    public void error(Object... args) {
+        int code= (int) args[0];
+        sendMessage(code,AreaModulesContract.FAILED,null);
+    }
+
+    @Override
+    public void showNotes(List<NoteInfo> infos) {
+        mDatas.clear();
+        mAdapter.addData(infos);
+    }
+
+    @Override
+    public void showArea(AreaInfo areaInfo) {
+        this.info=areaInfo;
+        loadArea(areaInfo);
+    }
+
+    @Override
+    public void onFollowArea(AreaInfo areaInfo) {
+        present.onFollowArea(areaInfo);
+    }
+
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(this," recommend 点击事件",Toast.LENGTH_SHORT).show();
+        NoteInfo info=mDatas.get(position);
+        Intent intent=new Intent(this,NoteActivity.class);
+        intent.putExtra(NOTEID,info);
+        startActivity(intent);
+    }
+
+    private void sendMessage(int code,int arg1,Object object){
+        Message message=myHandler.obtainMessage();
+        message.what=code;
+        message.obj=object;
+        message.arg1=arg1;
+        myHandler.sendMessage(message);
+    }
+
+    private void stopWait(){
+        if(mEasyRefreshLayout.isRefreshing())
+        {
+            mEasyRefreshLayout.refreshComplete();
+        }
+    }
+
+    private Handler myHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            AreaActivity.this.stopWait();
+            switch (msg.what){
+                case AreaModulesContract.AREA:
+                    if(msg.arg1==AreaModulesContract.SUCCEED){
+                        showArea((AreaInfo) msg.obj);
+                    }else {
+                        Toast.makeText(AreaActivity.this,"加载专区失败",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case AreaModulesContract.NOTE:
+                    if(msg.arg1==AreaModulesContract.SUCCEED){
+                        showNotes((List<NoteInfo>) msg.obj);
+                    }else {
+                        Toast.makeText(AreaActivity.this,"加载帖子失败",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case AreaModulesContract.FOLLOW:
+                    if(msg.arg1==AreaModulesContract.SUCCEED){
+                        AreaActivity.this.showArea((AreaInfo) msg.obj);
+                    }else {
+                        Toast.makeText(AreaActivity.this,"提交关注失败",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
+    };
 }

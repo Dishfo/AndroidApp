@@ -79,13 +79,13 @@
                 android:background="@drawable/edittext_divider_color"
                 android:hint="验证码" />
 
-            <View
+            <ImageView
                 android:id="@+id/activity_register_view_verification_code"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:scaleType="centerInside"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="#5FF" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <Button

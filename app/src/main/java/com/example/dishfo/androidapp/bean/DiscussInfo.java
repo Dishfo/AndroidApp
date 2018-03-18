@@ -1,26 +1,28 @@
 package com.example.dishfo.androidapp.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by apple on 2017/12/10.
  */
 
-public class DiscussInfo {
-    private String mHeaUrl = null;
-    private String mNickName = null;
-    private String mLevel = null;
-    private String mReplayedContent = null;
-    private String mReplayContent = null;
-    private List<String> mImageUrls = null;
-    private String mTime = null;
+public class DiscussInfo implements Serializable{
+    public String email=null;
+    public String mHeadUrl = null;
+    public String mNickName = null;
+    public String mReplayedContent = null;
+    public String mReplayContent = null;
+    public String discussArea=null;
+    public List<String> mImageUrls = null;
+    public String mTime = null;
 
     public String getmHeaUrl() {
-        return mHeaUrl;
+        return mHeadUrl;
     }
 
     public void setmHeaUrl(String mHeaUrl) {
-        this.mHeaUrl = mHeaUrl;
+        this.mHeadUrl = mHeaUrl;
     }
 
     public String getmNickName() {
@@ -29,14 +31,6 @@ public class DiscussInfo {
 
     public void setmNickName(String mNickName) {
         this.mNickName = mNickName;
-    }
-
-    public String getmLevel() {
-        return mLevel;
-    }
-
-    public void setmLevel(String mLevel) {
-        this.mLevel = mLevel;
     }
 
     public String getmReplayedContent() {

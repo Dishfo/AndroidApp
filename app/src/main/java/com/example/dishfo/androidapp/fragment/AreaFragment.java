@@ -4,19 +4,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,9 @@ import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.GridRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
+import com.example.dishfo.androidapp.mvp.Area.AreaContract;
+import com.example.dishfo.androidapp.mvp.Area.AreaModelImpl;
+import com.example.dishfo.androidapp.mvp.Area.AreaPresentImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +46,7 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
  * create an instance of this fragment.
  */
 public class AreaFragment extends Fragment implements View.OnClickListener
-        ,BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener{
+        ,BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener,AreaContract.AreaView{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final int ENTER_RECOMMEND= 1;
@@ -57,6 +61,9 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     private  static final int[] MODULE_IC=new int[]{R.mipmap.abc_btn_radio_to_on_mtrl_015};
     private List<NoteInfo> mDatas=null;
 
+    private AreaContract.AreaModel mAreaModel;
+    private AreaContract.AreaPresent mPresent;
+
     // TODO: Rename and change types of parameters
     private FragmentSendListener mFragmentSendListener=null;
     private String mParam1;
@@ -69,6 +76,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     private RecyclerView mRecyclerViewModule=null;
 
     private OnFragmentInteractionListener mListener;
+    private NoteInfo info;
 
     public AreaFragment() {
 
@@ -113,18 +121,12 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     }
 
     private void initData() {
+
+        mAreaModel=new AreaModelImpl();
+        mPresent=new AreaPresentImpl(mAreaModel,this,getContext());
+
         mDatas=new ArrayList<>();
-        NoteInfo noteInfo=new NoteInfo();
-        noteInfo.setmHeadUrl("http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg");
-        noteInfo.setmNickName("pby");
-        noteInfo.setmTime("2017-12-20");
-        noteInfo.setmContent("这是我的第一张帖子");
-        noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
-        noteInfo.setmAppreciateNumber("120");
-        noteInfo.setmReadNumber("100");
-        noteInfo.setmDiscussNumber("56");
-        noteInfo.setmAreaName("动漫");
-        mDatas.add(noteInfo);
+
     }
 
     private void initContent(View view){
@@ -164,13 +166,17 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         mNoteAdapter.setOnItemClickListener(this);
         mNoteAdapter.setOnItemChildClickListener(this);
         OverScrollDecoratorHelper.setUpOverScroll(mScrollView);
+        info=new NoteInfo();
+
+        info.mAreaName="开发团队";
+        mPresent.start(info);
     }
 
     @Override
     public void onClick(View v) {
-        int id=v.getId();
-        Toast.makeText(getContext(),"module 点击事件",Toast.LENGTH_SHORT).show();
-        mFragmentSendListener.action(ENTER_MODULE,null);
+        TextView textView=v.findViewById(R.id.fragment_area_textview_module_label);
+        String name=textView.getText().toString();
+        mFragmentSendListener.action(AreaFragment.ENTER_MODULE,name);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -203,12 +209,81 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         Toast.makeText(getContext()," recommend 点击事件",Toast.LENGTH_SHORT).show();
-        mFragmentSendListener.action(ENTER_RECOMMEND,null);
+        NoteInfo info=mDatas.get(position);
+        mFragmentSendListener.action(ENTER_RECOMMEND,info);
     }
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        Toast.makeText(getContext()," child 点击事件",Toast.LENGTH_SHORT).show();
+        Log.d("test","small button");
+        int id=view.getId();
+        switch (id){
+
+            case R.id.recyclerView_item_note_imageView_appreciate:
+             //   Log.d("test","zhan");
+                mPresent.onAppreciateNote(mDatas.get(0));
+                break;
+        }
+    }
+
+
+
+    @Override
+    public void setPresent(AreaContract.AreaPresent present) {
+        this.mPresent=present;
+    }
+
+    @Override
+    public void waitToCompete() {
+        startWait();
+    }
+
+    private void startWait(){
+
+    }
+
+    private void stopWait(){
+
+    }
+
+    @Override
+    public void compete(Object... args) {
+        int code= (int) args[0];
+        stopWait();
+        switch (code){
+            case AreaContract.RECOMMEND:
+                showRecommendNote((NoteInfo) args[1]);
+                break;
+            case AreaContract.APPRECIATE:
+                AppreciateNote();
+                mPresent.start(info);
+                break;
+            case AreaContract.NAPPRECIATE:
+                AppreciateNote();
+                break;
+        }
+    }
+
+    @Override
+    public void error(Object... args) {
+        Message message= errorHandler.obtainMessage();
+        message.arg1= (int) args[0];
+        errorHandler.sendMessage(message);
+    }
+
+    @Override
+    public void AppreciateNote() {
+        mNoteAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showRecommendNote(NoteInfo note) {
+        if(mNoteAdapter.getItemCount()>0){
+            mNoteAdapter.setData(0,note);
+        }else {
+            mNoteAdapter.addData(note);
+        }
+
     }
 
     public  class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
@@ -254,6 +329,27 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         }
 
     }
+
+    private Handler errorHandler =new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.arg1){
+                case AreaContract.RECOMMEND:
+                    Toast.makeText(AreaFragment.this.getContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                    AreaFragment.this.stopWait();
+                    break;
+                case AreaContract.APPRECIATE:
+                    Toast.makeText(AreaFragment.this.getContext(),"网路异常",Toast.LENGTH_SHORT).show();
+                    AreaFragment.this.stopWait();
+                    break;
+                case AreaContract.NAPPRECIATE:
+                    Toast.makeText(AreaFragment.this.getContext(),"网路异常",Toast.LENGTH_SHORT).show();
+                    AreaFragment.this.stopWait();
+                    break;
+            }
+        }
+    };
 
     /**
      * This interface must be implemented by activities that contain this

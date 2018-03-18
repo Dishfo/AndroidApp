@@ -25,13 +25,7 @@
             android:text="name"
             android:textColor="#000000" />
 
-        <ImageView
-            android:id="@+id/recyclerView_head_note_imageView_level"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/recyclerView_head_note_textView_nickName" />
+
 
         <TextView
             android:id="@+id/recyclerView_head_note_textView_follow"
@@ -59,6 +53,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="这是帖子的内容" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/activity_note_head_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+
     </LinearLayout>
 
     <RelativeLayout

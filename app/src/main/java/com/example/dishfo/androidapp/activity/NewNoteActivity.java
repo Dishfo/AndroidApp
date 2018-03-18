@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,8 +25,15 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
+import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
+import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.control.BitmapCache;
+import com.example.dishfo.androidapp.mvp.Area.AreaContract;
+import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
+import com.example.dishfo.androidapp.mvp.NewNote.NewNoteModelImpl;
+import com.example.dishfo.androidapp.mvp.NewNote.NewNotePresenterImpl;
+import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -38,7 +48,7 @@ import java.util.List;
  * Created by apple on 2017/12/10.
  */
 
-public class NewNoteActivity extends BaseActivity implements View.OnClickListener, BaseQuickAdapter.OnItemChildClickListener {
+public class NewNoteActivity extends BaseActivity implements View.OnClickListener, BaseQuickAdapter.OnItemChildClickListener,NewNoteTaskContract.NewNoteView{
     private ImageView mImageViewBack = null;
     private RecyclerView mRecyclerViewPicture = null;
     private EditText mEditTextContent = null;
@@ -56,9 +66,14 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
 
     private BitmapCache mBitmapCache = null;
 
+    private NewNoteTaskContract.NewNotePresenter mPresenter;
+    private AreaInfo info;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent=getIntent();
+        info= (AreaInfo) intent.getSerializableExtra(AREANAME);
         setContentView(R.layout.activity_new_note);
     }
 
@@ -90,13 +105,12 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
         mRecyclerViewPicture.setLayoutManager(new GridLayoutManager(this, 3));
 
         mBitmapCache = new BitmapCache();
+        new NewNotePresenterImpl(this,new NewNoteModelImpl());
     }
 
     @Override
     public void initData() {
         Glide.with(this).load(R.mipmap.imageview_back).into(mImageViewBack);
-
-
     }
 
     @Override
@@ -113,15 +127,14 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
                 break;
             }
             case R.id.activity_new_note_button_ok: {
-                Intent intent = new Intent(this, TestActivity.class);
-                startActivity(intent);
-                this.finish();
+                String files[]=mPictures.toArray(new String[]{});
+                mPresenter.onPushNote(generateNoteInfo(),info,files);
                 break;
             }
             case R.id.activity_new_note_imageView_picture: {
                 PictureSelector.create(this)
                         .openGallery(PictureMimeType.ofImage())
-                        .maxSelectNum(3 - mRecyclerViewPicture.getChildCount())
+                        .maxSelectNum(1)
                         .compress(true)
                         .enableCrop(true)
                         .forResult(PictureConfig.CHOOSE_REQUEST);
@@ -215,4 +228,75 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
         mBitmapCache.recycle();
         PictureFileUtils.deleteCacheDirFile(this);
     }
+
+    private NoteInfo generateNoteInfo(){
+        NoteInfo info=new NoteInfo();
+        info.mAreaName=this.info.name;
+        info.mContent=mEditTextContent.getText().toString();
+        return info;
+    }
+
+    @Override
+    public void setPresent(NewNoteTaskContract.NewNotePresenter present) {
+        this.mPresenter=present;
+    }
+
+    @Override
+    public void waitToCompete() {
+        startWait();
+    }
+
+    private void startWait(){
+
+    }
+
+    private void stopWait(){
+
+    }
+
+    @Override
+    public void compete(Object... args) {
+        sendMessage((int)args[0],NewNoteTaskContract.SUCCEED,null);
+    }
+
+    @Override
+    public void error(Object... args) {
+        sendMessage((int)args[0],NewNoteTaskContract.FAILED,null);
+    }
+
+
+    private void sendMessage(int code, int arg1, Object object){
+        Message message=errorHandler.obtainMessage();
+        message.what=code;
+        message.arg1=arg1;
+        message.obj=object;
+        errorHandler.sendMessage(message);
+    }
+
+    private Handler errorHandler =new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            NewNoteActivity.this.stopWait();
+            switch (msg.what){
+                case NewNoteTaskContract.UPFILE:
+                    if(msg.arg1==NewNoteTaskContract.SUCCEED){
+
+                    }else {
+                        Toast.makeText(NewNoteActivity.this,"文件上传失败",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case NewNoteTaskContract.NOTE:
+                    if(msg.arg1==NewNoteTaskContract.SUCCEED){
+                        NewNoteActivity.this.onBackPressed();
+                    }else {
+                        Toast.makeText(NewNoteActivity.this,"发帖失败",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+
+            }
+            NewNoteActivity.this.stopWait();
+        }
+    };
+
 }

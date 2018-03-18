@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/colorAreaActionBar">
+        android:background="@color/colorAreaActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/activity_area_imageView_back"
             android:layout_width="20dp"
             android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:src="@mipmap/imageview_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/activity_area_textview_follow"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:gravity="center"
             android:text="返回"
@@ -34,66 +42,45 @@
             android:id="@+id/activity_area_imageView_search"
             android:layout_width="20dp"
             android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:src="@mipmap/ic_fragment_area_search_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-    <com.ajguan.library.EasyRefreshLayout
-        android:id="@+id/activity_area_easyRefreshLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/activity_area_recyclerView_area"
+        android:layout_height="wrap_content">
+        <com.ajguan.library.EasyRefreshLayout
+            android:id="@+id/activity_area_easyRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-    </com.ajguan.library.EasyRefreshLayout>
+            android:layout_height="wrap_content"
 
-    <LinearLayout
-        android:id="@+id/activity_area_linearLayout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_area_recyclerView_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/activity_area_imageView_toTop"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/imageview_totop" />
-        </LinearLayout>
+            </android.support.v7.widget.RecyclerView>
+        </com.ajguan.library.EasyRefreshLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/activity_area_floatbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@mipmap/icon_note_add"
+            fab:fab_colorNormal="@color/colorLoginActivityButtonLogin_normal"
+            fab:fab_colorPressed="@color/colorLoginActivityButtonLogin_pressed"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="32dp"/>
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/activity_area_imageView_newNote"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/imageview_new_note" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
 
-            <ImageView
-                android:id="@+id/activity_area_imageView_update"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/imageview_update" />
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

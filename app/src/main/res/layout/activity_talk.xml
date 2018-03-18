@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dishfo.androidapp.activity.TalkActivity">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragment_mine_linearlayout_actionbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/colorAreaActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/activity_talk_textview_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="19dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/text_msg_fragment"
+            android:textColor="?android:attr/detailsElementBackground"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <com.ajguan.library.EasyRefreshLayout
+        android:id="@+id/activity_talk_easyRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_talk_button_send"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_mine_linearlayout_actionbar">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_talk_recylerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </com.ajguan.library.EasyRefreshLayout>
+
+    <EditText
+        android:id="@+id/activity_talk_edit_text"
+        android:layout_width="276dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:theme="@style/MyEditText"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/activity_talk_button_send"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/button_background_round"
+        android:text="发送"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/activity_talk_edit_text" />
+
+</android.support.constraint.ConstraintLayout>

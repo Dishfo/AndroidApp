@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 
@@ -34,13 +35,16 @@ public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, NoteInfo item) {
 
-        Glide.with(mContext).load(item.getmHeadUrl()).apply(RequestOptions.circleCropTransform()).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_head));
+        GlideApp.with(mContext).load(item.getmHeadUrl()).apply(RequestOptions.circleCropTransform()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).
+                apply(RequestOptions.circleCropTransform()).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_head));
         helper.setText(R.id.recyclerView_item_note_textView_nickName, item.getmNickName());
         helper.setText(R.id.recyclerView_item_note_textView_area, item.getmAreaName());
         helper.setText(R.id.recyclerView_item_note_textView_time, item.getmTime());
         helper.setText(R.id.recyclerView_item_note_textView_content, item.getmContent());
-        Glide.with(mContext).load(item.getmImageUrl()).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_image));
-        Glide.with(mContext).load(item.isAppreciate() ? R.mipmap.imageview_appreciate2 : R.mipmap.imageview_appreciate).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_appreciate));
+        GlideApp.with(mContext).load(item.getmImageUrl().get(0)).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).
+                into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_image));
+        Glide.with(mContext).load(item.isAppreciate() ? R.mipmap.imageview_appreciate2 : R.mipmap.imageview_appreciate).
+                into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_appreciate));
         helper.setText(R.id.recyclerView_item_note_textView_appreciate, item.getmAppreciateNumber());
         Glide.with(mContext).load(R.mipmap.imageview_read).into((ImageView) helper.getView(R.id.recyclerView_item_note_imageView_read));
         helper.setText(R.id.recyclerView_item_note_textView_read, item.getmReadNumber());
@@ -60,4 +64,9 @@ public class NoteAdapter extends BaseQuickAdapter<NoteInfo, BaseViewHolder> {
         helper.addOnClickListener(R.id.recyclerView_item_note_imageView_appreciate);
 
     }
+
+    private void loadImages(){
+
+    }
+
 }

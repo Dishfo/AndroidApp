@@ -1,20 +1,28 @@
 package com.example.dishfo.androidapp.bean;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by apple on 2017/12/8.
  */
 
-public class NoteInfo {
-    private String mHeadUrl = null;
-    private String mNickName = null;
-    private String mTime = null;
-    private String mContent = null;
-    private String mImageUrl = null;
-    private String mAppreciateNumber = null;
-    private String mReadNumber = null;
-    private String mDiscussNumber = null;
-    private String mAreaName = null;
-    private boolean isAppreciate = false;
+public class NoteInfo implements Serializable{
+
+    public String email;
+    public String id;
+    public String likeId;
+    public String mHeadUrl = null;
+    public String mNickName = null;
+    public String mTime = null;
+    public String mContent = null;
+    public List<String> mImageUrl = null;
+    public String mAppreciateNumber = null;
+    public String mReadNumber = null;
+    public String mDiscussNumber = null;
+    public String mAreaName = null;
+    public boolean isAppreciate = false;
 
     public boolean isAppreciate() {
         return isAppreciate;
@@ -64,11 +72,11 @@ public class NoteInfo {
         this.mContent = mContent;
     }
 
-    public String getmImageUrl() {
+    public List<String> getmImageUrl() {
         return mImageUrl;
     }
 
-    public void setmImageUrl(String mImageUrl) {
+    public void setmImageUrl(List<String> mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
 

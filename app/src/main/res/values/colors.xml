@@ -9,4 +9,5 @@
     <color name="colorLoginActivityButtonLogin_pressed">#0cc9f2</color>
     <color name="colorReplyedBackground">#D9D9D9</color>
     <color name="colorPictureTextColor">#A9A9A9</color>
+    <color name="colorAreaHeadColor">#300cc0f2</color>
 </resources>
