@@ -13,8 +13,8 @@ public class TalkContract {
 
     public final static int SEND=0X1;
     public final static int RECEIVER=0X2;
-    public final static int SUCCEED=0X2;
-    public final static int FAILED=0X2;
+    public final static int SUCCEED=0X3;
+    public final static int FAILED=0X4;
 
     public interface TalkPresenter extends BasePresenter{
         public void onSend(TalkInfo message);
