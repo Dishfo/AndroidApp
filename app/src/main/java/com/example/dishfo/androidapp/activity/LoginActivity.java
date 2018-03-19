@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
+import com.example.dishfo.androidapp.data.repository.MessageRepository;
 import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.example.dishfo.androidapp.mvp.login.LoginModelImpl;
 import com.example.dishfo.androidapp.mvp.login.LoginPresentImpl;
@@ -47,6 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setIsFullScreen(true);
+
     }
 
     @Override

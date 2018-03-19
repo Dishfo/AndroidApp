@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.DataAcess.NetMethod;
-import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.DiscussAdapter;
@@ -204,8 +203,9 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     private void showNoteHead(NoteInfo noteInfo) {
-        GlideApp.with(this).load(noteInfo.mHeadUrl).placeholder(R.mipmap.placeholder)
-                .error(R.mipmap.placeholder).apply(RequestOptions.circleCropTransform()).into(mImageViewHead);
+        NetMethod netMethod=new NetMethod();
+
+        netMethod.useGlide(this,noteInfo.mHeadUrl,mImageViewHead);
 
         mTextViewNickName.setText(noteInfo.mNickName);
         mTextViewContent.setText(noteInfo.mContent);
@@ -224,9 +224,8 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
                 imageView.setLayoutParams(lp);
                 group.addView(imageView);
                 Log.d("test","urlis"+url);
-                GlideApp.
-                        with(this).
-                        load(url).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(imageView);
+
+                netMethod.useGlideWithoutCircle(this,url,imageView);
             }
         }
     }

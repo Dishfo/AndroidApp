@@ -1,16 +1,15 @@
 package com.example.dishfo.androidapp.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.example.dishfo.androidapp.GlideApp;
+import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.SettingInfo;
 
@@ -51,6 +50,8 @@ public class SettingAdapter extends BaseMultiItemQuickAdapter<SettingInfo,BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, SettingInfo item) {
+        NetMethod netMethod=new NetMethod();
+
         helper.itemView.setTag(item.label);
 
         switch (item.getItemType()){
@@ -59,10 +60,7 @@ public class SettingAdapter extends BaseMultiItemQuickAdapter<SettingInfo,BaseVi
                 break;
             case SECOND_TYPE:
                 ((TextView)helper.getView(R.id.recyclerview_item_textview)).setText(item.label);
-                GlideApp.with(mContext).load(item.imageurl).placeholder(R.mipmap.placeholder)
-                        .error(R.mipmap.placeholder).
-                        apply(RequestOptions.circleCropTransform()).
-                        into((ImageView)helper.getView(R.id.recyclerview_item_iamgeview));
+                netMethod.useGlide(mContext,item.imageurl,(ImageView)helper.getView(R.id.recyclerview_item_iamgeview));
                 helper.addOnClickListener(R.id.recyclerview_item_iamgeview);
                 break;
             case THRID_TYPE:

@@ -11,7 +11,8 @@ import com.example.dishfo.androidapp.mvp.BaseView;
 
 public class TalkContract {
 
-    public final static int SEND=0X1;
+    public final static int LOAD=0X7;
+    public final static int SET =0X1;
     public final static int RECEIVER=0X2;
     public final static int SUCCEED=0X3;
     public final static int FAILED=0X4;

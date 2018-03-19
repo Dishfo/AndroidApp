@@ -1,7 +1,15 @@
 package com.example.dishfo.androidapp.DataAcess;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.request.RequestOptions;
+import com.example.dishfo.androidapp.GlideApp;
+import com.example.dishfo.androidapp.GlideRequest;
+import com.example.dishfo.androidapp.GlideRequests;
+import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.DiscussInfo;
@@ -33,6 +41,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -42,7 +52,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by dishfo on 18-2-14.
  */
-
+@Singleton
 public class NetMethod {
 
     private String user;
@@ -245,6 +255,7 @@ public class NetMethod {
         Log.d("test",json);
         return service.accessDatarx(action,json);
     }
+
     public Call<JsonObject> generateCall(String action, JsonAction jaction, Object...args){
         Retrofit retrofit=NetMethod.INSTANCE.getRetrofitWithRx();
         JsonGenerator generator=new JsonGenerator();
@@ -254,7 +265,6 @@ public class NetMethod {
         Log.d("test",json);
         return service.accessData(action,json);
     }
-
 
     public Retrofit getRetrofitWithRx(){
         Retrofit retrofit=new Retrofit.Builder()
@@ -411,5 +421,28 @@ public class NetMethod {
         }
         return id;
     }
+
+    public void useGlide(Context context, String url, RequestOptions options, ImageView view,int placeholder,int error){
+        GlideRequest<Drawable> request= GlideApp.with(context).load(url);
+        if(options!=null){
+            request=request.apply(options);
+        }
+        if(placeholder!=-1){
+            request=request.placeholder(placeholder);
+        }
+        if(error!=-1){
+            request=request.error(error);
+        }
+        request.into(view);
+    }
+
+    public void useGlide(Context context,String url,ImageView view){
+        useGlide(context,url,RequestOptions.circleCropTransform(),view, R.mipmap.placeholder,R.mipmap.placeholder);
+    }
+
+    public void useGlideWithoutCircle(Context context,String url,ImageView view){
+        useGlide(context,url,null,view, R.mipmap.placeholder,R.mipmap.placeholder);
+    }
+
 
 }

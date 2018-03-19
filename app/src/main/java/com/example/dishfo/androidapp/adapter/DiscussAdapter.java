@@ -15,7 +15,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.example.dishfo.androidapp.GlideApp;
+
+import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.DiscussInfo;
 import com.example.dishfo.androidapp.constant.ArrayConstant;
@@ -51,6 +52,9 @@ public class DiscussAdapter extends BaseQuickAdapter<DiscussInfo, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, DiscussInfo item) {
+
+        NetMethod netMethod=new NetMethod();
+
         helper.addOnClickListener(R.id.recyclerView_item_discuss_imageView_head);
         Glide.with(mContext).load(item.getmHeaUrl()).apply(RequestOptions.circleCropTransform()).into((ImageView) helper.getView(R.id.recyclerView_item_discuss_imageView_head));
         helper.setText(R.id.recyclerView_item_discuss_textView_nickName, item.getmNickName());
@@ -70,9 +74,9 @@ public class DiscussAdapter extends BaseQuickAdapter<DiscussInfo, BaseViewHolder
                 imageView.setLayoutParams(lp);
                 viewGroup.addView(imageView);
                 Log.d("test","urlis"+url);
-                GlideApp.
-                        with(mContext).
-                        load(url).listener(listener).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(imageView);
+
+                netMethod.useGlideWithoutCircle(mContext,url,imageView);
+
             }
         }
         helper.setText(R.id.recyclerView_item_discuss_textView_time, item.getmTime());

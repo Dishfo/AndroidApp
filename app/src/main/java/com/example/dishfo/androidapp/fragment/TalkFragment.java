@@ -187,7 +187,7 @@ public class TalkFragment extends Fragment implements
     }
 
     @Override
-    public void AfterRecevier(MessageBean message) {
+    public void AfterRecevier(com.example.dishfo.androidapp.sqlBean.Message message) {
         presenter.onRecevier(message);
     }
 
@@ -221,7 +221,7 @@ public class TalkFragment extends Fragment implements
     public void dispatchMessage(Message message) {
         switch (message.what){
             case MessageBean.GETUSERS:
-                MessageBean bean= (MessageBean) message.obj;
+                    com.example.dishfo.androidapp.sqlBean.Message bean= (com.example.dishfo.androidapp.sqlBean.Message) message.obj;
                 presenter.onRecevier(bean);
                 break;
         }

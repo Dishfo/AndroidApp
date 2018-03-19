@@ -8,25 +8,21 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.example.dishfo.androidapp.GlideApp;
+import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
-import com.example.dishfo.androidapp.customview.CustomHorizontalProgressBar;
 import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
@@ -35,12 +31,8 @@ import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesModelImpl;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesPresentImpl;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by apple on 2017/12/9.
@@ -149,9 +141,10 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void loadArea(AreaInfo areaInfo){
-        GlideApp.with(this).load(areaInfo.head).placeholder(R.mipmap.placeholder)
-                .error(R.mipmap.placeholder)
-                .into(mImageViewAreaHead);
+
+        NetMethod netMethod=new NetMethod();
+        netMethod.useGlideWithoutCircle(this,areaInfo.head,mImageViewAreaHead);
+
         mTextViewAreaName.setText(areaInfo.name);
         if(areaInfo.isFollow){
             mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal_org));

@@ -17,6 +17,8 @@ public class TalkInfo implements Serializable,MultiItemEntity{
    // public int type;
     public String messageContent;
     public boolean other;
+    public String otherUser;
+    public String time;
 
     @Override
     public int getItemType() {

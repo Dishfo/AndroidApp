@@ -1,16 +1,13 @@
 package com.example.dishfo.androidapp.adapter;
 
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.example.dishfo.androidapp.GlideApp;
+import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.MineInfo;
 
@@ -46,12 +43,11 @@ public class MineMultipleAdapter extends BaseMultiItemQuickAdapter<MineInfo,Base
 
     @Override
     protected void convert(BaseViewHolder helper, MineInfo item) {
+        NetMethod netMethod=new NetMethod();
+
         switch (item.getItemType()){
             case MineInfo.FIRST_TYPE:
-                GlideApp.with(mContext).load(item.headimageUrl).placeholder(R.mipmap.placeholder)
-                        .error(R.mipmap.placeholder).
-                        apply(RequestOptions.centerInsideTransform()).into((ImageView)
-                        helper.getView(R.id.recyclerview_imageview_head));
+                netMethod.useGlide(mContext,item.headimageUrl,(ImageView)helper.getView(R.id.recyclerview_imageview_head));
                 ((TextView)helper.getView(R.id.recyclerview_textview_name)).
                         setText(item.name);
                 ((TextView)helper.getView(R.id.recyclerview_textview_autograph)).

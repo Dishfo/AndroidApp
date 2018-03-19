@@ -9,7 +9,6 @@ import android.widget.PopupWindow;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
-import com.example.dishfo.androidapp.bean.MessageInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.fragment.AreaFragment;
@@ -106,7 +105,6 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void changeFrament(int index){
-
         if(fragments[index]==null){
             switch (index){
                 case 0:

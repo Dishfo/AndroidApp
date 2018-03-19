@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.message;
 
-import com.example.dishfo.androidapp.bean.MessageBean;
+import com.example.dishfo.androidapp.sqlBean.Message;
 
 /**
  * Created by dishfo on 18-3-17.
@@ -40,7 +40,7 @@ public class MessagePresenterImpl implements MessageContract.MessagePresenter{
     }
 
     @Override
-    public void onRecevier(MessageBean message) {
+    public void onRecevier(Message message) {
         model.saveMessage(message);
     }
 }

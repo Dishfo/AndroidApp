@@ -1,14 +1,8 @@
 package com.example.dishfo.androidapp.mvp.message;
 
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
-import com.example.dishfo.androidapp.DataAcess.UserAcess;
-import com.example.dishfo.androidapp.bean.MessageBean;
-import com.example.dishfo.androidapp.bean.MessageInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
-import com.example.dishfo.androidapp.data.message.MessageDataBase;
-import com.example.dishfo.androidapp.data.message.MessageEntity;
+import com.example.dishfo.androidapp.data.repository.MessageRepository;
+import com.example.dishfo.androidapp.sqlBean.Message;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -22,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MessageModelImpl implements MessageContract.MessageModel {
 
     private MessageContract.MessagePresenter presenter;
+    final MessageRepository repository=new MessageRepository();
     @Override
     public void setPresent(MessageContract.MessagePresenter present) {
         this.presenter=present;
@@ -49,56 +44,31 @@ public class MessageModelImpl implements MessageContract.MessageModel {
 
     @Override
     public void loadMessage(String email) {
-        final ArrayList<MessageInfo> lists=new ArrayList<>();
-        Observable.create(emitter -> {
-            MessageDataBase dataBase=MessageDataBase.getInstance();
-            List<MessageEntity> entities=dataBase.getData(email);
-            for(MessageEntity entity:entities){
-                MessageInfo info=new MessageInfo();
-                info.time=entity.getTime();
-                info.content=entity.getMessage();
-                info.email=entity.getEmail();
-                info.userName=entity.getName();
-
-                Observable<UserInfo> infos=UserAcess.INSTANCE.getUserById(info.email);
-                infos.subscribe(userInfo -> {
-                    info.headUrl=userInfo.head;
-                });
-
-                emitter.onNext(info);
-            }
-        }).observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                    lists.add((MessageInfo) o);
-                },throwable -> {
-                    error(MessageContract.MESSAGELOAD);
-                },() -> {
-                    compete(MessageContract.MESSAGELOAD,lists);
-                });
+        Observable<List<Message>> observable=Observable.create(emitter -> {
+            List<Message> messages=repository.getMessagesByEmail(email);
+            emitter.onNext(messages);
+        });
+        observable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(messages -> {
+            compete(MessageContract.MESSAGEGET,messages);
+        },throwable -> {
+           error(MessageContract.MESSAGEGET);
+        });
     }
 
     @Override
-    public void saveMessage(MessageBean messageBean) {
-        Observable<MessageEntity> observable=Observable.create(emitter -> {
-            MessageEntity entity=new MessageEntity();
-            entity.setEmail(NetMethod.INSTANCE.getUser());
-            entity.setMessage(messageBean.getText());
-            entity.setTime(messageBean.getTime());
-            entity.setSendUser(messageBean.getFrom());
-            Observable<UserInfo> infos=UserAcess.INSTANCE.getUserById(entity.getSendUser());
-            infos.subscribe(userInfo -> {
-                entity.setName(userInfo.name);
-            });
-        });
-
-        observable.observeOn(AndroidSchedulers.mainThread())
+    public void saveMessage(Message message) {
+        Observable.create(emitter -> {
+            repository.saveMessage(message);
+            emitter.onComplete();
+        }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(messageEntity -> {
-                            compete(MessageContract.MESSAGEGET,messageEntity);
-                        },
-                        throwable -> {
-                            error(MessageContract.MESSAGEGET);
-                        });
+                .subscribe(o -> {},throwable -> {
+                    error(MessageContract.SAVE);
+                },() -> {
+                    compete(MessageContract.SAVE,message);
+                });
+
     }
 }

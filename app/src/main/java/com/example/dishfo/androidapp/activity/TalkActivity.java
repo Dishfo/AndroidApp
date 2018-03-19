@@ -3,7 +3,6 @@ package com.example.dishfo.androidapp.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,14 +19,14 @@ import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.TalkAdapter;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.bean.MessageBean;
-import com.example.dishfo.androidapp.bean.MessageInfo;
 import com.example.dishfo.androidapp.bean.TalkInfo;
 import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
-import com.example.dishfo.androidapp.data.talk.TalkdbContract;
 import com.example.dishfo.androidapp.listener.MessageHandler;
 import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.example.dishfo.androidapp.mvp.talk.TalkContract;
+import com.example.dishfo.androidapp.mvp.talk.TalkModelImpl;
+import com.example.dishfo.androidapp.mvp.talk.TalkPresenterImpl;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class TalkActivity extends BaseActivity implements MessageHandler,TalkCon
     private EditText editTextMessage;
     private Button buttonSend;
     private TalkAdapter adapter;
-
     private List<TalkInfo> talkInfos;
     private TalkContract.TalkPresenter presenter;
 
@@ -70,6 +68,9 @@ public class TalkActivity extends BaseActivity implements MessageHandler,TalkCon
         adapter=new TalkAdapter(talkInfos);
         recyclerViewMessageContents.setAdapter(adapter);
         recyclerViewMessageContents.setLayoutManager(new LinearLayoutManager(this));
+
+        new TalkPresenterImpl(new TalkModelImpl(),this);
+        presenter.start(NetMethod.INSTANCE.getUser(),info.email);
     }
 
 
@@ -93,8 +94,8 @@ public class TalkActivity extends BaseActivity implements MessageHandler,TalkCon
 
     @Override
     public void dispatchMessage(Message message) {
-        TalkInfo info= (TalkInfo) message.obj;
-        afterRecevier(info);
+        MessageBean bean= (MessageBean) message.obj;
+        //afterRecevier(info);
     }
 
     @Override
@@ -109,12 +110,12 @@ public class TalkActivity extends BaseActivity implements MessageHandler,TalkCon
 
     @Override
     public void compete(Object... args) {
-
+        sendMessage((Integer) args[0],TalkContract.SUCCEED,args[1]);
     }
 
     @Override
     public void error(Object... args) {
-
+        sendMessage((Integer) args[0],TalkContract.FAILED,null);
     }
 
     @Override
@@ -128,7 +129,11 @@ public class TalkActivity extends BaseActivity implements MessageHandler,TalkCon
     }
 
     private void sendMessage(int code,int arg1,Object obj){
-
+        Message message=handler.obtainMessage();
+        message.what=code;
+        message.arg1=arg1;
+        message.obj=obj;
+        handler.sendMessage(message);
     }
 
     private MyHandler handler=new MyHandler();

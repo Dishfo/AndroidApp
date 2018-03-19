@@ -7,5 +7,5 @@ import com.bumptech.glide.module.AppGlideModule;
  * Created by dishfo on 18-3-16.
  */
 @GlideModule
-public class GlideAppModule extends AppGlideModule{
+public final class GlideAppModule extends AppGlideModule{
 }
