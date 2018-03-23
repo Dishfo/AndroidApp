@@ -16,7 +16,7 @@ public class UserInfoMapping extends Mapping<String>{
     private UserInfoMapping(){
         maps=new ArrayMap<>();
         maps.put(TableConstant.user+"."+ FieldConstant.email,"email");
-        maps.put(TableConstant.user+"."+ FieldConstant.head,"head");
+        maps.put(TableConstant.user+"."+ FieldConstant.head,"headUrl");
         maps.put(TableConstant.user+"."+ FieldConstant.name,"name");
     }
 

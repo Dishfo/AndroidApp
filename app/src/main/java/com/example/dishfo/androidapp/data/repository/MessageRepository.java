@@ -12,7 +12,6 @@ import javax.inject.Singleton;
 /**
  * Created by dishfo on 18-3-19.
  */
-@Singleton
 public class MessageRepository {
     @Inject
     MessageDao messageDao;

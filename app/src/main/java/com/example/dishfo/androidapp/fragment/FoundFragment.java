@@ -124,7 +124,7 @@ public class FoundFragment extends Fragment implements
         mImageButtonSearch=view.findViewById(R.id.fragment_found_imagebutton_search);
         mRecyclerViewList=view.findViewById(R.id.fragment_found_recyclerview_list);
 
-        mNoteAdapter=new NoteAdapter(R.layout.recyclerview_item_note,mDatas);
+        mNoteAdapter=new NoteAdapter(R.layout.recyclerview_item_note,null);
 
         mRecyclerViewList.setLayoutManager(
                 new LinearLayoutManager(getContext(),

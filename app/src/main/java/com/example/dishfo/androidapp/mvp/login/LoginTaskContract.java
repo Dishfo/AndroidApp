@@ -15,15 +15,13 @@ public class LoginTaskContract {
 
     public interface LoginPresent extends BasePresenter{
         public void login(String name,String pwd);
-        public void init(String name, String pwd);
     }
 
     public interface LoginView extends BaseView<LoginPresent>{
-        public void init(String name, String pwd);
+
     }
 
     public interface  LoginModel extends BaseModel<LoginPresent>{
         public void loginNow(String name,String pwd);
-        public void loadUser();
     }
 }

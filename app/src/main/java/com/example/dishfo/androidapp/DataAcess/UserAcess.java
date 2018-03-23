@@ -13,10 +13,18 @@ import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAc
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
 import com.example.dishfo.androidapp.netInterface.UpdateAction.UpdateConditionAction;
 import com.example.dishfo.androidapp.netInterface.UpdateAction.UpdateFieldsAction;
+import com.example.dishfo.androidapp.netbean.UserInfoMapping;
+import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
+
+import java.io.IOException;
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.http.PUT;
 
 
 /**
@@ -24,34 +32,54 @@ import retrofit2.Call;
  */
 
 public class UserAcess {
-    public static UserAcess INSTANCE=new UserAcess();
-    private UserAcess(){
+    public NetMethod netMethod;
 
+    public UserAcess(NetMethod netMethod){
+        this.netMethod=netMethod;
     }
 
-    public Observable<UserInfo> getUserById(String email){
-         Observable<JsonObject> observable=NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
+
+    public List<User> getUser(String email) throws IOException {
+        Call<JsonObject> objectCall= netMethod.generateCall("query",(generator, args) -> {
             competeUserQueryByUser(generator, (String) args[0]);
         },email);
 
-        return observable.map(object -> {
-            Log.d("userinfo",object.toString());
-           return NetMethod.INSTANCE.praseUser(object.get("result").getAsString());
-        });
+        Response<JsonObject> response=objectCall.execute();
+        JsonObject body=response.body();
+        int code=body.get("code").getAsInt();
+        if(code!=1){
+            return null;
+        }
+        return new JsonObjectParse().getBeans(body.get("result").getAsString(),
+                User.class, UserInfoMapping.INSTANCE);
     }
 
+    public boolean updateUser(User user) throws IOException {
+        if(user.getEmail()==null){
+            return false;
+        }
 
+        Call<JsonObject> objectCall= netMethod.generateCall("update",(generator, args) -> {
+            competeUpdateUseByUser(generator, (User) args[0]);
+        },user);
 
-    public Observable<JsonObject> updateUserInfoByUser(String email,UserInfo info){
-        Observable<JsonObject> observable=NetMethod.INSTANCE.generateObserable("update",(generator, args) -> {
-            competeUpdateUseByUser(generator, (String) args[0],(UserInfo)args[1]);
-        },email,info);
-
-        return observable;
+        Response<JsonObject> response=objectCall.execute();
+        JsonObject object=response.body();
+        int code=object.get("code").getAsInt();
+        if(code==1){
+            return true;
+        }else {
+            return false;
+        }
     }
 
+    /**
+     * 用于构建user josn查询语句
+     * @param generator
+     * @param user
+     */
 
-    public void competeUpdateUseByUser(JsonGenerator generator, String arg, UserInfo arg1) {
+    public void competeUpdateUseByUser(JsonGenerator generator, User user) {
         AddAction2 action2=new AddAction2();
         UpdateFieldsAction field=new UpdateFieldsAction();
         UpdateConditionAction condition=new UpdateConditionAction();
@@ -59,18 +87,16 @@ public class UserAcess {
         generator.openNode();
         generator.compete(action2,"className",TableConstant.user);
         generator.openArray()
-                .compete(field,FieldConstant.name,arg1.name,TypeConstant.varchar)
-                .compete(field,FieldConstant.head,arg1.head,TypeConstant.varchar)
+                .compete(field,FieldConstant.name,user.getName(),TypeConstant.varchar)
+                .compete(field,FieldConstant.head,user.getHeadUrl(),TypeConstant.varchar)
                 .closeNode("updateField");
 
         generator.openArray()
-                .compete(condition,FieldConstant.email,arg,TypeConstant.varchar)
+                .compete(condition,FieldConstant.email,user.getEmail(),TypeConstant.varchar)
                 .closeNode("select");
 
         generator.closeNode("");
-        String json=generator.toJson();
     }
-
 
     public void competeUserQueryByUser(JsonGenerator generator, String email) {
         SelectClassNameAction classname=new SelectClassNameAction();

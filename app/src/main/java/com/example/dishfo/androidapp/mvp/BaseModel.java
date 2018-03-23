@@ -7,7 +7,7 @@ import android.provider.Telephony;
  */
 
 public interface BaseModel<T>{
-    public static final String HOST="http://172.16.0.121:8080/test/";
+    public static final String HOST="http://192.168.1.109:8080/test/";
     public void setPresent(T present);
     public void setArgs(Object...args);
     public void stop();

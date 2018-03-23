@@ -81,7 +81,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         mEasyRefreshLayout.setRefreshHeadView(new RefreshHeaderView(this));
         mEasyRefreshLayout.setLoadMoreView(new LoadMoreFooterView(this));
         mDatas = new ArrayList<>();
-        mAdapter = new NoteAdapter(R.layout.recyclerview_item_note, mDatas);
+       // mAdapter = new NoteAdapter(R.layout.recyclerview_item_note, mDatas);
         mAdapter.setOnItemClickListener(this);
         mAdapter.addHeaderView(getHeaderView());
         mRecyclerViewNote.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -178,7 +178,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void showNotes(List<NoteInfo> infos) {
         mDatas.clear();
-        mAdapter.addData(infos);
+       // mAdapter.addData(infos);
     }
 
     @Override

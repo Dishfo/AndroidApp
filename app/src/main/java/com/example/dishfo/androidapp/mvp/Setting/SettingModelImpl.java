@@ -57,7 +57,8 @@ public class SettingModelImpl implements SettingContract.SettingModel{
         Observable<JsonObject> userObservable=observable.flatMap(jsonObject -> {
            if(jsonObject.get("code").getAsInt()==1){
                 info.head=NetMethod.INSTANCE.getUrl(jsonObject);
-                return UserAcess.INSTANCE.updateUserInfoByUser(NetMethod.INSTANCE.getUser(),info);
+              //  return UserAcess.INSTANCE.updateUserInfoByUser(NetMethod.INSTANCE.getUser(),info);
+               return null;
            }else {
                observable.unsubscribeOn(Schedulers.io());
            }
@@ -86,8 +87,8 @@ public class SettingModelImpl implements SettingContract.SettingModel{
     @Override
     public void toChangeName(UserInfo info,String name) {
         info.name=name;
-        Observable<JsonObject> observable=
-                UserAcess.INSTANCE.updateUserInfoByUser(NetMethod.INSTANCE.getUser(),info);
+        Observable<JsonObject> observable=null;
+              //  UserAcess.INSTANCE.updateUserInfoByUser(NetMethod.INSTANCE.getUser(),info);
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(jsonObject -> {

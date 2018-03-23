@@ -2,6 +2,8 @@ package com.example.dishfo.androidapp.mvp.login;
 
 import android.text.TextUtils;
 
+import javax.inject.Inject;
+
 /**
  * Created by dishfo on 18-1-26.
  */
@@ -14,6 +16,7 @@ public class LoginPresentImpl implements LoginTaskContract.LoginPresent{
     private String currentName;
     private String currentPwd;
 
+    @Inject
     public LoginPresentImpl
             (LoginTaskContract.LoginModel loginModel, LoginTaskContract.LoginView loginView) {
         this.mLoginModel = loginModel;
@@ -24,8 +27,6 @@ public class LoginPresentImpl implements LoginTaskContract.LoginPresent{
 
     @Override
     public void start(Object... args) {
-        mLoginModel.loadUser();
-//        mLoginModel.loginNow((String) args[0],(String)args[1]);
     }
 
     @Override
@@ -58,18 +59,11 @@ public class LoginPresentImpl implements LoginTaskContract.LoginPresent{
         }
     }
 
-
     private boolean config(){
         if(currentName==null||currentPwd==null||
                 TextUtils.isEmpty(currentName)||TextUtils.isEmpty(currentPwd)){
             return false;
         }
         return true;
-    }
-
-
-    @Override
-    public void init(String name, String pwd) {
-        mLoginView.init(name,pwd);
     }
 }

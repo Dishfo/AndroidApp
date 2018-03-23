@@ -8,13 +8,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.GlideRequest;
-import com.example.dishfo.androidapp.GlideRequests;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.DiscussInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.FieldConstant;
 import com.example.dishfo.androidapp.mvp.TableConstant;
@@ -26,7 +24,6 @@ import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsActio
 import com.example.dishfo.androidapp.netbean.AreaInfoMapping;
 import com.example.dishfo.androidapp.netbean.DiscussInfoMapping;
 import com.example.dishfo.androidapp.netbean.NoteInfoMapping;
-import com.example.dishfo.androidapp.netbean.UserInfoMapping;
 import com.example.dishfo.androidapp.util.JsonAction;
 import com.example.dishfo.androidapp.util.PropertiesReader;
 import com.google.gson.JsonArray;
@@ -50,6 +47,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ * 提供部分的常用方法
  * Created by dishfo on 18-2-14.
  */
 @Singleton
@@ -127,11 +125,6 @@ public class NetMethod {
         return noteInfos;
     }
 
-    public AreaInfo praseArea(String result){
-        AreaInfo areaInfo=new AreaInfo();
-        return praseArea(result,areaInfo);
-    }
-
     public AreaInfo praseArea(String result,AreaInfo areaInfo){
         Class areaInfoClass=areaInfo.getClass();
         JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
@@ -198,26 +191,6 @@ public class NetMethod {
             }
         }
         return discussInfo;
-    }
-
-    public void competeCollectionQueryByUser(JsonGenerator generator,String email){
-        SelectClassNameAction classname=new SelectClassNameAction();
-        SelectFieldsAction field=new SelectFieldsAction();
-        SelectConditionAction condition=new SelectConditionAction();
-
-        generator.openNode();
-        generator.openArray()
-                .compete(classname,TableConstant.collection)
-                .closeNode("className");
-
-        generator.openArray()
-                .compete(field,FieldConstant.noteId,TableConstant.collection)
-                .closeNode("field");
-
-        generator.openArray()
-                .compete(condition,FieldConstant.email,email,TypeConstant.varchar,TableConstant.collection,"0")
-                .closeNode("condition");
-        generator.closeNode("");
     }
 
     public void competeDiscussByUser(JsonGenerator generator,String email,String discuss){
@@ -338,42 +311,6 @@ public class NetMethod {
         generator.closeNode("");
     }
 
-    public UserInfo praseUser(String result) {
-        UserInfo userInfo=new UserInfo();
-        Class userInfoClass=userInfo.getClass();
-        JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
-        JsonArray array=jsonObject
-                .get(RESULT)
-                .getAsJsonArray()
-                .get(0)
-                .getAsJsonObject()
-                .get(RESULT)
-                .getAsJsonArray();
-
-        Iterator<JsonElement> elements=array.iterator();
-        while (elements.hasNext()){
-            JsonObject object=elements.next().getAsJsonObject();
-            String name=object.get("name").getAsString();
-            try {
-                Field field=userInfoClass.getField(UserInfoMapping.INSTANCE.
-                        get(PropertiesReader.strTurn(name, MyApplication.MAP)));
-                field.setAccessible(true);
-                Type type=field.getType();
-                if(type.equals(String.class)){
-                    field.set(userInfo,object.get("value").getAsString());
-                }else if(type.equals(List.class)){
-                    List<String> tmplist=NetMethod.INSTANCE.parseStringtoArray(object.get("value").getAsString());
-                    field.set(userInfo,tmplist);
-                }
-            } catch (NoSuchFieldException e) {
-                Log.d("test",e.toString()+" "+name);
-            } catch (IllegalAccessException e) {
-                Log.d("test",e.toString()+" "+name);
-            }
-        }
-        return userInfo;
-    }
-
     public String getUrl(JsonObject object){
         String url=object.get("result").getAsString();
         String tmp="http://"+url;
@@ -436,12 +373,30 @@ public class NetMethod {
         request.into(view);
     }
 
+    public void useGlide(Context context, int res, RequestOptions options, ImageView view,int placeholder,int error){
+        GlideRequest<Drawable> request= GlideApp.with(context).load(res);
+        if(options!=null){
+            request=request.apply(options);
+        }
+        if(placeholder!=-1){
+            request=request.placeholder(placeholder);
+        }
+        if(error!=-1){
+            request=request.error(error);
+        }
+        request.into(view);
+    }
+
     public void useGlide(Context context,String url,ImageView view){
         useGlide(context,url,RequestOptions.circleCropTransform(),view, R.mipmap.placeholder,R.mipmap.placeholder);
     }
 
     public void useGlideWithoutCircle(Context context,String url,ImageView view){
         useGlide(context,url,null,view, R.mipmap.placeholder,R.mipmap.placeholder);
+    }
+
+    public void useGlideWithoutCircle(Context context,int res,ImageView view){
+        useGlide(context,res,null,view, R.mipmap.placeholder,R.mipmap.placeholder);
     }
 
 

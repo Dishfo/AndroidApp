@@ -77,7 +77,7 @@ public class NoteModelImpl implements NoteTaskContract.NoteModel{
         String email=NetMethod.INSTANCE.getUser();
 
         Observable<JsonObject> observable=DiscussAcess.INSTANCE.getDiscussByNote(info,discussName);
-        Observable<JsonObject> headObservable1=NoteAcess.INSTANCE.getNotesById(notename,info.id);
+        Observable<JsonObject> headObservable1=null;//NoteAcess.INSTANCE.getNotesById(notename,info.id);
 
         Observable<Integer> resObservable1=Observable.zip(observable,headObservable1,(jsonObject, jsonObject2) -> {
             int code1=jsonObject.get("code").getAsInt();

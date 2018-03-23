@@ -1,13 +1,12 @@
 package com.example.dishfo.androidapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -16,29 +15,30 @@ import android.widget.Toast;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
-import com.example.dishfo.androidapp.data.repository.MessageRepository;
 import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.example.dishfo.androidapp.mvp.login.LoginModelImpl;
 import com.example.dishfo.androidapp.mvp.login.LoginPresentImpl;
 import com.example.dishfo.androidapp.mvp.login.LoginTaskContract;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
+import javax.inject.Inject;
 
 /**
+ *
+ * 用于登录的界面
+ * p通过model 发起特定的登录操作
+ * 非普通的数据库相关操作
  * Created by apple on 2017/12/7.
  */
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener,
         LoginTaskContract.LoginView {
 
+    public final static String USERS="users";
+    public final static String NAME="name";
+    public final static String PWD="password";
+
     private EditText mEditTextUserName = null;
     private EditText mEditTextPassword = null;
-    private Button mButtonLogin = null;
-    private TextView mTextViewForgetPassword = null;
-    private TextView mTextViewRegister = null;
-
     private LoginTaskContract.LoginPresent mLoginPresent;
     private PopupWindow mPopupWindow=null;
 
@@ -55,19 +55,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void initView() {
         mEditTextUserName = findView(R.id.activity_login_edittext_username);
         mEditTextPassword = findView(R.id.activity_login_edittext_password);
-        mButtonLogin = findView(R.id.activity_login_button_login);
-        mTextViewForgetPassword = findView(R.id.activity_login_textview_forget_password);
-        mTextViewRegister = findView(R.id.activity_login_textview_register);
+        Button mButtonLogin = findView(R.id.activity_login_button_login);
+        TextView mTextViewForgetPassword = findView(R.id.activity_login_textview_forget_password);
+        TextView mTextViewRegister = findView(R.id.activity_login_textview_register);
         mButtonLogin.setOnClickListener(this);
         mTextViewForgetPassword.setOnClickListener(this);
         mTextViewRegister.setOnClickListener(this);
 
     }
 
+    @Inject
     @Override
     public void initData() {
-        new LoginPresentImpl(new LoginModelImpl(this),this);
+        new LoginPresentImpl(new LoginModelImpl(),this);
         mLoginPresent.start();
+        loadUser();
     }
 
     @Override
@@ -75,7 +77,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         switch (v.getId()) {
             //登录
             case R.id.activity_login_button_login: {
-
                 mLoginPresent.login(mEditTextUserName.getText().toString(),
                         mEditTextPassword.getText().toString());
                 break;
@@ -124,6 +125,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             stopWait();
             switch (code){
                 case 1:
+                    saveUser(mEditTextUserName.getText().toString()
+                            ,mEditTextPassword.getText().toString());
                     LongConService.connect();
                     Intent intent=new Intent(this,MainActivity.class);
                     startActivity(intent);
@@ -148,9 +151,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     }
 
+    private void loadUser(){
+        SharedPreferences preferences = this.getSharedPreferences(USERS, Context.MODE_PRIVATE);
+        String name = preferences.getString(NAME, "");
+        String pwd = preferences.getString(PWD, "");
+        init(name,pwd);
+    }
 
-    @Override
-    public void init(String name, String pwd) {
+    private void saveUser(String name,String pwd){
+        SharedPreferences preferences = this.getSharedPreferences(USERS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(NAME,name);
+        editor.putString(PWD,pwd);
+        editor.apply();
+    }
+
+    private void init(String name, String pwd) {
         mEditTextPassword.setText(pwd);
         mEditTextUserName.setText(name);
     }

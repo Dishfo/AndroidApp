@@ -14,16 +14,22 @@ import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAc
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
 import com.example.dishfo.androidapp.netbean.AreaWithNDMapping;
+import com.example.dishfo.androidapp.netbean.NoteInfoMapping;
+import com.example.dishfo.androidapp.sqlBean.Note;
 import com.example.dishfo.androidapp.util.Action;
 import com.example.dishfo.androidapp.util.CompeteAction;
 import com.example.dishfo.androidapp.util.ErrorAction;
+import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -31,68 +37,92 @@ import retrofit2.Retrofit;
  */
 
 public class NoteAcess {
-    public static NoteAcess INSTANCE=new NoteAcess();
+    NetMethod netMethod=null;
+    JsonObjectParse objectParse;
 
-
-    private NoteAcess(){
-
+    public  NoteAcess(NetMethod netMethod){
+        this.netMethod=netMethod;
+        objectParse=new JsonObjectParse();
     }
 
-    public Observable<JsonObject> getNotesById(String name,String id){;
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
+//    public Observable<JsonObject> getNotesById(String name,String id){;
+//        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
+//            competeNoteQuerybyId(generator,(String) args[0],(String) args[1]);
+//        },name,id);
+//    }
+//
+//    public Observable<JsonObject> getNotesByArea(String areaName){
+//        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
+//            competeNoteQuerybyArea(generator,(String) args[0]);
+//        },areaName);
+//    }
+//
+//    public void getNotesByLike(){
+//
+//
+//    }
+//
+//    public Observable<JsonObject> getNoteByUser(String email,String note){
+//        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
+//            competeNoteQueryByUser(generator, (String) args[0], (String) args[1]);
+//        },email,note);
+//    }
+//
+//    public Observable<JsonObject> addNewNote(NoteInfo noteInfo,AreaInfo areaInfo){
+//        return NetMethod.INSTANCE.generateObserable("insert",(generator, args) -> {
+//            competeNoteInsert(generator,(NoteInfo) args[0],(AreaInfo)args[1]);
+//        },noteInfo,areaInfo);
+//    }
+//
+    public Note getNoteById(String id,String areaName)throws IOException{
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
             competeNoteQuerybyId(generator,(String) args[0],(String) args[1]);
-        },name,id);
-    }
+        },id,areaName);
 
-    public Observable<JsonObject> getNotesByArea(String areaName){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeNoteQuerybyArea(generator,(String) args[0]);
-        },areaName);
-    }
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
 
-    public void getNotesByLike(){
+        int code=object.get("code").getAsInt();
+        if(code!=1) {
+            return null;
+        }
 
+        List<Note> notes=objectParse.getBeans(object.get("result").getAsString()
+                ,Note.class, NoteInfoMapping.INSTANCE);
+        if(notes==null||notes.size()==0) {
+            return null;
+        }
 
-    }
-
-    public Observable<JsonObject> getNoteByUser(String email,String note){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeNoteQueryByUser(generator, (String) args[0], (String) args[1]);
-        },email,note);
-    }
-
-    public Observable<JsonObject> addNewNote(NoteInfo noteInfo,AreaInfo areaInfo){
-        return NetMethod.INSTANCE.generateObserable("insert",(generator, args) -> {
-            competeNoteInsert(generator,(NoteInfo) args[0],(AreaInfo)args[1]);
-        },noteInfo,areaInfo);
+        return notes.get(0);
     }
 
 
+    /**
+     * 用于构建note 查询的json语句
+     * @param generator
+     * @param table
+     */
 
-    private void competeNoteQueryClassName(JsonGenerator generator,String name){
+
+    private void competeNoteQueryClassName(JsonGenerator generator,String table){
         SelectClassNameAction classname=new SelectClassNameAction();
         generator.openArray()
-                .compete(classname, name)
-                .compete(classname, TableConstant.Area)
-                .compete(classname,TableConstant.user)
+                .compete(classname, table)
                 .closeNode("className");
     }
 
-    private void competeNoteQueryField(JsonGenerator generator,String name){
+    private void competeNoteQueryField(JsonGenerator generator,String table){
         SelectFieldsAction field=new SelectFieldsAction();
         generator.openArray()
-                .compete(field, FieldConstant.head,TableConstant.user)
-                .compete(field,FieldConstant.id,name)
-                .compete(field,FieldConstant.name,TableConstant.user)
-                .compete(field,FieldConstant.name,TableConstant.Area)
-                .compete(field,FieldConstant.time,name)
-                .compete(field,FieldConstant.email,name)
-                .compete(field,FieldConstant.images,name)
-                .compete(field,FieldConstant.appreciateNumber,name)
-                .compete(field,FieldConstant.readNumber,name)
-                .compete(field,FieldConstant.discussNumber,name)
-                .compete(field,FieldConstant.head,TableConstant.user)
-                .compete(field,FieldConstant.content,name)
+                .compete(field,FieldConstant.id,table)
+                .compete(field,FieldConstant.email,table)
+                .compete(field,FieldConstant.content,table)
+                .compete(field,FieldConstant.images,table)
+                .compete(field,FieldConstant.appreciateNumber,table)
+                .compete(field,FieldConstant.readNumber,table)
+                .compete(field,FieldConstant.discussNumber,table)
+                .compete(field,FieldConstant.time,table)
+                .compete(field,FieldConstant.areaId,table)
                 .closeNode("field");
     }
 
@@ -109,17 +139,31 @@ public class NoteAcess {
         generator.closeNode("");
     }
 
-    public void competeNoteQuerybyId(JsonGenerator generator,String name,String noteId){
+    public void competeNoteQuerybyId(JsonGenerator generator,String id,String areaName){
+        String table=AreaWithNDMapping.INSTANCE.getNote(areaName);
         generator.openNode();
-        competeNoteQueryClassName(generator,name);
-        competeNoteQueryField(generator,name);
+        competeNoteQueryClassName(generator,table);
+        competeNoteQueryField(generator,table);
         SelectConditionAction condition=new SelectConditionAction();
         generator.openArray()
-                .compete(condition, FieldConstant.email,"user.email", TypeConstant.varchar,name,"1")
-                .compete(condition, FieldConstant.id,noteId, TypeConstant.varchar,name,"0")
+                .compete(condition, FieldConstant.id,id, TypeConstant.varchar,table,"0")
                 .closeNode("condition");
         generator.closeNode("");
     }
+
+
+
+//    public void competeNoteQuerybyId(JsonGenerator generator,String name,String noteId){
+//        generator.openNode();
+//        competeNoteQueryClassName(generator,name);
+//        competeNoteQueryField(generator,name);
+//        SelectConditionAction condition=new SelectConditionAction();
+//        generator.openArray()
+//                .compete(condition, FieldConstant.email,"user.email", TypeConstant.varchar,name,"1")
+//                .compete(condition, FieldConstant.id,noteId, TypeConstant.varchar,name,"0")
+//                .closeNode("condition");
+//        generator.closeNode("");
+//    }
 
     public void competeNoteQueryByUser(JsonGenerator generator,String email,String note){
         SelectConditionAction condition=new SelectConditionAction();

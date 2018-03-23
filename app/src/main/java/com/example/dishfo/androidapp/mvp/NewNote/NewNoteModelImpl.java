@@ -76,20 +76,20 @@ public class NewNoteModelImpl implements NewNoteTaskContract.NewNoteModel{
     }
 
     private void addNewNote(AreaInfo areaInfo,NoteInfo noteInfo){
-        Observable<JsonObject> observable=NoteAcess.INSTANCE.addNewNote(noteInfo,areaInfo);
-        observable.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(jsonObject -> {
-                            if(jsonObject.get("code").getAsInt()==1){
-                                compete(DiscussTaskContract.DISCUSS);
-                            }else {
-                                error(DiscussTaskContract.DISCUSS);
-                            }
-                        },
-                        throwable -> {
-                            observable.unsubscribeOn(Schedulers.io());
-                            error(DiscussTaskContract.DISCUSS);
-                        });
+//        Observable<JsonObject> observable=new NoteAcess(null).addNewNote(noteInfo,areaInfo);
+//        observable.observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(jsonObject -> {
+//                            if(jsonObject.get("code").getAsInt()==1){
+//                                compete(DiscussTaskContract.DISCUSS);
+//                            }else {
+//                                error(DiscussTaskContract.DISCUSS);
+//                            }
+//                        },
+//                        throwable -> {
+//                            observable.unsubscribeOn(Schedulers.io());
+//                            error(DiscussTaskContract.DISCUSS);
+//                        });
     }
 
 

@@ -10,26 +10,81 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.FollowArea;
+import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.util.List;
+
 import io.reactivex.Observable;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
+ * 提供followUser网络访问接口
  * Created by dishfo on 18-3-7.
  */
 
-public class followAreaAcess {
-    public static followAreaAcess INSTANCE=new followAreaAcess();
+public class FollowAreaAcess {
+    private NetMethod netMethod;
+    private JsonObjectParse jsonObjectParse=new JsonObjectParse();
 
-    private followAreaAcess(){
-
+    public FollowAreaAcess(NetMethod netMethod){
+        this.netMethod=netMethod;
     }
 
-    public Observable<JsonObject> insertFolloArea(String email,String areaId){
+    public FollowArea getFollowArea(Area area, User user) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeFollowAreaByFollow(generator,(String)args[1],(String)args[0]);
+        },area.getId(),user.getEmail());
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        List<FollowArea> followAreas=jsonObjectParse.getBeans(object.get("result").getAsString(),
+                FollowArea.class,null);
+
+        return (followAreas==null||followAreas.size()==0)?null:followAreas.get(0);
+    }
+
+    public boolean deleteFollowaArea(FollowArea followArea) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("delete",(generator, args) -> {
+            compteFollowDelete(generator,(String)args[0]);
+        },followArea.getId());
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return false;
+        }
+        return true;
+    }
+
+    public FollowArea inertFollowArea(FollowArea followArea) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("insert",(generator, args) -> {
+            compteFollowAreaInsert(generator,followArea);
+        },followArea);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return null;
+        }
+
+        return jsonObjectParse.getFromInsert(object.get("result").getAsString(),
+                FollowArea.class,null);
+    }
+
+   /* public Observable<JsonObject> insertFolloArea(String email,String areaId){
         return NetMethod.INSTANCE.generateObserable("insert",(generator, args) -> {
             compteFollowAreaInsert(generator,(String)args[0],(String)args[1]);
         },email,areaId);
-    }
+    }*/
 
     public Observable<JsonObject> deleteFollowArea(String followId){
         return NetMethod.INSTANCE.generateObserable("delete",(generator, args) -> {
@@ -68,20 +123,20 @@ public class followAreaAcess {
         generator.compete(new AddAction2(),"className",TableConstant.followArea);
     }
 
-    private void competeFollowAreaInsertField(JsonGenerator generator,String email,String areaId){
+    private void competeFollowAreaInsertField(JsonGenerator generator,FollowArea followArea){
         InsertValuesAction insert=new InsertValuesAction();
         generator.openArray()
                 .compete(insert,FieldConstant.id,"",TypeConstant.varchar,"primarykey")
-                .compete(insert,FieldConstant.email,email,TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.followAreaId,areaId,TypeConstant.integer,"")
+                .compete(insert,FieldConstant.email,followArea.getEmail(),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.followAreaId,followArea.getFollowAreaId(),TypeConstant.integer,"")
                 .compete(insert,FieldConstant.level,"",TypeConstant.varchar,"")
                 .closeNode("values");
     }
 
-    public void compteFollowAreaInsert(JsonGenerator generator,String email,String areId){
+    public void compteFollowAreaInsert(JsonGenerator generator,FollowArea followArea){
         generator.openNode();
         competeFollowAreaInsertClassName(generator);
-        competeFollowAreaInsertField(generator,email,areId);
+        competeFollowAreaInsertField(generator,followArea);
         generator.closeNode("");
     }
 

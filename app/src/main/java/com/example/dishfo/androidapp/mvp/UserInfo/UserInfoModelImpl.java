@@ -5,11 +5,8 @@ import android.util.Log;
 import com.example.dishfo.androidapp.DataAcess.CollectionAcess;
 import com.example.dishfo.androidapp.DataAcess.DiscussAcess;
 import com.example.dishfo.androidapp.DataAcess.FansAcess;
-import com.example.dishfo.androidapp.DataAcess.LikeAcess;
+import com.example.dishfo.androidapp.DataAcess.FollowAreaAcess;
 import com.example.dishfo.androidapp.DataAcess.NetMethod;
-import com.example.dishfo.androidapp.DataAcess.NoteAcess;
-import com.example.dishfo.androidapp.DataAcess.UserAcess;
-import com.example.dishfo.androidapp.DataAcess.followAreaAcess;
 import com.example.dishfo.androidapp.DataAcess.followUserAcess;
 import com.example.dishfo.androidapp.bean.MineMessage;
 import com.example.dishfo.androidapp.bean.UserInfo;
@@ -101,17 +98,18 @@ public class UserInfoModelImpl implements UserInfoTaskContract.UserInfoModel{
     }
 
     private Observable<UserInfo> getUserInfo(String email) {
-        return UserAcess.INSTANCE.getUserById(email);
+       // return UserAcess.INSTANCE.getUserById(email);
+        return null;
     }
 
 
     private Observable<Integer> getFollowAreaNumber(String email) {
-        Observable<Integer> observable= followAreaAcess.INSTANCE.getFollowAreaByUser(email).map(new MapFunction());
+        Observable<Integer> observable= FollowAreaAcess.INSTANCE.getFollowAreaByUser(email).map(new MapFunction());
         return observable;
     }
 
     private Observable<Integer> getLikeNumber(String email) {
-        Observable<Integer> observable= LikeAcess.INSTANCE.getLikeByUser(email).map(new MapFunction());
+        Observable<Integer> observable= null;//LikeAcess.INSTANCE.getLikeByUser(email).map(new MapFunction());
         return observable;
     }
 
@@ -165,7 +163,7 @@ public class UserInfoModelImpl implements UserInfoTaskContract.UserInfoModel{
         ArrayList<Observable<JsonObject>> observables=new ArrayList<>();
         for(String s:list){
             String note=AreaWithNDMapping.INSTANCE.getNote(s);
-            Observable<JsonObject> observable= NoteAcess.INSTANCE.getNoteByUser(email,note);
+            Observable<JsonObject> observable= null;//NoteAcess.INSTANCE.getNoteByUser(email,note);
             observables.add(observable);
         }
         return observables;

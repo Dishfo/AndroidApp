@@ -9,7 +9,6 @@ import java.util.List;
  */
 
 public class NoteInfo implements Serializable{
-
     public String email;
     public String id;
     public String likeId;

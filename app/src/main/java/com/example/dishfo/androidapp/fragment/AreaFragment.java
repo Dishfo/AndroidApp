@@ -1,5 +1,6 @@
 package com.example.dishfo.androidapp.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
@@ -23,14 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.GridRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.mvp.Area.AreaContract;
 import com.example.dishfo.androidapp.mvp.Area.AreaModelImpl;
 import com.example.dishfo.androidapp.mvp.Area.AreaPresentImpl;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +61,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     "我关注的专区","学习天堂","运动广场","旅游天地",
     "游戏","娱乐","明星","阅读","美食","动漫",""};
     private  static final int[] MODULE_IC=new int[]{R.mipmap.abc_btn_radio_to_on_mtrl_015};
-    private List<NoteInfo> mDatas=null;
-
-    private AreaContract.AreaModel mAreaModel;
+    private List<ViewNote> mDatas=null;
     private AreaContract.AreaPresent mPresent;
 
     // TODO: Rename and change types of parameters
@@ -70,13 +70,10 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     private RecyclerView mRecyclerViewRecommend=null;
     private NoteAdapter mNoteAdapter=null;
-    private ScrollView mScrollView=null;
     private RecyclerViewAdapter mRecyclerViewAdapter=null;
     private ImageButton mButtonSearch=null;
-    private RecyclerView mRecyclerViewModule=null;
 
     private OnFragmentInteractionListener mListener;
-    private NoteInfo info;
 
     public AreaFragment() {
 
@@ -113,7 +110,6 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_area, container, false);
         initData();
         initContent(view);
@@ -121,16 +117,13 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     }
 
     private void initData() {
-
-        mAreaModel=new AreaModelImpl();
-        mPresent=new AreaPresentImpl(mAreaModel,this,getContext());
-
+        new AreaPresentImpl(new AreaModelImpl(),this);
         mDatas=new ArrayList<>();
-
+        mPresent.start();
     }
 
     private void initContent(View view){
-        mScrollView=view.findViewById(R.id.fragment_area_scrollview_container);
+        ScrollView mScrollView = view.findViewById(R.id.fragment_area_scrollview_container);
         mRecyclerViewRecommend=view.findViewById(R.id.fragment_area_recyclerview_recommend);
 
         mNoteAdapter=new NoteAdapter(R.layout.recyclerview_item_note,mDatas);
@@ -145,7 +138,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         });
         mRecyclerViewRecommend.setAdapter(mNoteAdapter);
 
-        mRecyclerViewModule=view.findViewById(R.id.fragment_area_recyclerview_module);
+        RecyclerView mRecyclerViewModule = view.findViewById(R.id.fragment_area_recyclerview_module);
         mButtonSearch=view.findViewById(R.id.fragment_area_imagebutton_search);
 
         mRecyclerViewModule.setLayoutManager(new GridLayoutManager(getContext(),2){
@@ -166,10 +159,6 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         mNoteAdapter.setOnItemClickListener(this);
         mNoteAdapter.setOnItemChildClickListener(this);
         OverScrollDecoratorHelper.setUpOverScroll(mScrollView);
-        info=new NoteInfo();
-
-        info.mAreaName="开发团队";
-        mPresent.start(info);
     }
 
     @Override
@@ -208,9 +197,8 @@ public class AreaFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Toast.makeText(getContext()," recommend 点击事件",Toast.LENGTH_SHORT).show();
-        NoteInfo info=mDatas.get(position);
-        mFragmentSendListener.action(ENTER_RECOMMEND,info);
+      //  NoteInfo info=mDatas.get(position);
+       // mFragmentSendListener.action(ENTER_RECOMMEND,info);
     }
 
     @Override
@@ -220,7 +208,10 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         switch (id){
 
             case R.id.recyclerView_item_note_imageView_appreciate:
-             //   Log.d("test","zhan");
+                ViewNote item= (ViewNote) adapter.getItem(position);
+                new NetMethod().useGlideWithoutCircle(getContext()
+                        ,item.getLike()==null ? R.mipmap.imageview_appreciate2 :R.mipmap.imageview_appreciate
+                        ,(ImageView) view);
                 mPresent.onAppreciateNote(mDatas.get(0));
                 break;
         }
@@ -252,14 +243,13 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         stopWait();
         switch (code){
             case AreaContract.RECOMMEND:
-                showRecommendNote((NoteInfo) args[1]);
+                showRecommendNote((ViewNote) args[1]);
                 break;
             case AreaContract.APPRECIATE:
-                AppreciateNote();
-                mPresent.start(info);
+             //   mPresent.start();
                 break;
             case AreaContract.NAPPRECIATE:
-                AppreciateNote();
+              //  mPresent.start();
                 break;
         }
     }
@@ -277,20 +267,19 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void showRecommendNote(NoteInfo note) {
+    public void showRecommendNote(ViewNote viewNote) {
         if(mNoteAdapter.getItemCount()>0){
-            mNoteAdapter.setData(0,note);
+            mNoteAdapter.setData(0,viewNote);
         }else {
-            mNoteAdapter.addData(note);
+            mNoteAdapter.addData(viewNote);
         }
-
     }
 
     public  class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
 
         private Context context;
 
-        public RecyclerViewAdapter(Context context){
+        RecyclerViewAdapter(Context context){
             this.context=context;
         }
 
@@ -318,10 +307,10 @@ public class AreaFragment extends Fragment implements View.OnClickListener
             return MODULE_COUNT;
         }
 
-        public class MyViewHolder extends  RecyclerView.ViewHolder{
+        class MyViewHolder extends  RecyclerView.ViewHolder{
             TextView textView=null;
             ImageView imageView=null;
-            public MyViewHolder(View itemView) {
+            MyViewHolder(View itemView) {
                 super(itemView);
                 textView=itemView.findViewById(R.id.fragment_area_textview_module_label);
                 imageView=itemView.findViewById(R.id.fragment_area_imageview_module_label);
@@ -330,6 +319,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
 
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler errorHandler =new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -337,30 +327,17 @@ public class AreaFragment extends Fragment implements View.OnClickListener
             switch (msg.arg1){
                 case AreaContract.RECOMMEND:
                     Toast.makeText(AreaFragment.this.getContext(),"加载失败",Toast.LENGTH_SHORT).show();
-                    AreaFragment.this.stopWait();
                     break;
                 case AreaContract.APPRECIATE:
                     Toast.makeText(AreaFragment.this.getContext(),"网路异常",Toast.LENGTH_SHORT).show();
-                    AreaFragment.this.stopWait();
                     break;
                 case AreaContract.NAPPRECIATE:
                     Toast.makeText(AreaFragment.this.getContext(),"网路异常",Toast.LENGTH_SHORT).show();
-                    AreaFragment.this.stopWait();
                     break;
             }
         }
     };
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
 
         void onFragmentInteraction(Uri uri);

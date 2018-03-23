@@ -48,7 +48,7 @@ public class FollowPersonActivity extends BaseActivity implements BaseQuickAdapt
         mEasyRefreshLayout.setRefreshHeadView(new RefreshHeaderView(this));
         mEasyRefreshLayout.setLoadMoreView(new LoadMoreFooterView(this));
         mDatas = new ArrayList<>();
-        mAdapter = new NoteAdapter(R.layout.recyclerview_item_note, mDatas);
+      //  mAdapter = new NoteAdapter(R.layout.recyclerview_item_note, mDatas);
         mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

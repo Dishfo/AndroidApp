@@ -4,6 +4,7 @@ import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 
 /**
  * Created by dishfo on 18-2-12.
@@ -16,19 +17,19 @@ public class AreaContract {
 
     public interface AreaPresent extends BasePresenter{
 
-        public void onAppreciateNote(NoteInfo noteInfo);
+        public void onAppreciateNote(ViewNote viewNote);
 
     }
 
     public interface AreaModel extends BaseModel<AreaPresent>{
         public void loadNote();
-        public void onAppreciateNote(NoteInfo noteInfo);
+        public void onAppreciateNote(ViewNote viewNote);
     }
 
     public interface AreaView extends BaseView<AreaPresent>{
 
         public void AppreciateNote();
-        public void showRecommendNote(NoteInfo note);
+        public void showRecommendNote(ViewNote viewNote);
 
     }
 

@@ -20,10 +20,7 @@ public class NoteInfoMapping extends Mapping<String>{
 
     private NoteInfoMapping() {
         this.maps = new ArrayMap<>();
-        maps.put(TableConstant.likeNote+"."+FieldConstant.id,"likeId");
-        maps.put(TableConstant.user+"."+FieldConstant.head,"mHeadUrl");
-        maps.put(TableConstant.user+"."+FieldConstant.name,"mNickName");
-        maps.put(TableConstant.Area+"."+FieldConstant.name,"mAreaName");
+
         competeMaps();
     }
 
@@ -36,17 +33,15 @@ public class NoteInfoMapping extends Mapping<String>{
 
         for(String name:names){
             maps.put(name+"."+FieldConstant.email,"email");
+            maps.put(name+"."+FieldConstant.areaId,"areaId");
             maps.put(name+"."+FieldConstant.id,"id");
-            maps.put(name+"."+FieldConstant.time,"mTime");
-            maps.put(name+"."+FieldConstant.content,"mContent");
-            maps.put(name+"."+FieldConstant.images,"mImageUrl");
-            maps.put(name+"."+FieldConstant.appreciateNumber,"mAppreciateNumber");
-            maps.put(name+"."+FieldConstant.readNumber,"mReadNumber");
-            maps.put(name+"."+FieldConstant.discussNumber,"mDiscussNumber");
+            maps.put(name+"."+FieldConstant.time,"time");
+            maps.put(name+"."+FieldConstant.content,"content");
+            maps.put(name+"."+FieldConstant.images,"images");
+            maps.put(name+"."+FieldConstant.appreciateNumber,"appreciateNumber");
+            maps.put(name+"."+FieldConstant.readNumber,"readNumber");
+            maps.put(name+"."+FieldConstant.discussNumber,"discussNumber");
         }
-
-
-
     }
 
     public String get(String key){
