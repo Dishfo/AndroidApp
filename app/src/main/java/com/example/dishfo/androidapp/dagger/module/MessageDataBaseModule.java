@@ -14,7 +14,6 @@ import dagger.Provides;
  * Created by dishfo on 18-3-19.
  */
 @Module
-@Singleton
 public class MessageDataBaseModule {
 
     @Provides

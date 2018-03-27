@@ -9,45 +9,88 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.netbean.FollowUserMapping;
+import com.example.dishfo.androidapp.sqlBean.FollowUser;
+import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
-import io.reactivex.Observable;
-import retrofit2.http.PUT;
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
+ * 用于提供FollowUser访问的网络接口
  * Created by dishfo on 18-3-7.
  */
 
-public class followUserAcess extends DataAcess{
-    public static followUserAcess INSTANCE=new followUserAcess();
+public class FollowUserAcess extends DataAcess{
+    private NetMethod netMethod;
+    private JsonObjectParse objectParse;
 
-    private followUserAcess(){
-
+    public FollowUserAcess(NetMethod netMethod){
+        this.netMethod=netMethod;
+        objectParse=new JsonObjectParse();
     }
 
-    public Observable getFollowUserByUser(String email){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeFollowUserQueryByUser(generator, (String) args[0]);
-        },email);
-    }
-
-    public Observable getFollowUserByFollow(String email,String followed){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeFollowUserQueryByFollow(generator, (String) args[0],(String)args[1]);
+    public FollowUser getFollowUser(String email,String followed) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeFollowUserQueryByFollow(generator,(String)args[0],(String)args[1]);
         },email,followed);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return null;
+        }
+
+        List<FollowUser> list=objectParse.getBeans(object.get("result").getAsString()
+                ,FollowUser.class, FollowUserMapping.INSTANCE);
+        if(list==null||list.size()==0){
+            return null;
+        }
+        return list.get(0);
     }
 
-    public Observable<JsonObject> deleteFollow(String id){
-        return NetMethod.INSTANCE.generateObserable("delete",(generator, args) -> {
-            generateDelete(generator, TableConstant.followuser,(String)args[0]);
-        },id);
-    }
-
-    public Observable<JsonObject> insertFollow(String id,String followedId){
-        return NetMethod.INSTANCE.generateObserable("insert",(generator, args) -> {
+    public FollowUser insertFollowUser(FollowUser followUser) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("insert",(generator, args) -> {
             competeFollowUserInsert(generator,(String)args[0],(String)args[1]);
-        },followedId,id);
+        },followUser.getFollowUser(),followUser.getEmail());
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return null;
+        }
+
+        FollowUser followUser1=objectParse.getFromInsert(object.get("result").getAsString(),
+                FollowUser.class,FollowUserMapping.INSTANCE);
+        return  followUser1;
     }
+
+    public boolean deleteFollowUser(FollowUser followUser) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("delete",(generator, args) -> {
+            generateDelete(generator,TableConstant.followuser,(String)args[0]);
+        },followUser.getId());
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return false;
+        }
+        return true;
+
+    }
+
+
+    /**
+     * 用于构建相关的json语句
+     * @param generator
+     */
 
     private void competeFollowUserQueryClassName(JsonGenerator generator){
         SelectClassNameAction classname=new SelectClassNameAction();
@@ -60,6 +103,8 @@ public class followUserAcess extends DataAcess{
         SelectFieldsAction field=new SelectFieldsAction();
         generator.openArray()
                 .compete(field, FieldConstant.id,TableConstant.followuser)
+                .compete(field, FieldConstant.email,TableConstant.followuser)
+                .compete(field, FieldConstant.followUserEmail,TableConstant.followuser)
                 .closeNode("field");
 
     }

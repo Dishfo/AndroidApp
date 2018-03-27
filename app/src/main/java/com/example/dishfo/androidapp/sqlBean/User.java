@@ -5,12 +5,14 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by dishfo on 18-3-19.
  */
 
 @Entity
-public class User {
+public class User implements Serializable {
     @PrimaryKey
     @NonNull
     private String email;

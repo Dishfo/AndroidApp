@@ -28,8 +28,6 @@ public class AreaModulesContract {
     }
 
     public interface AreaModulesView extends BaseView<AreaModulesPresent>{
-        public void showNotes(List<ViewNote> viewNotes);
-        public void showArea(ViewArea area);
         public void onFollowArea(ViewArea area);
     }
 

@@ -84,8 +84,11 @@ public class JsonObjectParse {
             JsonObject obj=elements.next().getAsJsonObject();
             String name=table+"."+obj.get("name").getAsString();
             try {
-                Field field=cls.getDeclaredField(mapping.
-                        get(PropertiesReader.strTurn(name, MyApplication.MAP)));
+                String fieldname=mapping.
+                        get(PropertiesReader.strTurn(name, MyApplication.MAP));
+                if(fieldname==null)
+                    continue;
+                Field field=cls.getDeclaredField(fieldname);
                 field.setAccessible(true);
                 Type type=field.getType();
                 if(type.equals(String.class)){
@@ -131,6 +134,7 @@ public class JsonObjectParse {
                 field.setAccessible(true);
                 Type type=field.getType();
                 if(type.equals(String.class)){
+                    Log.d("error_test",name+"===="+object.get("value").getAsString());
                     field.set(res,object.get("value").getAsString());
                 }else if(type.equals(List.class)){
                     List<String> tmplist= Converts.toList(object.get("value").getAsString());

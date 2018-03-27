@@ -1,6 +1,7 @@
 package com.example.dishfo.androidapp.mvp.AreaModules;
 
 import com.example.dishfo.androidapp.application.MyApplication;
+import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.data.repository.AreaRepository;
 import com.example.dishfo.androidapp.data.repository.FollowAreaRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
@@ -62,7 +63,6 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
 
     @Override
     public void compete(Object... args) {
-        int code= (int) args[0];
         present.onCompete(args[0],args[1]);
     }
 
@@ -75,7 +75,7 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
     public void getAreaWithNotes(String name) {
         Observable<ViewArea> observable=Observable.create(emitter -> {
             Area area=areaRepository.getAreaByName(name);
-            FollowArea followArea=followAreaRepository.getFollow(new LoginModelImpl().getCurrentUser(),
+            FollowArea followArea=followAreaRepository.getFollow(TMPclass.tmp.getCurrentUser(),
                     area);
             ViewArea viewArea=new ViewArea();
             viewArea.setArea(area);
@@ -87,7 +87,7 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
         Observable<List<ViewNote>> listObservable=observable.flatMap(viewArea -> {
             return  Observable.create(emitter -> {
                 List<ViewNote> viewNote=new ArrayList<>();
-                List<Note> notes=noteRepository.getNoteByArea(viewArea.getArea().getId());
+                List<Note> notes=noteRepository.getNoteByArea(viewArea.getArea().getName());
                 for(Note note:notes){
                     ViewNote viewNote1=new ViewNote();
                     User user=userRepository.getUserByEmail(note.getEmail());
@@ -106,78 +106,16 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
                 .subscribeOn(Schedulers.io())
                 .subscribe(viewNotes -> compete(AreaModulesContract.NOTE,viewNotes)
                 ,throwable -> {},() -> {});
-//        AreaInfo tmpAreaInfo=new AreaInfo();
-//        Observable<JsonObject> observable=null;//AreaAcess.INSTANCE.getAreaByName(name);
-//        Observable<JsonObject> areaObservable=observable
-//                .flatMap(jsonObject -> {
-//                    double code=jsonObject.get("code").getAsDouble();
-//                    if(code==1.0){
-//                        String json=jsonObject.get("result").getAsString();
-//                        NetMethod.INSTANCE.praseArea(json,tmpAreaInfo);
-//                        return FollowAreaAcess.INSTANCE.
-//                                getFollowAreaByFollow(NetMethod.INSTANCE.getUser(),tmpAreaInfo.id);
-//                    }else {
-//                        observable.unsubscribeOn(Schedulers.io());
-//                        error(AreaModulesContract.AREA);
-//                        return null;
-//                    }
-//                });
-//
-//        Observable<JsonObject> areaObservable1=areaObservable.flatMap(jsonObject -> {
-//            double code=jsonObject.get("code").getAsDouble();
-//            Log.d("area",jsonObject.toString());
-//            if(code==1.0){
-//                String id=NetMethod.INSTANCE.getId(jsonObject.get("result").getAsString());
-//                tmpAreaInfo.isFollow=true;
-//                tmpAreaInfo.followId=id;
-//            }else if(code==37.0) {
-//                tmpAreaInfo.isFollow=false;
-//            }else {
-//                    areaObservable.unsubscribeOn(Schedulers.io());
-//                    error(AreaModulesContract.AREA);
-//                    return null;
-//                }
-//            compete(AreaModulesContract.AREA,tmpAreaInfo);
-//            return null;//NoteAcess.INSTANCE.getNotesByArea(tmpAreaInfo.name);
-//        });
-//        areaObservable1.
-//                observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(jsonObject -> {
-//                    double code=jsonObject.get("code").getAsDouble();
-//                    if(code==1.0){
-//                        String json=jsonObject.get("result").getAsString();
-//                        List<NoteInfo> infos=NetMethod.INSTANCE.praseNoteList(json);
-//                        compete(AreaModulesContract.NOTE,infos);
-//                    }else if(code==37.0){
-//                        List<NoteInfo> infos=new ArrayList<>();
-//                        compete(AreaModulesContract.NOTE,infos);
-//                    }else {
-//                        observable.unsubscribeOn(Schedulers.io());
-//                        Log.d("area",jsonObject.toString());
-//                        error(AreaModulesContract.NOTE);
-//                    }
-//                },
-//                throwable -> {
-//                    observable.unsubscribeOn(Schedulers.io());
-//                    Log.d("area",throwable.toString());
-//                    error(AreaModulesContract.NOTE);
-//                });
     }
 
     @Override
     public void FollowArea(ViewArea viewArea) {
         LoginModelImpl loginModel=new LoginModelImpl();
         if(viewArea.getFollowArea()==null){
-            insertFollowArea(viewArea.getArea(),loginModel.getCurrentUser());
+            insertFollowArea(viewArea.getArea(),TMPclass.tmp.getCurrentUser());
         }else {
             deleteFollowArea(viewArea.getFollowArea());
         }
-//        if(areaInfo.isFollow
-//            deleteFollowArea(areaInfo);
-//        }else {
-//            insertFollowArea(areaInfo);
-//        }
     }
 
 
@@ -190,22 +128,8 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
                 .subscribe(o -> {},throwable -> {
                     error(AreaModulesContract.FOLLOW);
                 }, () -> {
-                    compete(AreaModulesContract.FOLLOW);
+                    compete(AreaModulesContract.FOLLOW,null);
                 });
-//        Observable<JsonObject> observable=FollowAreaAcess.INSTANCE.deleteFollowArea(areaInfo.followId);
-//        observable.observeOn(AndroidSchedlets.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(object -> {
-//                    Log.d("area",object.toString());
-//                    int code=object.get("code").getAsInt();
-//                    if(code==1){
-//                        compete(AreaModulesContract.FOLLOW,areaInfo);
-//                    }else {
-//                        areaError(observable,AreaModulesContract.FOLLOW);
-//                    }
-//                },throwable -> {
-//                    areaError(observable,AreaModulesContract.FOLLOW);
-//                });
     }
 
     private void insertFollowArea(Area area,User user){
@@ -227,25 +151,5 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
                         throwable -> error(AreaModulesContract.FOLLOW),
                         () -> {});
 
-//        Observable<JsonObject> observable=FollowAreaAcess.INSTANCE.insertFolloArea(NetMethod.INSTANCE.getUser(),areaInfo.id);
-//        observable.observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(object -> {
-//                            int code=object.get("code").getAsInt();
-//                            if(code==1){
-//                                compete(AreaModulesContract.FOLLOW,areaInfo);
-//                            }else {
-//                                areaError(observable,AreaModulesContract.FOLLOW);
-//                            }
-//                        },
-//                        throwable -> {
-//                            areaError(observable,AreaModulesContract.FOLLOW);
-//                        });
-    }
-
-
-    private void areaError(Observable observable,int code){
-        error(code);
-        observable.unsubscribeOn(Schedulers.io());
     }
 }

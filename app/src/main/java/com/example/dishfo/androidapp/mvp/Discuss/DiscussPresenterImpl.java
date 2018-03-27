@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.Discuss;
 
-import com.example.dishfo.androidapp.bean.DiscussInfo;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 
 /**
  * Created by dishfo on 18-3-3.
@@ -11,7 +11,8 @@ public class DiscussPresenterImpl implements DiscussTaskContract.DiscussPresente
     private DiscussTaskContract.DiscusssModel model;
     private DiscussTaskContract.DiscussView view;
 
-    public DiscussPresenterImpl(DiscussTaskContract.DiscusssModel model, DiscussTaskContract.DiscussView view) {
+    public DiscussPresenterImpl(DiscussTaskContract.DiscusssModel model,
+                                DiscussTaskContract.DiscussView view) {
         this.model = model;
         this.view = view;
 
@@ -20,9 +21,7 @@ public class DiscussPresenterImpl implements DiscussTaskContract.DiscussPresente
     }
 
     @Override
-    public void start(Object... args) {
-        model.setArgs(args[0],args[1]);
-    }
+    public void start(Object... args) {}
 
     @Override
     public void stop() {
@@ -40,8 +39,8 @@ public class DiscussPresenterImpl implements DiscussTaskContract.DiscussPresente
     }
 
     @Override
-    public void onDiscussNote(DiscussInfo info, String[] files) {
-        model.DisussNote(info,files);
+    public void onDiscussNote(ViewDiscuss discuss, String[] files) {
+        model.DisussNote(discuss,files);
     }
 
 

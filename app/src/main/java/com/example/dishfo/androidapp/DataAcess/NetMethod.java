@@ -10,9 +10,6 @@ import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.GlideRequest;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.FieldConstant;
 import com.example.dishfo.androidapp.mvp.TableConstant;
@@ -21,9 +18,6 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netbean.AreaInfoMapping;
-import com.example.dishfo.androidapp.netbean.DiscussInfoMapping;
-import com.example.dishfo.androidapp.netbean.NoteInfoMapping;
 import com.example.dishfo.androidapp.util.JsonAction;
 import com.example.dishfo.androidapp.util.PropertiesReader;
 import com.google.gson.JsonArray;
@@ -31,10 +25,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,130 +60,8 @@ public class NetMethod {
         this.mParser = new JsonParser();
     }
 
-    public NoteInfo parseNote(JsonElement element){
-        NoteInfo noteInfo=new NoteInfo();
-        Class noteInfoClass=  noteInfo.getClass();
-        JsonArray array=element
-                .getAsJsonObject()
-                .get(RESULT)
-                .getAsJsonArray();
 
-        Iterator<JsonElement> elements=array.iterator();
-        while (elements.hasNext()){
-            JsonObject object=elements.next().getAsJsonObject();
-            String name=object.get("name").getAsString();
-            try {
-                Field field=noteInfoClass.getField(NoteInfoMapping.INSTANCE.
-                        get(PropertiesReader.strTurn(name, MyApplication.MAP)));
-                field.setAccessible(true);
-                Type type=field.getType();
-                if(type.equals(String.class)){
-                    field.set(noteInfo,object.get("value").getAsString());
-                }else if(type.equals(List.class)){
-                    List<String> tmplist=parseStringtoArray(object.get("value").getAsString());
-                    field.set(noteInfo,tmplist);
-                }
-            } catch (NoSuchFieldException e) {
-                Log.d("test",e.toString()+" "+name);
-            } catch (IllegalAccessException e) {
-                Log.d("test",e.toString()+" "+name);
-            }
-        }
-
-        return noteInfo;
-    }
-
-    public List<DiscussInfo> praseDiscussList(String result){
-        JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
-        JsonArray array=jsonObject.get(RESULT).getAsJsonArray();
-        Iterator<JsonElement> elements=array.iterator();
-        ArrayList<DiscussInfo> discussInfos=new ArrayList<>();
-        while(elements.hasNext()){
-            discussInfos.add(praseDiscuss(elements.next()));
-        }
-        return discussInfos;
-    }
-
-    public List<NoteInfo> praseNoteList(String result){
-        JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
-        JsonArray array=jsonObject.get(RESULT).getAsJsonArray();
-        Iterator<JsonElement> elements=array.iterator();
-        ArrayList<NoteInfo> noteInfos=new ArrayList<>();
-        while(elements.hasNext()){
-            noteInfos.add(parseNote(elements.next()));
-        }
-        return noteInfos;
-    }
-
-    public AreaInfo praseArea(String result,AreaInfo areaInfo){
-        Class areaInfoClass=areaInfo.getClass();
-        JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
-        JsonArray array=jsonObject
-                .get(RESULT)
-                .getAsJsonArray()
-                .get(0)
-                .getAsJsonObject()
-                .get(RESULT)
-                .getAsJsonArray();
-
-        Iterator<JsonElement> elements=array.iterator();
-        while (elements.hasNext()){
-            JsonObject object=elements.next().getAsJsonObject();
-            String name=object.get("name").getAsString();
-            try {
-                Field field=areaInfoClass.getField(AreaInfoMapping.INSTANCE.
-                        get(PropertiesReader.strTurn(name, MyApplication.MAP)));
-                field.setAccessible(true);
-                Type type=field.getType();
-                if(type.equals(String.class)){
-                    field.set(areaInfo,object.get("value").getAsString());
-                }else if(type.equals(List.class)){
-                    List<String> tmplist=NetMethod.INSTANCE.parseStringtoArray(object.get("value").getAsString());
-                    field.set(areaInfo,tmplist);
-                }
-            } catch (NoSuchFieldException e) {
-                Log.d("test",e.toString()+" "+name);
-            } catch (IllegalAccessException e) {
-                Log.d("test",e.toString()+" "+name);
-            }
-        }
-        return areaInfo;
-    }
-
-    public DiscussInfo praseDiscuss(JsonElement element){
-        DiscussInfo discussInfo=new DiscussInfo();
-        Class discussInfoClass=discussInfo.getClass();
-
-        JsonArray array=element
-                .getAsJsonObject()
-                .get(RESULT)
-                .getAsJsonArray();
-
-        Iterator<JsonElement> elements=array.iterator();
-        while (elements.hasNext()){
-            JsonObject object=elements.next().getAsJsonObject();
-            String name=object.get("name").getAsString();
-            try {
-                Field field=discussInfoClass.getField(DiscussInfoMapping.INSTANCE.
-                        get(PropertiesReader.strTurn(name, MyApplication.MAP)));
-                field.setAccessible(true);
-                Type type=field.getType();
-                if(type.equals(String.class)){
-                    field.set(discussInfo,object.get("value").getAsString());
-                }else if(type.equals(List.class)){
-                    List<String> tmplist=NetMethod.INSTANCE.parseStringtoArray(object.get("value").getAsString());
-                    field.set(discussInfo,tmplist);
-                }
-            } catch (NoSuchFieldException e) {
-                Log.d("test",e.toString()+" "+name);
-            } catch (IllegalAccessException e) {
-                Log.d("test",e.toString()+" "+name);
-            }
-        }
-        return discussInfo;
-    }
-
-    public void competeDiscussByUser(JsonGenerator generator,String email,String discuss){
+    void competeDiscussByUser(JsonGenerator generator, String email, String discuss){
         SelectClassNameAction classname=new SelectClassNameAction();
         SelectFieldsAction field=new SelectFieldsAction();
         SelectConditionAction condition=new SelectConditionAction();
@@ -219,7 +87,7 @@ public class NetMethod {
         return array.size();
     }
 
-    public Observable<JsonObject> generateObserable(String action, JsonAction jaction,Object...args){
+    Observable<JsonObject> generateObserable(String action, JsonAction jaction, Object... args){
         Retrofit retrofit=NetMethod.INSTANCE.getRetrofitWithRx();
         JsonGenerator generator=new JsonGenerator();
         jaction.competeJson(generator,args);
@@ -229,7 +97,7 @@ public class NetMethod {
         return service.accessDatarx(action,json);
     }
 
-    public Call<JsonObject> generateCall(String action, JsonAction jaction, Object...args){
+    Call<JsonObject> generateCall(String action, JsonAction jaction, Object... args){
         Retrofit retrofit=NetMethod.INSTANCE.getRetrofitWithRx();
         JsonGenerator generator=new JsonGenerator();
         jaction.competeJson(generator,args);
@@ -272,24 +140,6 @@ public class NetMethod {
         return builder.toString();
     }
 
-    public List<String> parseStringtoArray(String urls){
-
-        if(!urls.endsWith("]")||!urls.startsWith("[")){
-            return new ArrayList<String>();
-        }else if(urls.equals("[]")) {
-            return new ArrayList<String>();
-        }else {
-                String tmp=urls.substring(1,urls.length()-1);
-                String[] urlarray=tmp.split(",");
-
-                int len=urlarray.length;
-                for(int i=0;i<len;i++){
-                    urlarray[i]=urlarray[i].replace("http://localhost:8080/test/",BaseModel.HOST);
-                }
-                return Arrays.asList(urlarray);
-
-        }
-    }
 
     public void competeFansQueryByUser(JsonGenerator generator, String email) {
         SelectClassNameAction classname=new SelectClassNameAction();
@@ -360,7 +210,7 @@ public class NetMethod {
     }
 
     public void useGlide(Context context, String url, RequestOptions options, ImageView view,int placeholder,int error){
-        GlideRequest<Drawable> request= GlideApp.with(context).load(url);
+        GlideRequest<Drawable> request= GlideApp.with(context).load(urlHandle(url));
         if(options!=null){
             request=request.apply(options);
         }
@@ -400,4 +250,24 @@ public class NetMethod {
     }
 
 
+    private String urlHandle(String url){
+        return url.replaceAll("localhost",BaseModel.HOST_IP);
+    }
+
+    private static final String CODE="code";
+
+    boolean isSucceed(JsonObject object){
+        JsonElement codeElement=object==null?null:object.get(CODE);
+        int code=codeElement==null?-1:codeElement.getAsInt();
+        if(code!=1){
+            return false;
+        }
+        return true;
+    }
+
+    String getResult(JsonObject object){
+        JsonElement element=object==null?null:object.get(RESULT);
+        String json=element==null?"{}":element.getAsString();
+        return json;
+    }
 }

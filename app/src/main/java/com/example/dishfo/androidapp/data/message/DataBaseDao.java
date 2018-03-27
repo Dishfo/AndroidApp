@@ -6,10 +6,15 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.Discuss;
+import com.example.dishfo.androidapp.sqlBean.FollowArea;
+import com.example.dishfo.androidapp.sqlBean.FollowUser;
 import com.example.dishfo.androidapp.sqlBean.Like;
 import com.example.dishfo.androidapp.sqlBean.Note;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by dishfo on 18-3-20.
@@ -21,8 +26,12 @@ public interface DataBaseDao {
     public Note getNoteById(String id,String areaId);
 
     @Query("select * from Note inner join Area on Area.id = Note.area_id" +
+            " where Area.id = :areaId")
+    public List<Note> getNoteByAreAId(String areaId);
+
+    @Query("select * from Note inner join Area on Area.id = Note.area_id" +
             " where Area.name = :areaName")
-    public Note getNoteByArea(String areaName);
+    public List<Note> getNoteByAreaName(String areaName);
 
     @Query("select * from Note inner join Area on Area.id = Note.area_id" +
             " where Area.name = :areaName and Note.id = :id")
@@ -43,8 +52,20 @@ public interface DataBaseDao {
     @Query("select * from `Like` where email=:email")
     public List<Like> getLikeByUser(String email);
 
+    @Query("select * from FollowArea where follow_id=:areaId and email=:email")
+    public FollowArea getFollowArea(String areaId,String email);
+
+    @Query("select * from FollowUser where email=:email and follow_user=:followed")
+    public FollowUser getFollowUser(String email,String followed);
+
+    @Query("select * from Discuss where note_id=:noteId and area_id=:areaId")
+    public List<Discuss> getDiscuss(String noteId,String areaId);
+
     @Insert
     public void insertArea(Area area);
+
+    @Insert
+    public void insertFollowArea(FollowArea followArea);
 
     @Insert
     public void insertNote(Note note);
@@ -52,8 +73,20 @@ public interface DataBaseDao {
     @Insert
     public void insertLike(Like like);
 
+    @Insert
+    public void insertDiscuss(Discuss discuss);
+
+    @Insert
+    public void insertFollowUser(FollowUser followUser);
+
     @Delete
     public void deleteLike(Like like);
+
+    @Delete
+    public void deleteFollowArea(FollowArea followArea);
+
+    @Delete
+    public void deleteFollowUser(FollowUser followUser);
 
 
 }

@@ -17,6 +17,7 @@ import com.example.dishfo.androidapp.fragment.MineFragment;
 import com.example.dishfo.androidapp.fragment.TalkFragment;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.longconnect.LongConService;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.OnTabSelectListener;
 import com.jpeng.jptabbar.animate.AnimationType;
@@ -119,7 +120,6 @@ public class MainActivity extends BaseActivity implements
                 case 3:
                     fragments[index]= MineFragment.newInstance("","");
                     break;
-
             }
         }
 
@@ -137,8 +137,8 @@ public class MainActivity extends BaseActivity implements
         switch (tag){
             case AreaFragment.ENTER_RECOMMEND:
                 intent=new Intent(this,NoteActivity.class);
-                NoteInfo info= (NoteInfo) arg;
-                intent.putExtra(NOTEID,info);
+                ViewNote note= (ViewNote) arg;
+                intent.putExtra(NOTEID,note);
                 startActivity(intent);
                 break;
             case AreaFragment.ENTER_MODULE:

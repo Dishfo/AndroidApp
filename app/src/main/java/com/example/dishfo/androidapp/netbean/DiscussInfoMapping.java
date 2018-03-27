@@ -17,15 +17,6 @@ public class DiscussInfoMapping extends Mapping<String>{
 
     private DiscussInfoMapping(){
         this.maps=new ArrayMap<>();
-        maps.put(TableConstant.user+"."+ FieldConstant.email,"email");
-        maps.put(TableConstant.user+"."+ FieldConstant.head,"mHeadUrl");
-        maps.put(TableConstant.Area+"."+FieldConstant.areaName,"discussArea");
-        maps.put(TableConstant.user+"."+FieldConstant.name,"mNickName");
-
-        maps.put(TableConstant.discuss+"."+FieldConstant.oldContent,"mReplayedContent");
-        maps.put(TableConstant.discuss+"."+FieldConstant.content,"mReplayContent");
-        maps.put(TableConstant.discuss+"."+FieldConstant.images,"mImageUrls");
-        maps.put(TableConstant.discuss+"."+FieldConstant.time,"mTime");
         competeDiscuss();
     }
 
@@ -37,10 +28,15 @@ public class DiscussInfoMapping extends Mapping<String>{
         ,TableConstant.discussstudy,TableConstant.discusstour};
 
         for (String name:names){
-            maps.put(name+"."+FieldConstant.oldContent,"mReplayedContent");
-            maps.put(name+"."+FieldConstant.content,"mReplayContent");
-            maps.put(name+"."+FieldConstant.images,"mImageUrls");
-            maps.put(name+"."+FieldConstant.time,"mTime");
+            maps.put(name+"."+FieldConstant.id,"id");
+            maps.put(name+"."+FieldConstant.email,"email");
+            maps.put(name+"."+FieldConstant.content,"content");
+            maps.put(name+"."+FieldConstant.images,"images");
+            maps.put(name+"."+FieldConstant.oldUserName,"oldUser");
+            maps.put(name+"."+FieldConstant.oldContent,"oldContent");
+            maps.put(name+"."+FieldConstant.time,"time");
+            maps.put(name+"."+FieldConstant.noteId,"noteId");
+            maps.put(name+"."+FieldConstant.areaId,"areaId");
         }
 
     }

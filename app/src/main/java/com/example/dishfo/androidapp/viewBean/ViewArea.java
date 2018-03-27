@@ -3,12 +3,14 @@ package com.example.dishfo.androidapp.viewBean;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.FollowArea;
 
+import java.io.Serializable;
+
 /**
  *
  * Created by dishfo on 18-3-23.
  */
 
-public class ViewArea {
+public class ViewArea implements Serializable{
     private Area area;
     private FollowArea followArea;
 

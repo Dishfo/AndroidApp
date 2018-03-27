@@ -21,14 +21,16 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.DiscussInfo;
 import com.example.dishfo.androidapp.constant.ArrayConstant;
 import com.example.dishfo.androidapp.util.ScreenUtils;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 
 import java.util.List;
 
 /**
+ *
  * Created by apple on 2017/12/10.
  */
 
-public class DiscussAdapter extends BaseQuickAdapter<DiscussInfo, BaseViewHolder> {
+public class DiscussAdapter extends BaseQuickAdapter<ViewDiscuss, BaseViewHolder> {
 
 
     RequestListener<Drawable> listener=new RequestListener<Drawable>() {
@@ -46,26 +48,27 @@ public class DiscussAdapter extends BaseQuickAdapter<DiscussInfo, BaseViewHolder
     };
 
 
-    public DiscussAdapter(int layoutResId, @Nullable List<DiscussInfo> data) {
+    public DiscussAdapter(int layoutResId, @Nullable List<ViewDiscuss> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, DiscussInfo item) {
+    protected void convert(BaseViewHolder helper, ViewDiscuss item) {
 
         NetMethod netMethod=new NetMethod();
 
         helper.addOnClickListener(R.id.recyclerView_item_discuss_imageView_head);
-        Glide.with(mContext).load(item.getmHeaUrl()).apply(RequestOptions.circleCropTransform()).into((ImageView) helper.getView(R.id.recyclerView_item_discuss_imageView_head));
-        helper.setText(R.id.recyclerView_item_discuss_textView_nickName, item.getmNickName());
-        if (item.getmReplayedContent() != null) {
-            helper.setText(R.id.recyclerView_item_discuss_textView_replyed, item.getmReplayedContent());
+        netMethod.useGlide(mContext,item.getUser().getHeadUrl(),helper.getView(R.id.recyclerView_item_discuss_imageView_head));
+        helper.setText(R.id.recyclerView_item_discuss_textView_nickName, item.getUser().getName());
+        if (item.getDiscuss().getContent() != null) {
+            helper.setText(R.id.recyclerView_item_discuss_textView_replyed,
+                    item.getDiscuss().getContent());
         }
-        helper.setText(R.id.recyclerView_item_discuss_textView_replayContent, item.getmReplayContent());
-        if (item.getmImageUrls() != null && item.getmImageUrls().size() != 0) {
+        helper.setText(R.id.recyclerView_item_discuss_textView_replayContent, item.getDiscuss().getOldContent());
+        if (item.getDiscuss().getImages() != null && item.getDiscuss().getImages().size() != 0) {
             ViewGroup viewGroup = helper.getView(R.id.recyclerView_item_discuss_linearLayout);
             viewGroup.removeAllViews();
-            for (String url : item.getmImageUrls()) {
+            for (String url : item.getDiscuss().getImages()) {
                 ImageView imageView = new ImageView(mContext);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.topMargin = (int) ScreenUtils.dpToPx(mContext, 10);
@@ -79,6 +82,6 @@ public class DiscussAdapter extends BaseQuickAdapter<DiscussInfo, BaseViewHolder
 
             }
         }
-        helper.setText(R.id.recyclerView_item_discuss_textView_time, item.getmTime());
+        helper.setText(R.id.recyclerView_item_discuss_textView_time, item.getDiscuss().getTime());
     }
 }

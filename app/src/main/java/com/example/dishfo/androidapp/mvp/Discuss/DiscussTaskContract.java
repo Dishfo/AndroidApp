@@ -1,11 +1,9 @@
 package com.example.dishfo.androidapp.mvp.Discuss;
 
-import com.example.dishfo.androidapp.bean.DiscussInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-
-import retrofit2.http.PUT;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 
 /**
  * Created by dishfo on 18-3-1.
@@ -18,11 +16,11 @@ public class DiscussTaskContract {
     public static final int FAILED=0X5;
 
     public interface DiscussPresenter extends BasePresenter{
-        public void onDiscussNote(DiscussInfo info,String files[]);
+        public void onDiscussNote(ViewDiscuss discuss, String files[]);
     }
 
     public interface DiscusssModel extends BaseModel<DiscussPresenter>{
-        public void DisussNote(DiscussInfo info, String files[]);
+        public void DisussNote(ViewDiscuss discuss, String files[]);
     }
 
     public interface DiscussView extends BaseView<DiscussPresenter>{

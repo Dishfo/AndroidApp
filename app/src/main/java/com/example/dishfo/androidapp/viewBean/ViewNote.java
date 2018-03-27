@@ -7,11 +7,13 @@ import com.example.dishfo.androidapp.sqlBean.Like;
 import com.example.dishfo.androidapp.sqlBean.Note;
 import com.example.dishfo.androidapp.sqlBean.User;
 
+import java.io.Serializable;
+
 /**
  * Created by dishfo on 18-3-20.
  */
 
-public class ViewNote {
+public class ViewNote implements Serializable{
     private Note note;
     private Area area;
     private Like like;

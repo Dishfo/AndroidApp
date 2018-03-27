@@ -13,20 +13,36 @@ import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAc
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
 import com.example.dishfo.androidapp.netbean.AreaWithNDMapping;
+import com.example.dishfo.androidapp.netbean.DiscussInfoMapping;
+import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.Discuss;
+import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.util.JsonObjectParse;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.util.List;
+
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by dishfo on 18-3-7.
  */
 
 public class DiscussAcess {
-    public static DiscussAcess INSTANCE=new DiscussAcess();
+    private NetMethod netMethod;
+    private JsonObjectParse objectParse;
 
-    private DiscussAcess(){
-
+    public DiscussAcess(NetMethod netMethod){
+        this.netMethod=netMethod;
+        objectParse=new JsonObjectParse();
     }
+
 
     public Observable<JsonObject> getDiscussByUser(String email,String discuss){
         return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
@@ -34,29 +50,50 @@ public class DiscussAcess {
         },email,discuss);
     }
 
-    public Observable<JsonObject> getDiscussByNote(NoteInfo noteId,String discuss){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeDiscussQueryByNote(generator,(NoteInfo)args[0] , (String) args[1]);
-        },noteId,discuss);
+    public List<Discuss> getDiscussByNote(Note note, Area area) throws IOException {
+        String discuss=AreaWithNDMapping.INSTANCE.getDiscuss(area.getName());
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeDiscussQueryByNote(generator,(String) args[0] , (String) args[1]);
+        },note.getId(),discuss);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+
+        int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return null;
+        }
+        return objectParse.getBeans(object.get("result").getAsString(),Discuss.class, DiscussInfoMapping.INSTANCE);
     }
 
-    public Observable<JsonObject> insertDiscuss(String email,NoteInfo info,DiscussInfo discussInfo,AreaInfo areaInfo){
-        return NetMethod.INSTANCE.generateObserable("insert",(generator, args) -> {
-            competeDiscussInsert(generator, (NoteInfo) args[0], (DiscussInfo) args[1], (AreaInfo) args[2]);
-        },info,discussInfo,areaInfo);
+    public Discuss insertDiscuss(Discuss discuss,String areaName) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("insert",(generator, args) -> {
+            competeDiscussInsert(generator,(Discuss)args[0],(String)args[1]);
+        },discuss,areaName);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        int code=object==null?-1:object.get("code").getAsInt();
+        if (code!=1){
+            return null;
+        }
+
+        return objectParse.getFromInsert(object.get("result").getAsString(),Discuss.class,DiscussInfoMapping.INSTANCE);
     }
 
 
     private void competeDiscussQueryField(JsonGenerator generator,String discussarea){
         SelectFieldsAction field=new SelectFieldsAction();
         generator.openArray()
-                .compete(field,FieldConstant.email, TableConstant.user)
-                .compete(field,FieldConstant.head, TableConstant.user)
-                .compete(field,FieldConstant.name,TableConstant.user)
-                .compete(field,FieldConstant.oldContent,discussarea)
-                .compete(field,FieldConstant.content,discussarea)
-                .compete(field,FieldConstant.images,discussarea)
-                .compete(field,FieldConstant.time,discussarea)
+                .compete(field,FieldConstant.id, discussarea)
+                .compete(field,FieldConstant.email, discussarea)
+                .compete(field,FieldConstant.content, discussarea)
+                .compete(field,FieldConstant.images, discussarea)
+                .compete(field,FieldConstant.oldContent, discussarea)
+                .compete(field,FieldConstant.oldUserName, discussarea)
+                .compete(field,FieldConstant.time, discussarea)
+                .compete(field,FieldConstant.noteId, discussarea)
+                .compete(field,FieldConstant.areaId, discussarea)
                 .closeNode("field");
     }
 
@@ -64,22 +101,17 @@ public class DiscussAcess {
         SelectClassNameAction classname=new SelectClassNameAction();
         generator.openArray()
                 .compete(classname,discussarea)
-                .compete(classname,TableConstant.user)
                 .closeNode("className");
     }
 
-    public void competeDiscussQueryByNote(JsonGenerator generator,NoteInfo info,String discuss){
+    public void competeDiscussQueryByNote(JsonGenerator generator,String noteId,String discuss){
         SelectConditionAction condition=new SelectConditionAction();
         generator.openNode();
         competeDiscussQueryClassName(generator,discuss);
         competeDiscussQueryField(generator,discuss);
 
-        String useremail=TableConstant.user+"."+FieldConstant.email;
-        String fllowAreaEmail=TableConstant.followArea+"."+FieldConstant.email;
-        String fllowAreaId=TableConstant.followArea+"."+FieldConstant.followAreaId;
         generator.openArray()
-                .compete(condition,FieldConstant.noteId,info.id,TypeConstant.varchar,discuss,"0")
-                .compete(condition,FieldConstant.email,useremail,TypeConstant.varchar,discuss,"1")
+                .compete(condition,FieldConstant.noteId,noteId,TypeConstant.varchar,discuss,"0")
                 .closeNode("condition");
         generator.closeNode("");
     }
@@ -88,26 +120,27 @@ public class DiscussAcess {
         generator.compete(new AddAction2(),"className",discuss);
     }
 
-    private void competeDiscussInsertField(JsonGenerator generator, NoteInfo info, DiscussInfo discussInfo){
+    private void competeDiscussInsertField(JsonGenerator generator,Discuss discuss){
         InsertValuesAction insert=new InsertValuesAction();
-        generator.openArray()
-                .compete(insert, FieldConstant.id,"", TypeConstant.varchar,"primarykey,autoincrement")
-                .compete(insert,FieldConstant.email,NetMethod.INSTANCE.getUser(),TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.content,discussInfo.mReplayContent,TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.images,NetMethod.INSTANCE.parseList(discussInfo.mImageUrls),TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.oldUserName,info.mNickName,TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.oldContent,info.mContent,TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.oldImages,info.mImageUrl.toString(),TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.time,"",TypeConstant.varchar,"")
-                .compete(insert,FieldConstant.noteId,info.id,TypeConstant.varchar,"");
-        generator.closeNode("values");
 
+        generator.openArray()
+                .compete(insert, FieldConstant.id,"", TypeConstant.varchar,"primarykey")
+                .compete(insert,FieldConstant.email,discuss.getEmail(),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.content,discuss.getContent(),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.images,NetMethod.INSTANCE.parseList(discuss.getImages()),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.oldUserName,discuss.getOldUser(),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.oldContent,discuss.getOldContent(),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.oldImages,"",TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.time,"",TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.noteId,discuss.getNoteId(),TypeConstant.varchar,"")
+                .compete(insert,FieldConstant.areaId,discuss.getAreaId(),TypeConstant.varchar,"");
+        generator.closeNode("values");
     }
 
-    public void competeDiscussInsert(JsonGenerator generator, NoteInfo info, DiscussInfo discussInfo, AreaInfo areaInfo){
+    public void competeDiscussInsert(JsonGenerator generator,Discuss discuss,String areaName){
         generator.openNode();
-        competeDiscussInsertClassName(generator, AreaWithNDMapping.INSTANCE.getDiscuss(areaInfo.name));
-        competeDiscussInsertField(generator,info,discussInfo);
+        competeDiscussInsertClassName(generator, AreaWithNDMapping.INSTANCE.getDiscuss(areaName));
+        competeDiscussInsertField(generator,discuss);
         generator.closeNode("");
     }
 

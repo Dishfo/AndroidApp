@@ -3,7 +3,9 @@ package com.example.dishfo.androidapp.sqlBean;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.PrimaryKey;
 
-public class Collection {
+import java.io.Serializable;
+
+public class Collection implements Serializable{
     @PrimaryKey
     private String id;
     private String email;

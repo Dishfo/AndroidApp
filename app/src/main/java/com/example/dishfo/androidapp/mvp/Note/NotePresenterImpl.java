@@ -1,8 +1,13 @@
 package com.example.dishfo.androidapp.mvp.Note;
 
+import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.bean.DiscussInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.bean.UserInfo;
+import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
 
 import java.util.List;
 
@@ -25,9 +30,7 @@ public class NotePresenterImpl implements NoteTaskContract.NotePresenter{
 
     @Override
     public void start(Object... args) {
-        model.setArgs(args[0]);
-        view.waitToCompete();
-        model.getDiscuss();
+        model.getDiscuss((ViewNote) args[0]);
     }
 
     @Override
@@ -46,23 +49,18 @@ public class NotePresenterImpl implements NoteTaskContract.NotePresenter{
     }
 
     @Override
-    public void loadDicuss(List<DiscussInfo> discussInfos) {
-        view.showDiscuss(discussInfos);
-    }
-
-
-
-    @Override
-    public void onshowHead(NoteInfo noteInfo) {
-        view.showHead(noteInfo);
-    }
-
-    @Override
-    public void onFollowUser(UserInfo userInfo) {
-        if(!userInfo.isOne){
+    public void onFollowUser(ViewNoteHead userInfo) {
+        if(!isOne(userInfo.getUser())){
             model.followUser(userInfo);
         }else {
             onError(NoteTaskContract.FOLLOW);
         }
+    }
+
+    private boolean isOne(User user){
+        if(user.getEmail().equals(TMPclass.tmp.getCurrentUser().getEmail())){
+            return true;
+        }
+        return false;
     }
 }

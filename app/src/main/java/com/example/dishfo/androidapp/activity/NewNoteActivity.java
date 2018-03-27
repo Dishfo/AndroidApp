@@ -1,5 +1,6 @@
 package com.example.dishfo.androidapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
+import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
@@ -34,6 +36,10 @@ import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteModelImpl;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNotePresenterImpl;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;
+import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -45,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by apple on 2017/12/10.
  */
 
@@ -67,13 +74,13 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
     private BitmapCache mBitmapCache = null;
 
     private NewNoteTaskContract.NewNotePresenter mPresenter;
-    private AreaInfo info;
+    private Area area;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent=getIntent();
-        info= (AreaInfo) intent.getSerializableExtra(AREANAME);
+        area= (Area) intent.getSerializableExtra(AREANAME);
         setContentView(R.layout.activity_new_note);
     }
 
@@ -128,7 +135,7 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
             }
             case R.id.activity_new_note_button_ok: {
                 String files[]=mPictures.toArray(new String[]{});
-                mPresenter.onPushNote(generateNoteInfo(),info,files);
+                mPresenter.onPushNote(generateNoteInfo(),files);
                 break;
             }
             case R.id.activity_new_note_imageView_picture: {
@@ -229,11 +236,23 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
         PictureFileUtils.deleteCacheDirFile(this);
     }
 
-    private NoteInfo generateNoteInfo(){
-        NoteInfo info=new NoteInfo();
-        info.mAreaName=this.info.name;
-        info.mContent=mEditTextContent.getText().toString();
-        return info;
+    private ViewNote generateNoteInfo(){
+        User user=TMPclass.tmp.getCurrentUser();
+        ViewNote viewNote=new ViewNote();
+        viewNote.setUser(user);
+        viewNote.setArea(this.area);
+        viewNote.setLike(null);
+
+        Note note=new Note();
+        note.setEmail(user.getEmail());
+        note.setContent(mEditTextContent.getText().toString());
+        note.setAppreciateNumber("");
+        note.setReadNumber("");
+        note.setDiscussNumber("");
+        note.setAreaId(area.getId());
+        viewNote.setNote(note);
+
+        return viewNote;
     }
 
     @Override
@@ -273,6 +292,7 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
         errorHandler.sendMessage(message);
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler errorHandler =new Handler(){
         @Override
         public void handleMessage(Message msg) {

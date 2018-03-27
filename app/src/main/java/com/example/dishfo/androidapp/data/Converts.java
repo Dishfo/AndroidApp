@@ -2,6 +2,7 @@ package com.example.dishfo.androidapp.data;
 
 import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class Converts {
         String content=data.substring(1,data.length()-1);
         String[] items=content.split(",");
         for(String s:items){
+            if(TextUtils.isEmpty(s))
+                continue;
             list.add(s.trim());
         }
         return list;

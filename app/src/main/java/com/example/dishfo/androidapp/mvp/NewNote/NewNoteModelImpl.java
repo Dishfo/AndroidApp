@@ -3,13 +3,20 @@ package com.example.dishfo.androidapp.mvp.NewNote;
 import com.example.dishfo.androidapp.DataAcess.FileAcess;
 import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.DataAcess.NoteAcess;
+import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
+import com.example.dishfo.androidapp.data.repository.NoteRepository;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
+import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,10 +29,11 @@ import io.reactivex.schedulers.Schedulers;
 public class NewNoteModelImpl implements NewNoteTaskContract.NewNoteModel{
 
     private NewNoteTaskContract.NewNotePresenter presenter;
-    private List<String> fielUrls;
+    @Inject
+    NoteRepository repository;
 
     public NewNoteModelImpl(){
-        fielUrls=new ArrayList<>();
+        MyApplication.getRepositoryComponent().inject(this);
     }
 
     @Override
@@ -34,13 +42,10 @@ public class NewNoteModelImpl implements NewNoteTaskContract.NewNoteModel{
     }
 
     @Override
-    public void setArgs(Object... args) {
-    }
+    public void setArgs(Object... args) {}
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() {}
 
     @Override
     public void compete(Object... args) {
@@ -53,13 +58,14 @@ public class NewNoteModelImpl implements NewNoteTaskContract.NewNoteModel{
     }
 
     @Override
-    public void PushNote(NoteInfo info, AreaInfo areaInfo, String[] files) {
+    public void PushNote(ViewNote viewNote, String[] files) {
+        final List<String> fileUrls=new ArrayList<>();
         Observable<JsonObject> observable= FileAcess.INSTANCE.uploadFile(files);
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(jsonObject -> {
                             if(jsonObject.get("code").getAsInt()==1){
-                                fielUrls.add(NetMethod.INSTANCE.getUrl(jsonObject));
+                                fileUrls.add(NetMethod.INSTANCE.getUrl(jsonObject));
                             }else {
                                 observable.unsubscribeOn(Schedulers.io());
                                 error(DiscussTaskContract.UPFILE);
@@ -70,28 +76,27 @@ public class NewNoteModelImpl implements NewNoteTaskContract.NewNoteModel{
                             error(DiscussTaskContract.UPFILE);
                         },
                         () -> {
-                            info.mImageUrl=fielUrls;
-                            addNewNote(areaInfo,info);
+                            Note note=viewNote.getNote();
+                            note.setImages(fileUrls);
+                            addNewNote(viewNote.getArea(),note);
                         });
     }
 
-    private void addNewNote(AreaInfo areaInfo,NoteInfo noteInfo){
-//        Observable<JsonObject> observable=new NoteAcess(null).addNewNote(noteInfo,areaInfo);
-//        observable.observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(jsonObject -> {
-//                            if(jsonObject.get("code").getAsInt()==1){
-//                                compete(DiscussTaskContract.DISCUSS);
-//                            }else {
-//                                error(DiscussTaskContract.DISCUSS);
-//                            }
-//                        },
-//                        throwable -> {
-//                            observable.unsubscribeOn(Schedulers.io());
-//                            error(DiscussTaskContract.DISCUSS);
-//                        });
+    private void addNewNote(Area area, Note note){
+        Observable.create(emitter -> {
+            Note res=repository.saveNote(note,area);
+            emitter.onNext(res);
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(o -> {
+                            if(o==null){
+                                error(DiscussTaskContract.DISCUSS);
+                            }else {
+                                compete(DiscussTaskContract.DISCUSS);
+                            }
+                        },
+                        throwable -> {
+                            error(DiscussTaskContract.DISCUSS);
+                        });
     }
-
-
-
 }

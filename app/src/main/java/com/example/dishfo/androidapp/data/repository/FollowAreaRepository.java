@@ -1,28 +1,50 @@
 package com.example.dishfo.androidapp.data.repository;
 
+import com.example.dishfo.androidapp.DataAcess.FollowAreaAcess;
+import com.example.dishfo.androidapp.application.MyApplication;
+import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.FollowArea;
 import com.example.dishfo.androidapp.sqlBean.User;
 
+import java.io.IOException;
+
+import javax.inject.Inject;
+
 /**
+ *提供访问followArea 的数据接口
  * Created by dishfo on 18-3-23.
  */
 
 public class FollowAreaRepository {
 
+    @Inject
+    DataBaseDao dataBaseDao;
 
+    @Inject
+    FollowAreaAcess followAreaAcess;
 
-    public FollowArea saveFollowArea(FollowArea area){
-
-        return null;
+    public FollowAreaRepository(){
+        MyApplication.getComponent().inject(this);
     }
 
-    public void deleteFollowArea(FollowArea area){
-
+    public FollowArea saveFollowArea(FollowArea area) throws IOException {
+        FollowArea followArea=followAreaAcess.inertFollowArea(area);
+        dataBaseDao.insertFollowArea(followArea);
+        return followArea;
     }
 
-    public FollowArea getFollow(User user,Area area){
-        return null;
+    public void deleteFollowArea(FollowArea area) throws IOException {
+        dataBaseDao.deleteFollowArea(area);
+        followAreaAcess.deleteFollowaArea(area);
+    }
+
+    public FollowArea getFollow(User user,Area area) throws IOException {
+        FollowArea followArea=dataBaseDao.getFollowArea(area.getId(),user.getEmail());
+        if(followArea==null){
+            followArea=followAreaAcess.getFollowArea(area,user);
+        }
+        return followArea;
     }
 
 }

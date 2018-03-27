@@ -1,11 +1,9 @@
 package com.example.dishfo.androidapp.mvp.AreaModules;
 
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
-
-import java.util.List;
+import com.example.dishfo.androidapp.viewBean.ViewArea;
 
 /**
+ *
  * Created by dishfo on 18-3-6.
  */
 
@@ -43,7 +41,7 @@ public class AreaModulesPresentImpl implements AreaModulesContract.AreaModulesPr
     }
 
     @Override
-    public void onFollowArea(AreaInfo areaInfo) {
-        model.FollowArea(areaInfo);
+    public void onFollowArea(ViewArea viewArea) {
+        model.FollowArea(viewArea);
     }
 }

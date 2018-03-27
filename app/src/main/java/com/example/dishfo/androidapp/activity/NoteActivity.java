@@ -26,16 +26,20 @@ import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.DiscussAdapter;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
+import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.mvp.Note.NoteModelImpl;
 import com.example.dishfo.androidapp.mvp.Note.NotePresenterImpl;
 import com.example.dishfo.androidapp.mvp.Note.NoteTaskContract;
+import com.example.dishfo.androidapp.sqlBean.FollowUser;
+import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.sqlBean.User;
 import com.example.dishfo.androidapp.util.ScreenUtils;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,18 +69,18 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
     private TextView mTextViewTime = null;
 
     private DiscussAdapter mAdapter = null;
-    private List<DiscussInfo> mDatas = null;
+    private List<ViewDiscuss> mDatas = null;
 
     private NoteTaskContract.NotePresenter mPresenter=null;
 
-    private NoteInfo info;
-    private UserInfo userInfo;
+    private ViewNote note;
+    private ViewNoteHead viewNoteHead;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent=getIntent();
-        info= (NoteInfo) intent.getSerializableExtra(NOTEID);
+        note= (ViewNote) intent.getSerializableExtra(NOTEID);
         setContentView(R.layout.activity_note);
     }
 
@@ -114,12 +118,12 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
 
             @Override
             public void onRefreshing() {
-                mPresenter.start(info);
+                mPresenter.start(note);
 
             }
         });
         mEasyRefreshLayout.setLoadMoreModel(LoadModel.NONE);
-        mPresenter.start(info);
+        mPresenter.start(note);
 
     }
 
@@ -145,11 +149,11 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
         switch (v.getId()){
             case R.id.activity_note_button_discuss:
                 Intent intent=new Intent(this,DiscussActivity.class);
-                intent.putExtra(NOTEID,info);
+                intent.putExtra(NOTEID,note);
                 startActivity(intent);
                 break;
             case R.id.recyclerView_head_note_textView_follow:
-                mPresenter.onFollowUser(userInfo);
+                mPresenter.onFollowUser(viewNoteHead);
         }
 
     }
@@ -184,17 +188,9 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
         sendMessage((int)args[0],NoteTaskContract.FAILED,null);
     }
 
-    @Override
-    public void showDiscuss(List<DiscussInfo> discussInfos) {
-        sendMessage(NoteTaskContract.DISCUSS,NoteTaskContract.SUCCEED,discussInfos);
-    }
 
-    @Override
-    public void showHead(NoteInfo info) {
-        sendMessage(NoteTaskContract.NOTE,NoteTaskContract.SUCCEED,info);
-    }
 
-    private void showDiscusses(List<DiscussInfo> discussInfos){
+    private void showDiscusses(List<ViewDiscuss> discussInfos){
         mDatas.clear();
         mAdapter.addData(discussInfos);
         if(mEasyRefreshLayout.isRefreshing()){
@@ -202,20 +198,23 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
         }
     }
 
-    private void showNoteHead(NoteInfo noteInfo) {
+    private void showNoteHead(ViewNoteHead viewNoteHead) {
         NetMethod netMethod=new NetMethod();
+        this.viewNoteHead=viewNoteHead;
 
-        netMethod.useGlide(this,noteInfo.mHeadUrl,mImageViewHead);
+        netMethod.useGlide(this,viewNoteHead.getUser().getHeadUrl(),mImageViewHead);
 
-        mTextViewNickName.setText(noteInfo.mNickName);
-        mTextViewContent.setText(noteInfo.mContent);
-        mTextViewDiscuss.setText(noteInfo.mReadNumber);
-        mTextViewAppreciate.setText(noteInfo.mAppreciateNumber);
-        mTextViewTime.setText(noteInfo.mTime);
-        if(info.mImageUrl!=null&&info.mImageUrl.size()>0){
+        Note note=viewNoteHead.getNote();
+
+        mTextViewNickName.setText(viewNoteHead.getUser().getName());
+        mTextViewContent.setText(note.getContent());
+        mTextViewDiscuss.setText(note.getDiscussNumber());
+        mTextViewAppreciate.setText(note.getAppreciateNumber());
+        mTextViewTime.setText(note.getTime());
+        if(note.getImages()!=null&&note.getImages().size()>0){
             ViewGroup group=mViewGroupImages;
             group.removeAllViews();
-            for (String url : info.mImageUrl) {
+            for (String url : note.getImages()) {
                 ImageView imageView = new ImageView(this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.topMargin = (int) ScreenUtils.dpToPx(this, 10);
@@ -228,15 +227,17 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
                 netMethod.useGlideWithoutCircle(this,url,imageView);
             }
         }
+        showHead(viewNoteHead.getFollowUser());
     }
 
-    private void showHead(UserInfo userInfo){
-        this.userInfo=userInfo;
-        if(userInfo.isOne){
+    private void showHead(FollowUser followUser){
+        viewNoteHead.setFollowUser(followUser);
+        User cur=TMPclass.tmp.getCurrentUser();
+        if(viewNoteHead.getUser().getEmail().equals(cur.getEmail())){
             mTextViewFollow.setVisibility(View.GONE);
         }else {
             mTextViewFollow.setVisibility(View.VISIBLE);
-            if(userInfo.isFollow){
+            if(followUser!=null){
                 mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal_org));
             }else {
                 mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal));
@@ -261,28 +262,21 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
             switch (msg.what){
                 case NoteTaskContract.NOTE:
                     if(msg.arg1==NoteTaskContract.SUCCEED){
-                        showNoteHead((NoteInfo) msg.obj);
+                        showNoteHead((ViewNoteHead) msg.obj);
                     }else {
                         Toast.makeText(NoteActivity.this,"加载顶层失败",Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case NoteTaskContract.DISCUSS:
                     if(msg.arg1==NoteTaskContract.SUCCEED){
-                        showDiscusses((List<DiscussInfo>) msg.obj);
+                        showDiscusses((List<ViewDiscuss>) msg.obj);
                     }else {
                         Toast.makeText(NoteActivity.this,"加载列表失败",Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case NoteTaskContract.FOLLOW:
                     if(msg.arg1==NoteTaskContract.SUCCEED){
-                        showHead((UserInfo) msg.obj);
-                    }else {
-                        Toast.makeText(NoteActivity.this,"获取关注信息失败",Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case NoteTaskContract.FOLLOWUSER:
-                    if(msg.arg1==NoteTaskContract.SUCCEED){
-                        showHead((UserInfo)msg.obj);
+                        showHead((FollowUser) msg.obj);
                     }else {
                         Toast.makeText(NoteActivity.this,"获取关注信息失败",Toast.LENGTH_SHORT).show();
                     }
@@ -295,17 +289,17 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
             new BaseQuickAdapter.OnItemChildClickListener() {
                 @Override
                 public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                    DiscussInfo info=mDatas.get(position);
-                    if(NetMethod.INSTANCE.getUser().equals(info.email)){
-                        return;
-                    }
-                    UserInfo userInfo=new UserInfo();
-                    userInfo.name=info.mNickName;
-                    userInfo.email=info.email;
-                    userInfo.head=info.mHeadUrl;
-                    Intent intent=new Intent(NoteActivity.this,TalkActivity.class);
-                    intent.putExtra(USERINFO,userInfo);
-                    startActivity(intent);
+//                    ViewDiscuss =mDatas.get(position);
+//                    if(NetMethod.INSTANCE.getUser().equals(info.email)){
+//                        return;
+//                    }
+//                    UserInfo userInfo=new UserInfo();
+//                    userInfo.name=info.mNickName;
+//                    userInfo.email=info.email;
+//                    userInfo.head=info.mHeadUrl;
+//                    Intent intent=new Intent(NoteActivity.this,TalkActivity.class);
+//                    intent.putExtra(USERINFO,userInfo);
+//                    startActivity(intent);
                 }
             };
 

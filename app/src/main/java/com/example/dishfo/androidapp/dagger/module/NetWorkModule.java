@@ -1,11 +1,14 @@
 package com.example.dishfo.androidapp.dagger.module;
 
 import com.example.dishfo.androidapp.DataAcess.AreaAcess;
+import com.example.dishfo.androidapp.DataAcess.DiscussAcess;
 import com.example.dishfo.androidapp.DataAcess.FollowAreaAcess;
+import com.example.dishfo.androidapp.DataAcess.FollowUserAcess;
 import com.example.dishfo.androidapp.DataAcess.LikeAcess;
 import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.DataAcess.NoteAcess;
 import com.example.dishfo.androidapp.DataAcess.UserAcess;
+import com.example.dishfo.androidapp.sqlBean.FollowUser;
 import com.example.dishfo.androidapp.sqlBean.Like;
 
 import javax.inject.Singleton;
@@ -16,7 +19,6 @@ import dagger.Provides;
 /**
  * Created by dishfo on 18-3-19.
  */
-@Singleton
 @Module
 public class NetWorkModule {
 
@@ -50,8 +52,15 @@ public class NetWorkModule {
         return new FollowAreaAcess(netMethod);
     }
 
+    @Provides
+    public FollowUserAcess provideFollowUserAcess(NetMethod netMethod){
+        return new FollowUserAcess(netMethod);
+    }
 
-
+    @Provides
+    public DiscussAcess provideDiscussAcess(NetMethod netMethod){
+        return new DiscussAcess(netMethod);
+    }
 
 
 }

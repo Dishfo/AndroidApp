@@ -6,11 +6,13 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by dishfo on 18-3-20.
  */
 @Entity
-public class Like {
+public class Like implements Serializable {
     @NonNull
     @PrimaryKey
     private String id;

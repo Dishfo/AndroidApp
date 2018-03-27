@@ -4,10 +4,12 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.example.dishfo.androidapp.data.Converts;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,9 +17,9 @@ import java.util.List;
  */
 @Entity
 @TypeConverters({Converts.class})
-public class Discuss {
+public class Discuss implements Serializable {
     @PrimaryKey
-    @Nullable
+    @NonNull
     private String id;
     private String email;
     private String content;

@@ -1,0 +1,45 @@
+package com.example.dishfo.androidapp.data.repository;
+
+import com.example.dishfo.androidapp.DataAcess.DiscussAcess;
+import com.example.dishfo.androidapp.application.MyApplication;
+import com.example.dishfo.androidapp.data.message.DataBaseDao;
+import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.Discuss;
+import com.example.dishfo.androidapp.sqlBean.Note;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.inject.Inject;
+
+/**
+ * Created by dishfo on 18-3-24.
+ */
+
+public class DiscussRepository {
+
+    @Inject
+    DataBaseDao dataBaseDao;
+
+    @Inject
+    DiscussAcess discussAcess;
+
+    public DiscussRepository(){
+        MyApplication.getComponent().inject(this);
+    }
+
+    public List<Discuss> getDiscussByNote(Note note, Area area) throws IOException {
+        List<Discuss> discusses=dataBaseDao.getDiscuss(note.getId(),area.getId());
+        if(discusses==null||discusses.size()==0){
+            discusses = discussAcess.getDiscussByNote(note,area);
+        }
+        return discusses;
+    }
+
+
+    public Discuss insertDiscuss(Discuss discuss,Area area) throws IOException {
+        Discuss res=discussAcess.insertDiscuss(discuss,area.getName());
+        dataBaseDao.insertDiscuss(res);
+        return res;
+    }
+}

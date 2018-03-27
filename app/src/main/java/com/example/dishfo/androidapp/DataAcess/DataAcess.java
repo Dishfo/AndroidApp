@@ -12,6 +12,12 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 
 public class DataAcess {
 
+    protected static final String CLASS_NAME="className";
+    protected static final String VALUES="values";
+    protected static final String CONDITION="condition";
+    protected static final String FIELD="field";
+
+
     public void generateDelete(JsonGenerator generator, String className, String id){
         generator.openNode();
         generator.compete(new AddAction2(),"className", className)

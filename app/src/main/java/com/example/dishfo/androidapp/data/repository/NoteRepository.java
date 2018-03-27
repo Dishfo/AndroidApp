@@ -3,15 +3,16 @@ package com.example.dishfo.androidapp.data.repository;
 import com.example.dishfo.androidapp.DataAcess.NoteAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
+import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.Note;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
+ *
  * Created by dishfo on 18-3-20.
  */
 public class NoteRepository {
@@ -21,27 +22,29 @@ public class NoteRepository {
     @Inject
     NoteAcess noteAcess;
 
-    public NoteRepository(){
+    public NoteRepository() {
         MyApplication.getComponent().inject(this);
     }
 
-    public Note getNoteById(String id,String areaName){
-        Note note=dataBaseDao.getNoteById(id,areaName);
-        if(note==null){
-            try {
-                note=noteAcess.getNoteById(id,areaName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public Note getNoteById(String id, String areaName) throws IOException {
+        Note note = dataBaseDao.getNoteById(id, areaName);
+        if (note == null) {
+            note = noteAcess.getNoteById(id, areaName);
         }
         return note;
     }
 
-    public void saveNote(Note note){
-        return;
+    public Note saveNote(Note note, Area area) throws IOException {
+        Note res=noteAcess.insertNote(note,area);
+        dataBaseDao.insertNote(res);
+        return res;
     }
 
-    public List<Note> getNoteByArea(String areaId){
-        return null;
+    public List<Note> getNoteByArea(String areaName) throws IOException {
+        List<Note> notes = dataBaseDao.getNoteByAreaName(areaName);
+        if (notes == null||notes.size()==0) {
+            notes = noteAcess.getNoteByArea(areaName);
+        }
+        return notes;
     }
 }

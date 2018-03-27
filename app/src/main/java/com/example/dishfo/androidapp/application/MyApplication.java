@@ -5,7 +5,6 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 
 import com.example.dishfo.androidapp.R;
-
 import com.example.dishfo.androidapp.dagger.component.DaggerMessageComponent;
 import com.example.dishfo.androidapp.dagger.component.DaggerRepositoryComponent;
 import com.example.dishfo.androidapp.dagger.component.MessageComponent;

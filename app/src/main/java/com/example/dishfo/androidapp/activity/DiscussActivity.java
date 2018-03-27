@@ -1,5 +1,6 @@
 package com.example.dishfo.androidapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,18 +26,19 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
+import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.control.BitmapCache;
-import com.example.dishfo.androidapp.fragment.AreaFragment;
-import com.example.dishfo.androidapp.mvp.Area.AreaContract;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussModelImpl;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussPresenterImpl;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;
-import com.example.dishfo.androidapp.netbean.AreaWithNDMapping;
+import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.sqlBean.Discuss;
+import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -46,9 +48,9 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 /**
+ *
  * Created by dishfo on 18-3-3.
  */
 
@@ -71,17 +73,14 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
     private BitmapCache mBitmapCache = null;
 
     private DiscussTaskContract.DiscussPresenter mPresenter;
-    private NoteInfo info;
-    private AreaInfo areaInfo;
-  ///  private String areaName;
+    private ViewNote note;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent=getIntent();
-        info= (NoteInfo) intent.getSerializableExtra(NOTEID);
-        areaInfo=new AreaInfo();
-        areaInfo.name=info.mAreaName;
+        note= (ViewNote) intent.getSerializableExtra(NOTEID);
         setContentView(R.layout.activity_new_note);
     }
 
@@ -114,7 +113,7 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
 
         mBitmapCache = new BitmapCache();
         mPresenter=new DiscussPresenterImpl(new DiscussModelImpl(),this);
-        mPresenter.start(info,areaInfo);
+        mPresenter.start();
     }
 
     @Override
@@ -232,13 +231,25 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    private DiscussInfo generateDiscussInfo(){
-        DiscussInfo discussinfo=new DiscussInfo();
-        discussinfo.discussArea= AreaWithNDMapping.INSTANCE.getDiscuss(info.mAreaName);
-        discussinfo.mReplayContent=mEditTextContent.getText().toString();
-        discussinfo.mReplayedContent=info.mContent;
+    private ViewDiscuss generateDiscussInfo(){
+        Discuss discuss=new Discuss();
+        Note note=this.note.getNote();
+        Area area=this.note.getArea();
+        User user=this.note.getUser();
 
-        return  discussinfo;
+        discuss.setEmail(TMPclass.tmp.getCurrentUser().getEmail() );
+        discuss.setContent(mEditTextContent.getText().toString());
+        discuss.setOldContent(note.getContent());
+        discuss.setOldUser(user.getName());
+        discuss.setNoteId(note.getId());
+        discuss.setAreaId(area.getId());
+
+        ViewDiscuss viewDiscuss=new ViewDiscuss();
+        viewDiscuss.setDiscuss(discuss);
+        viewDiscuss.setNote(note);
+        viewDiscuss.setArea(area);
+
+        return viewDiscuss;
     }
 
     @Override
@@ -284,6 +295,7 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
         errorHandler.sendMessage(message);
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler errorHandler =new Handler(){
         @Override
         public void handleMessage(Message msg) {

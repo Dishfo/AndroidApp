@@ -5,9 +5,8 @@ import android.util.Log;
 import com.example.dishfo.androidapp.DataAcess.CollectionAcess;
 import com.example.dishfo.androidapp.DataAcess.DiscussAcess;
 import com.example.dishfo.androidapp.DataAcess.FansAcess;
-import com.example.dishfo.androidapp.DataAcess.FollowAreaAcess;
 import com.example.dishfo.androidapp.DataAcess.NetMethod;
-import com.example.dishfo.androidapp.DataAcess.followUserAcess;
+import com.example.dishfo.androidapp.DataAcess.FollowUserAcess;
 import com.example.dishfo.androidapp.bean.MineMessage;
 import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.netbean.AreaWithNDMapping;
@@ -104,8 +103,9 @@ public class UserInfoModelImpl implements UserInfoTaskContract.UserInfoModel{
 
 
     private Observable<Integer> getFollowAreaNumber(String email) {
-        Observable<Integer> observable= FollowAreaAcess.INSTANCE.getFollowAreaByUser(email).map(new MapFunction());
-        return observable;
+//        Observable<Integer> observable= FollowAreaAcess.INSTANCE.getFollowAreaByUser(email).map(new MapFunction());
+//        return observable;
+        return null;
     }
 
     private Observable<Integer> getLikeNumber(String email) {
@@ -124,10 +124,11 @@ public class UserInfoModelImpl implements UserInfoTaskContract.UserInfoModel{
     }
 
     private Observable<Integer> getFollowUserNumber(String email) {
-        Observable<Integer> observable=followUserAcess.INSTANCE.
-                getFollowUserByUser(email).map(new MapFunction());
-
-        return observable;
+//        Observable<Integer> observable= FollowUserAcess.INSTANCE.
+//                getFollowUserByUser(email).map(new MapFunction());
+//
+//        return observable;
+        return null;
     }
 
     private Observable<Integer> getNoteNumber(String email) {
@@ -200,8 +201,8 @@ public class UserInfoModelImpl implements UserInfoTaskContract.UserInfoModel{
         ArrayList<Observable<JsonObject>> observables=new ArrayList<>();
         for(String s:list){
             String discuss=AreaWithNDMapping.INSTANCE.getDiscuss(s);
-            Observable<JsonObject> observable=DiscussAcess.INSTANCE.getDiscussByUser(email,discuss);
-            observables.add(observable);
+           // Observable<JsonObject> observable=DiscussAcess.INSTANCE.getDiscussByUser(email,discuss);
+          //  observables.add(observable);
         }
         return observables;
     }

@@ -76,8 +76,6 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     private OnFragmentInteractionListener mListener;
 
     public AreaFragment() {
-
-        // Required empty public constructor
     }
 
     /**
@@ -183,10 +181,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
         }
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
-          //  throw new RuntimeException(context.toString()
-            //        + " must implement OnFragmentInteractionListener");
-        }
+        } else {}
     }
 
     @Override
@@ -197,8 +192,8 @@ public class AreaFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-      //  NoteInfo info=mDatas.get(position);
-       // mFragmentSendListener.action(ENTER_RECOMMEND,info);
+        ViewNote viewNote=mDatas.get(position);
+        mFragmentSendListener.action(ENTER_RECOMMEND,viewNote);
     }
 
     @Override

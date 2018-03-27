@@ -10,6 +10,7 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.netbean.FollowAreaMapping;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.FollowArea;
 import com.example.dishfo.androidapp.sqlBean.User;
@@ -19,7 +20,6 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.List;
 
-import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -44,8 +44,11 @@ public class FollowAreaAcess {
         Response<JsonObject> response=call.execute();
         JsonObject object=response.body();
         int code=object==null?-1:object.get("code").getAsInt();
+        if(code!=1){
+            return null;
+        }
         List<FollowArea> followAreas=jsonObjectParse.getBeans(object.get("result").getAsString(),
-                FollowArea.class,null);
+                FollowArea.class, FollowAreaMapping.INSTANCE);
 
         return (followAreas==null||followAreas.size()==0)?null:followAreas.get(0);
     }
@@ -77,34 +80,13 @@ public class FollowAreaAcess {
         }
 
         return jsonObjectParse.getFromInsert(object.get("result").getAsString(),
-                FollowArea.class,null);
+                FollowArea.class,FollowAreaMapping.INSTANCE);
     }
 
-   /* public Observable<JsonObject> insertFolloArea(String email,String areaId){
-        return NetMethod.INSTANCE.generateObserable("insert",(generator, args) -> {
-            compteFollowAreaInsert(generator,(String)args[0],(String)args[1]);
-        },email,areaId);
-    }*/
-
-    public Observable<JsonObject> deleteFollowArea(String followId){
-        return NetMethod.INSTANCE.generateObserable("delete",(generator, args) -> {
-            compteFollowDelete(generator,(String)args[0]);
-        },followId);
-    }
-
-    public Observable<JsonObject> getFollowAreaByUser(String email){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeFollowAreaByUser(generator, (String) args[0]);
-        },email);
-    }
-
-    public Observable<JsonObject> getFollowAreaByFollow(String email,String areId){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeFollowAreaByFollow(generator, (String) args[0],(String)args[1]);
-        },email,areId);
-    }
-
-
+    /**
+     * 构建相关的json 语句
+     * @param generator
+     */
     private void competeFollowAreaClassName(JsonGenerator generator){
         SelectClassNameAction classname=new SelectClassNameAction();
         generator.openArray()

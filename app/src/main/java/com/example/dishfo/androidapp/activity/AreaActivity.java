@@ -1,16 +1,14 @@
 package com.example.dishfo.androidapp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,20 +19,22 @@ import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesContract;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesModelImpl;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesPresentImpl;
+import com.example.dishfo.androidapp.sqlBean.FollowArea;
+import com.example.dishfo.androidapp.viewBean.ViewArea;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by apple on 2017/12/9.
  */
 
@@ -49,22 +49,20 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
     private EasyRefreshLayout mEasyRefreshLayout = null;
     private RecyclerView mRecyclerViewNote = null;
     private NoteAdapter mAdapter = null;
-    private List<NoteInfo> mDatas = null;
+    private List<ViewNote> mDatas = null;
     private FloatingActionButton mFloatingActionButton;
     private TextView mTextViewFollow=null;
 
-    private Animation mRotateInfinite = null;
-
     private AreaModulesContract.AreaModulesPresent present;
-    private AreaInfo info;
+    private String areaName;
+    private ViewArea viewArea;
 
     @Override
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent=getIntent();
-        info=new AreaInfo();
-        info.name=intent.getStringExtra(AREANAME);
+        areaName=intent.getStringExtra(AREANAME);
         setContentView(R.layout.activity_area);
     }
 
@@ -81,17 +79,16 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         mEasyRefreshLayout.setRefreshHeadView(new RefreshHeaderView(this));
         mEasyRefreshLayout.setLoadMoreView(new LoadMoreFooterView(this));
         mDatas = new ArrayList<>();
-       // mAdapter = new NoteAdapter(R.layout.recyclerview_item_note, mDatas);
+        mAdapter=new NoteAdapter(R.layout.recyclerview_item_note,mDatas);
         mAdapter.setOnItemClickListener(this);
         mAdapter.addHeaderView(getHeaderView());
-        mRecyclerViewNote.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerViewNote.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         mRecyclerViewNote.setAdapter(mAdapter);
-        mRecyclerViewNote.addItemDecoration(new LinearRecyclerViewDecoration(this, R.drawable.recyclerview_divider_dark1, LinearRecyclerViewDecoration.VERTIACL));
-        mRotateInfinite = AnimationUtils.loadAnimation(this, R.anim.rotate_infinite);
+        mRecyclerViewNote.addItemDecoration(new LinearRecyclerViewDecoration(this, R.drawable.recyclerview_divider_dark1,
+                LinearRecyclerViewDecoration.VERTIACL));
 
         new AreaModulesPresentImpl(new AreaModulesModelImpl(),this);
-        present.start(info.name);
-        Handler handler=new Handler(Looper.getMainLooper());
+        present.start(areaName);
     }
 
     @Override
@@ -99,13 +96,11 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         mEasyRefreshLayout.setLoadMoreModel(null);
         mEasyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             @Override
-            public void onLoadMore() {
-
-            }
+            public void onLoadMore() {}
 
             @Override
             public void onRefreshing() {
-                present.start(info.name);
+                present.start(areaName);
             }
         });
 
@@ -118,7 +113,6 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         mTextViewAreaName = headView.findViewById(R.id.recyclerView_head_area_textView_areaName);
 
         mTextViewFollow.setOnClickListener(this);
-       // AndroidSchedulers.mainThread()
         return headView;
     }
 
@@ -127,7 +121,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.activity_area_floatbutton: {
                 Intent intent=new Intent(this,NewNoteActivity.class);
-                intent.putExtra(AREANAME,info);
+                intent.putExtra(AREANAME,viewArea.getArea());
                 startActivity(intent);
                 break;
             }
@@ -135,18 +129,17 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
                 onBackPressed();
                 break;
             case R.id.recyclerView_head_area_textView_follow:
-                onFollowArea(this.info);
+                onFollowArea(viewArea);
                 break;
         }
     }
 
-    public void loadArea(AreaInfo areaInfo){
-
+    public void loadArea(ViewArea viewArea){
         NetMethod netMethod=new NetMethod();
-        netMethod.useGlideWithoutCircle(this,areaInfo.head,mImageViewAreaHead);
+        netMethod.useGlideWithoutCircle(this,viewArea.getArea().getHead(),mImageViewAreaHead);
 
-        mTextViewAreaName.setText(areaInfo.name);
-        if(areaInfo.isFollow){
+        mTextViewAreaName.setText(viewArea.getArea().getName());
+        if(viewArea.getFollowArea()!=null){
             mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal_org));
         }else {
             mTextViewFollow.setBackground(getResources().getDrawable(R.drawable.button_background_round_normal));
@@ -175,28 +168,28 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         sendMessage(code,AreaModulesContract.FAILED,null);
     }
 
-    @Override
-    public void showNotes(List<NoteInfo> infos) {
+
+    public void showNotes(List<ViewNote> viewNotes) {
         mDatas.clear();
-       // mAdapter.addData(infos);
+        mDatas.addAll(viewNotes);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void showArea(ViewArea viewArea) {
+        this.viewArea=viewArea;
+        loadArea(viewArea);
     }
 
     @Override
-    public void showArea(AreaInfo areaInfo) {
-        this.info=areaInfo;
-        loadArea(areaInfo);
-    }
-
-    @Override
-    public void onFollowArea(AreaInfo areaInfo) {
-        present.onFollowArea(areaInfo);
+    public void onFollowArea(ViewArea viewArea) {
+        present.onFollowArea(viewArea);
     }
 
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         Toast.makeText(this," recommend 点击事件",Toast.LENGTH_SHORT).show();
-        NoteInfo info=mDatas.get(position);
+        ViewNote info=mDatas.get(position);
         Intent intent=new Intent(this,NoteActivity.class);
         intent.putExtra(NOTEID,info);
         startActivity(intent);
@@ -217,6 +210,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler myHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -224,21 +218,22 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
             switch (msg.what){
                 case AreaModulesContract.AREA:
                     if(msg.arg1==AreaModulesContract.SUCCEED){
-                        showArea((AreaInfo) msg.obj);
+                        showArea((ViewArea) msg.obj);
                     }else {
                         Toast.makeText(AreaActivity.this,"加载专区失败",Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case AreaModulesContract.NOTE:
                     if(msg.arg1==AreaModulesContract.SUCCEED){
-                        showNotes((List<NoteInfo>) msg.obj);
+                        showNotes((List<ViewNote>) msg.obj);
                     }else {
                         Toast.makeText(AreaActivity.this,"加载帖子失败",Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case AreaModulesContract.FOLLOW:
                     if(msg.arg1==AreaModulesContract.SUCCEED){
-                        AreaActivity.this.showArea((AreaInfo) msg.obj);
+                        AreaActivity.this.viewArea.setFollowArea((FollowArea) msg.obj);
+                        showArea(AreaActivity.this.viewArea);
                     }else {
                         Toast.makeText(AreaActivity.this,"提交关注失败",Toast.LENGTH_SHORT).show();
                     }

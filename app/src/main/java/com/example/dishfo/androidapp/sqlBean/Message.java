@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.dishfo.androidapp.data.Converts;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
 @Entity(tableName = "message",
 primaryKeys = {"sendemail","acceptemail"})
 @TypeConverters({Converts.class})
-public class Message {
+public class Message implements Serializable {
 
     @Embedded(prefix = "send")
     @NonNull

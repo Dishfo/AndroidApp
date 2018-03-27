@@ -4,8 +4,10 @@ import android.hardware.Camera;
 
 import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.NoteInfo;
+import com.example.dishfo.androidapp.viewBean.ViewNote;
 
 /**
+ *
  * Created by dishfo on 18-3-5.
  */
 
@@ -43,8 +45,8 @@ public class NewNotePresenterImpl implements NewNoteTaskContract.NewNotePresente
     }
 
     @Override
-    public void onPushNote(NoteInfo info, AreaInfo areaInfo, String[] files) {
-        model.PushNote(info, areaInfo, files);
+    public void onPushNote(ViewNote viewNote, String[] files) {
+        model.PushNote(viewNote, files);
     }
 
 }
