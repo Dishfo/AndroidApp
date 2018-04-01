@@ -1,9 +1,9 @@
 package com.example.dishfo.androidapp.dagger.module;
 
-import com.example.dishfo.androidapp.DataAcess.UserAcess;
-import com.example.dishfo.androidapp.data.message.UserDao;
 import com.example.dishfo.androidapp.data.repository.AreaRepository;
+import com.example.dishfo.androidapp.data.repository.CollectionRepository;
 import com.example.dishfo.androidapp.data.repository.DiscussRepository;
+import com.example.dishfo.androidapp.data.repository.FansRepository;
 import com.example.dishfo.androidapp.data.repository.FollowAreaRepository;
 import com.example.dishfo.androidapp.data.repository.FollowUserRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
@@ -61,6 +61,16 @@ public class RepositoryModule {
     @Provides
     public DiscussRepository provideDiscussRepository(){
         return new DiscussRepository();
+    }
+
+    @Provides
+    public FansRepository provideFansRepository(){
+        return new FansRepository();
+    }
+
+    @Provides
+    public CollectionRepository provideCollectionRepository(){
+        return new CollectionRepository();
     }
 
 }

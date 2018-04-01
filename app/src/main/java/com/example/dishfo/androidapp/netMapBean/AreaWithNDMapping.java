@@ -1,8 +1,8 @@
-package com.example.dishfo.androidapp.netbean;
+package com.example.dishfo.androidapp.netMapBean;
 
 import android.util.ArrayMap;
 
-import com.example.dishfo.androidapp.mvp.TableConstant;
+import com.example.dishfo.androidapp.constant.TableConstant;
 
 import java.util.Set;
 

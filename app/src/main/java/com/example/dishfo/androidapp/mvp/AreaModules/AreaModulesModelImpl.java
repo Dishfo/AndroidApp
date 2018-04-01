@@ -1,12 +1,12 @@
 package com.example.dishfo.androidapp.mvp.AreaModules;
 
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.data.repository.AreaRepository;
 import com.example.dishfo.androidapp.data.repository.FollowAreaRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
 import com.example.dishfo.androidapp.data.repository.NoteRepository;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.login.LoginModelImpl;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.FollowArea;
@@ -75,7 +75,7 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
     public void getAreaWithNotes(String name) {
         Observable<ViewArea> observable=Observable.create(emitter -> {
             Area area=areaRepository.getAreaByName(name);
-            FollowArea followArea=followAreaRepository.getFollow(TMPclass.tmp.getCurrentUser(),
+            FollowArea followArea=followAreaRepository.getFollow(ModelManager.INSTANCE.getLoginModel().getCurrentUser(),
                     area);
             ViewArea viewArea=new ViewArea();
             viewArea.setArea(area);
@@ -110,9 +110,10 @@ public class AreaModulesModelImpl implements AreaModulesContract.AreaModulesMode
 
     @Override
     public void FollowArea(ViewArea viewArea) {
-        LoginModelImpl loginModel=new LoginModelImpl();
+
         if(viewArea.getFollowArea()==null){
-            insertFollowArea(viewArea.getArea(),TMPclass.tmp.getCurrentUser());
+            insertFollowArea(viewArea.getArea(),
+                    ModelManager.INSTANCE.getLoginModel().getCurrentUser());
         }else {
             deleteFollowArea(viewArea.getFollowArea());
         }

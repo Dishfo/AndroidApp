@@ -26,12 +26,12 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
-import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
 import com.example.dishfo.androidapp.control.BitmapCache;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussModelImpl;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussPresenterImpl;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.Discuss;
@@ -112,7 +112,7 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
         mRecyclerViewPicture.setLayoutManager(new GridLayoutManager(this, 3));
 
         mBitmapCache = new BitmapCache();
-        mPresenter=new DiscussPresenterImpl(new DiscussModelImpl(),this);
+        mPresenter=new DiscussPresenterImpl(ModelManager.INSTANCE.getDiscussModel(),this);
         mPresenter.start();
     }
 
@@ -237,7 +237,7 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
         Area area=this.note.getArea();
         User user=this.note.getUser();
 
-        discuss.setEmail(TMPclass.tmp.getCurrentUser().getEmail() );
+        discuss.setEmail(ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail());
         discuss.setContent(mEditTextContent.getText().toString());
         discuss.setOldContent(note.getContent());
         discuss.setOldUser(user.getName());

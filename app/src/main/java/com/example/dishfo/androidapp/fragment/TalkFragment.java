@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.MessageAdpter;
 import com.example.dishfo.androidapp.application.MyApplication;
@@ -26,8 +25,9 @@ import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.listener.MessageHandler;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.message.MessageContract;
-import com.example.dishfo.androidapp.mvp.message.MessageModelImpl;
 import com.example.dishfo.androidapp.mvp.message.MessagePresenterImpl;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class TalkFragment extends Fragment implements
         mRecyclerView.addItemDecoration(new LinearRecyclerViewDecoration(getContext(),
                 R.drawable.recyclerview_divider_dark1, LinearLayoutManager.VERTICAL));
         messageAdpter.setOnItemClickListener(itemClickListener);
-        new MessagePresenterImpl(new MessageModelImpl(),this);
+        new MessagePresenterImpl(ModelManager.INSTANCE.getMessageModel(),this);
         presenter.start(NetMethod.INSTANCE.getUser());
     }
 

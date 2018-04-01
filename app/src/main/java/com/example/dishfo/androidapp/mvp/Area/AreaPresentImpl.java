@@ -1,9 +1,5 @@
 package com.example.dishfo.androidapp.mvp.Area;
 
-import android.content.Context;
-import android.widget.Toast;
-
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.viewBean.ViewNote;
 
 /**

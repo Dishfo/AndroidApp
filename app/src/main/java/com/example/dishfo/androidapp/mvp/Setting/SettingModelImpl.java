@@ -1,21 +1,20 @@
 package com.example.dishfo.androidapp.mvp.Setting;
 
-import android.util.Log;
-
-import com.example.dishfo.androidapp.DataAcess.FileAcess;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
-import com.example.dishfo.androidapp.DataAcess.UserAcess;
-import com.example.dishfo.androidapp.activity.LoginActivity;
-import com.example.dishfo.androidapp.bean.UserInfo;
-import com.example.dishfo.androidapp.mvp.Note.NoteTaskContract;
+import com.example.dishfo.androidapp.data.DataAcess.FileAcess;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.application.MyApplication;
+import com.example.dishfo.androidapp.data.repository.UserRepository;
+import com.example.dishfo.androidapp.sqlBean.User;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 /**
  * Created by dishfo on 18-3-8.
@@ -24,6 +23,11 @@ import retrofit2.Retrofit;
 public class SettingModelImpl implements SettingContract.SettingModel{
 
     private  SettingContract.SettingPresent present;
+
+    @Inject
+    UserRepository userRepository;
+
+    public SettingModelImpl(){MyApplication.getRepositoryComponent().inject(this);}
 
 
     @Override
@@ -52,55 +56,52 @@ public class SettingModelImpl implements SettingContract.SettingModel{
     }
 
     @Override
-    public void toChangeHead(UserInfo info, String file) {
-        Observable<JsonObject> observable=FileAcess.INSTANCE.uploadFile(new String[]{file});
-        Observable<JsonObject> userObservable=observable.flatMap(jsonObject -> {
-           if(jsonObject.get("code").getAsInt()==1){
-                info.head=NetMethod.INSTANCE.getUrl(jsonObject);
-              //  return UserAcess.INSTANCE.updateUserInfoByUser(NetMethod.INSTANCE.getUser(),info);
-               return null;
-           }else {
-               observable.unsubscribeOn(Schedulers.io());
-           }
-           return null;
-        });
-        userObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(jsonObject -> {
-                            double code=jsonObject.get("code").getAsDouble();
-                            if(code==1){
-                                compete(SettingContract.HEAD,info);
-                            }else {
-                                settingError(userObservable,SettingContract.HEAD);
-                            }
-                        },
-                        throwable -> {
-                            settingError(userObservable,SettingContract.HEAD);
-                        });
-    }
+    public void toChangeHead(User user, String file) {
 
-    private void settingError(Observable observable,int code){
-        observable.unsubscribeOn(Schedulers.io());
-        error(NoteTaskContract.NOTE);
-    }
-
-    @Override
-    public void toChangeName(UserInfo info,String name) {
-        info.name=name;
-        Observable<JsonObject> observable=null;
-              //  UserAcess.INSTANCE.updateUserInfoByUser(NetMethod.INSTANCE.getUser(),info);
+        final List<String> fileUrls=new ArrayList<>();
+        Observable<JsonObject> observable= FileAcess.INSTANCE.uploadFile(new String[]{file});
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(jsonObject -> {
-                            double code=jsonObject.get("code").getAsDouble();
-                            if(code==1){
-                                info.name=name;
-                                compete(SettingContract.NAME,info);
+                            if(jsonObject.get("code").getAsInt()==1){
+                                fileUrls.add(NetMethod.INSTANCE.getUrl(jsonObject));
                             }else {
-                                settingError(observable,SettingContract.NAME);
+                                observable.unsubscribeOn(Schedulers.io());
+                                error(SettingContract.HEAD);
                             }
-                        }
-                        );
+                        },
+                        throwable -> {
+                            observable.unsubscribeOn(Schedulers.io());
+                            error(SettingContract.HEAD);
+                        },
+                        () -> {
+                            if(fileUrls.size()>0){
+                                user.setHeadUrl(fileUrls.get(0));
+                                updateUser(user,SettingContract.HEAD);
+                            }
+                        });
+    }
 
+
+    @Override
+    public void toChangeName(User user, String name) {
+        user.setName(name);
+        updateUser(user,SettingContract.NAME);
+    }
+
+    private void updateUser(User user,int code){
+        Observable.create(emitter -> {
+            boolean result=userRepository.updateUser(user);
+            emitter.onNext(result);
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(o -> {
+                   Boolean res= (Boolean) o;
+                   if(res){
+                       compete(code,user);
+                   }else {
+
+                   }
+                });
     }
 }

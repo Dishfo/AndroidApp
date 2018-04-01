@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.Setting;
 
-import com.example.dishfo.androidapp.bean.UserInfo;
+import com.example.dishfo.androidapp.sqlBean.User;
 
 /**
  * Created by dishfo on 18-3-8.
@@ -20,22 +20,18 @@ public class SettingPresentImpl implements SettingContract.SettingPresent{
     }
 
     @Override
-    public void start(Object... args) {
-
-    }
+    public void start(Object... args) {}
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() {}
 
     @Override
-    public void changeHead(UserInfo info, String file) {
+    public void changeHead(User info, String file) {
         model.toChangeHead(info,file);
     }
 
     @Override
-    public void changeName(UserInfo info,String name) {
+    public void changeName(User info,String name) {
         model.toChangeName(info,name);
     }
 

@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import com.example.dishfo.androidapp.DataAcess.DiscussAcess;
+import com.example.dishfo.androidapp.data.DataAcess.DiscussAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.Area;
@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
+ *
  * Created by dishfo on 18-3-24.
  */
 
@@ -32,14 +33,27 @@ public class DiscussRepository {
         List<Discuss> discusses=dataBaseDao.getDiscuss(note.getId(),area.getId());
         if(discusses==null||discusses.size()==0){
             discusses = discussAcess.getDiscussByNote(note,area);
+            dataBaseDao.insertDiscusses(discusses);
         }
         return discusses;
     }
 
 
+    public List<Discuss> getDiscussByUser(String email,String areaName) throws IOException {
+        List<Discuss> list=dataBaseDao.getDiscussByUser(email,areaName);
+        if(list==null){
+            list=discussAcess.getDissDiscussesByUser(email,areaName);
+        }
+        return list;
+    }
+
     public Discuss insertDiscuss(Discuss discuss,Area area) throws IOException {
         Discuss res=discussAcess.insertDiscuss(discuss,area.getName());
         dataBaseDao.insertDiscuss(res);
         return res;
+    }
+
+    public void  refreshData(){
+
     }
 }

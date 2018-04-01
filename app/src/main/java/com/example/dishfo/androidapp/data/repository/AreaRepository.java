@@ -1,8 +1,6 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import android.nfc.tech.NfcA;
-
-import com.example.dishfo.androidapp.DataAcess.AreaAcess;
+import com.example.dishfo.androidapp.data.DataAcess.AreaAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.Area;
@@ -11,9 +9,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
+ *
  * Created by dishfo on 18-3-20.
  */
 public class AreaRepository {

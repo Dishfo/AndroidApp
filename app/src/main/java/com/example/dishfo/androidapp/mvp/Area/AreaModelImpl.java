@@ -3,7 +3,6 @@ package com.example.dishfo.androidapp.mvp.Area;
 import android.util.Log;
 
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.data.repository.AreaRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
 import com.example.dishfo.androidapp.data.repository.NoteRepository;

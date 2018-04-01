@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.TalkAdapter;
@@ -24,8 +23,9 @@ import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.listener.MessageHandler;
 import com.example.dishfo.androidapp.longconnect.LongConService;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.talk.TalkContract;
-import com.example.dishfo.androidapp.mvp.talk.TalkModelImpl;
 import com.example.dishfo.androidapp.mvp.talk.TalkPresenterImpl;
 import com.google.gson.Gson;
 
@@ -69,7 +69,7 @@ public class TalkActivity extends BaseActivity implements MessageHandler,TalkCon
         recyclerViewMessageContents.setAdapter(adapter);
         recyclerViewMessageContents.setLayoutManager(new LinearLayoutManager(this));
 
-        new TalkPresenterImpl(new TalkModelImpl(),this);
+        new TalkPresenterImpl(ModelManager.INSTANCE.getTalkModel(),this);
         presenter.start(NetMethod.INSTANCE.getUser(),info.email);
     }
 

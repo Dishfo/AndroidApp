@@ -1,9 +1,9 @@
-package com.example.dishfo.androidapp.netbean;
+package com.example.dishfo.androidapp.netMapBean;
 
 import android.util.ArrayMap;
 
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TableConstant;
 
 /**
  * Created by dishfo on 18-3-8.

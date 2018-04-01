@@ -1,11 +1,8 @@
 package com.example.dishfo.androidapp.mvp.NewNote;
 
-import com.example.dishfo.androidapp.DataAcess.FileAcess;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
-import com.example.dishfo.androidapp.DataAcess.NoteAcess;
+import com.example.dishfo.androidapp.data.DataAcess.FileAcess;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.data.repository.NoteRepository;
 import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
 import com.example.dishfo.androidapp.sqlBean.Area;
@@ -23,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
+ *
  * Created by dishfo on 18-3-5.
  */
 

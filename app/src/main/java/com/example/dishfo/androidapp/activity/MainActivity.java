@@ -9,7 +9,6 @@ import android.widget.PopupWindow;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.fragment.AreaFragment;
 import com.example.dishfo.androidapp.fragment.FoundFragment;

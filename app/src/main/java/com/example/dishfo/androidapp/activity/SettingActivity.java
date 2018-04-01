@@ -2,20 +2,16 @@ package com.example.dishfo.androidapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +19,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.SettingAdapter;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.bean.SettingInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.Note.NoteTaskContract;
 import com.example.dishfo.androidapp.mvp.Setting.SettingContract;
-import com.example.dishfo.androidapp.mvp.Setting.SettingModelImpl;
 import com.example.dishfo.androidapp.mvp.Setting.SettingPresentImpl;
+import com.example.dishfo.androidapp.sqlBean.User;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -39,12 +33,14 @@ import com.luck.picture.lib.entity.LocalMedia;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import me.drakeet.materialdialog.MaterialDialog;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-import  static com.example.dishfo.androidapp.bean.SettingInfo.*;
+import static com.example.dishfo.androidapp.bean.SettingInfo.FIRST_TYPE;
+import static com.example.dishfo.androidapp.bean.SettingInfo.FOURTH_TYPE;
+import static com.example.dishfo.androidapp.bean.SettingInfo.SECOND_TYPE;
+import static com.example.dishfo.androidapp.bean.SettingInfo.THRID_TYPE;
 public class SettingActivity extends BaseActivity implements View.OnClickListener,
         BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener,
         SettingContract.SettingView{
@@ -54,7 +50,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private ImageView mImageViewBack = null;
     private RecyclerView mRecyclerView=null;
     private SettingAdapter mSettingAdapter=null;
-    UserInfo info;
+    private User user;
     private SettingContract.SettingPresent present;
     private String picture;
     private SettingInfo[] settingInfos=null;
@@ -82,8 +78,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                             path = media.getPath();
                         }
                         picture=path;
-                        UserInfo info=this.generateUserInfo();
-                        present.changeHead(info,path);
+                        User user=this.generateUserInfo();
+                        present.changeHead(user,path);
                     }
                     break;
             }
@@ -93,7 +89,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        info= (UserInfo) getIntent().getSerializableExtra(USERINFO);
+        user= (User) getIntent().getSerializableExtra(USERINFO);
         setContentView(R.layout.activity_setting);
 
     }
@@ -119,7 +115,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         mRecyclerView.setAdapter(mSettingAdapter);
         mImageViewBack.setOnClickListener(this);
-        new SettingPresentImpl(new SettingModelImpl(),this);
+        new SettingPresentImpl(ModelManager.INSTANCE.getSettingModel(),this);
     }
 
     @Override
@@ -127,8 +123,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mDatas=new ArrayList<>();
         settingInfos=new SettingInfo[]{
                 new SettingInfo("通用设置",FIRST_TYPE),
-                new SettingInfo(" 个人头像",SECOND_TYPE,info.head),
-                new SettingInfo(" 个人昵称",info.name,THRID_TYPE),
+                new SettingInfo(" 个人头像",SECOND_TYPE,user.getHeadUrl()),
+                new SettingInfo(" 个人昵称",user.getName(),THRID_TYPE),
                 new SettingInfo(" 个人简介",FIRST_TYPE),
                 new SettingInfo(" 密码管理",FIRST_TYPE),
                 new SettingInfo(" 应用设置",FIRST_TYPE),
@@ -136,9 +132,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 new SettingInfo(" 版本更新","1.0",THRID_TYPE),
                 new SettingInfo(" 退出帐号",FOURTH_TYPE)
         };
-        int len=settingInfos.length;
-        for(int i=0;i<len;i++){
-            mSettingAdapter.addData(settingInfos[i]);
+
+        for (SettingInfo settingInfo : settingInfos) {
+            mSettingAdapter.addData(settingInfo);
         }
         OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView,OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
 
@@ -218,11 +214,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private void changeCompete(Object... args) {
         int arg= (int) args[0];
-        UserInfo info= (UserInfo) args[1];
+        User user= (User) args[1];
         if(arg== SettingContract.HEAD){
-            mSettingAdapter.getData().get(1).imageurl=info.head;
+            mSettingAdapter.getData().get(1).imageurl=user.getHeadUrl();
         }else if(arg == SettingContract.NAME){
-            mSettingAdapter.getData().get(2).essue=info.name;
+            mSettingAdapter.getData().get(2).essue=user.getName();
         }
         mSettingAdapter.notifyDataSetChanged();
     }
@@ -231,20 +227,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         final MaterialDialog dialog=new MaterialDialog(this);
         dialog.setTitle("退出帐号")
                 .setMessage("确认退出当前帐号")
-                .setPositiveButton("退出", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(SettingActivity.this,LoginActivity.class);
-                        startActivity(intent);
-                        Log.d("test","exit");
-                    }
+                .setPositiveButton("退出", v -> {
+                    Intent intent=new Intent(SettingActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    Log.d("test","exit");
                 })
-                .setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                .setNegativeButton("取消", v -> dialog.dismiss());
 
         dialog.show();
     }
@@ -253,32 +241,23 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         MaterialDialog dialog=new MaterialDialog(this);
         View view= LayoutInflater.from(this).inflate(R.layout.activity_dialog_editname,null);
         dialog.setView(view)
-                .setPositiveButton("确认", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditText editText=view.findViewById(R.id.editText);
-                        UserInfo info=generateUserInfo();
-                        String name=editText.getText().toString();
-                        info.name=name;
-                        present.changeName(info,name);
-                        dialog.dismiss();
-                    }
+                .setPositiveButton("确认", v -> {
+                    EditText editText=view.findViewById(R.id.editText);
+                    User user=generateUserInfo();
+                    String name=editText.getText().toString();
+                    present.changeName(user,name);
+                    dialog.dismiss();
                 })
-                .setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                }).show();
+                .setNegativeButton("取消", v -> dialog.dismiss()).show();
     }
 
 
-    private UserInfo generateUserInfo(){
-        UserInfo userInfo=new UserInfo();
-        userInfo.head=this.info.head;
-        userInfo.name=this.info.name;
-        userInfo.email=this.info.email;
-        return userInfo;
+    private User generateUserInfo(){
+        User res=new User();
+        res.setName(user.getName());
+        res.setHeadUrl(user.getHeadUrl());
+        res.setEmail(user.getEmail());
+        return res;
     }
 
 

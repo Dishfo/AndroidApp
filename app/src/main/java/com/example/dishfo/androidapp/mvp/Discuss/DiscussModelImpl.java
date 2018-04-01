@@ -2,8 +2,8 @@ package com.example.dishfo.androidapp.mvp.Discuss;
 
 import android.util.Log;
 
-import com.example.dishfo.androidapp.DataAcess.FileAcess;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.data.DataAcess.FileAcess;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.repository.DiscussRepository;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;

@@ -1,4 +1,4 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
 import com.google.gson.JsonObject;
 

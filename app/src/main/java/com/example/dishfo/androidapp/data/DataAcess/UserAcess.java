@@ -1,11 +1,8 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import android.util.Log;
-
-import com.example.dishfo.androidapp.bean.UserInfo;
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TableConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.AddAction2;
 import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
@@ -13,29 +10,25 @@ import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAc
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
 import com.example.dishfo.androidapp.netInterface.UpdateAction.UpdateConditionAction;
 import com.example.dishfo.androidapp.netInterface.UpdateAction.UpdateFieldsAction;
-import com.example.dishfo.androidapp.netbean.UserInfoMapping;
+import com.example.dishfo.androidapp.netMapBean.UserInfoMapping;
 import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.List;
 
-import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.http.PUT;
 
 
 /**
  * Created by dishfo on 18-3-8.
  */
 
-public class UserAcess {
-    public NetMethod netMethod;
+public class UserAcess extends DataAcess{
 
     public UserAcess(NetMethod netMethod){
-        this.netMethod=netMethod;
+        super(netMethod);
     }
 
 
@@ -50,7 +43,7 @@ public class UserAcess {
         if(code!=1){
             return null;
         }
-        return new JsonObjectParse().getBeans(body.get("result").getAsString(),
+        return objectParse.getBeans(body.get("result").getAsString(),
                 User.class, UserInfoMapping.INSTANCE);
     }
 

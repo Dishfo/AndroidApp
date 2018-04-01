@@ -3,10 +3,10 @@ package com.example.dishfo.androidapp.adapter;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.request.RequestOptions;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.bean.MessageInfo;
 

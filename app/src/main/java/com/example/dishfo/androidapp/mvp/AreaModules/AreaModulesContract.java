@@ -1,16 +1,9 @@
 package com.example.dishfo.androidapp.mvp.AreaModules;
 
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-import com.example.dishfo.androidapp.sqlBean.Like;
-import com.example.dishfo.androidapp.sqlBean.Note;
 import com.example.dishfo.androidapp.viewBean.ViewArea;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
-
-import java.util.List;
 
 /**
  * Created by dishfo on 18-3-6.

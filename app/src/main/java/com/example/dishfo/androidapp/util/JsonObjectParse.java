@@ -2,17 +2,9 @@ package com.example.dishfo.androidapp.util;
 
 import android.util.Log;
 
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.data.Converts;
-import com.example.dishfo.androidapp.netbean.AreaInfoMapping;
-import com.example.dishfo.androidapp.netbean.Mapping;
-import com.example.dishfo.androidapp.netbean.NoteInfoMapping;
-import com.example.dishfo.androidapp.netbean.UserInfoMapping;
-import com.example.dishfo.androidapp.sqlBean.Area;
-import com.example.dishfo.androidapp.sqlBean.Note;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.netMapBean.Mapping;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

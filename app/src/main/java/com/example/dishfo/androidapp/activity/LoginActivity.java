@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +15,8 @@ import android.widget.Toast;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
-import com.example.dishfo.androidapp.application.TMPclass;
-import com.example.dishfo.androidapp.dagger.component.DaggerAppModuleComponent;
-import com.example.dishfo.androidapp.dagger.module.AppModelModule;
 import com.example.dishfo.androidapp.longconnect.LongConService;
-import com.example.dishfo.androidapp.mvp.login.LoginModelImpl;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.login.LoginPresentImpl;
 import com.example.dishfo.androidapp.mvp.login.LoginTaskContract;
 
@@ -46,18 +42,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private LoginTaskContract.LoginPresent mLoginPresent;
     private PopupWindow mPopupWindow=null;
 
-    @Inject
-    LoginModelImpl im1;
-    @Inject
-    LoginModelImpl im2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setIsFullScreen(true);
-        DaggerAppModuleComponent.create().inject(this);
-        Log.d("test_dagger",im1.toString()+"  ----  "+im2.toString());
     }
 
     @Override
@@ -76,7 +66,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Inject
     @Override
     public void initData() {
-        new LoginPresentImpl(TMPclass.tmp,this);
+        new LoginPresentImpl(ModelManager.INSTANCE.getLoginModel(),this);
         mLoginPresent.start();
         loadUser();
     }

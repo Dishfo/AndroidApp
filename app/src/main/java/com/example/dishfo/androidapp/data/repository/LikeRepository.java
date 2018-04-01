@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import com.example.dishfo.androidapp.DataAcess.LikeAcess;
+import com.example.dishfo.androidapp.data.DataAcess.LikeAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.Like;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by dishfo on 18-3-20.
@@ -38,8 +37,12 @@ public class LikeRepository {
         return like;
     }
 
-    public Like getLikeByUser(String email){
-        return null;
+    public List<Like> getLikeByUser(String email) throws IOException {
+        List<Like> likes=dataBaseDao.getLikeByUser(email);
+        if(likes==null){
+            likes=likeAcess.getLikeByUser(email);
+        }
+        return likes;
     }
 
     public Like saveLike(Like like) throws IOException {

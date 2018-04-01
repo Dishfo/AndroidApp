@@ -1,9 +1,5 @@
 package com.example.dishfo.androidapp.mvp.NewNote;
 
-import android.hardware.Camera;
-
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.viewBean.ViewNote;
 
 /**

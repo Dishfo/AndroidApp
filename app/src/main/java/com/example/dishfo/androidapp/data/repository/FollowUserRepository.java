@@ -1,12 +1,13 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import com.example.dishfo.androidapp.DataAcess.FollowUserAcess;
+import com.example.dishfo.androidapp.data.DataAcess.FollowUserAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.FollowUser;
 import com.example.dishfo.androidapp.sqlBean.User;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,6 +45,16 @@ public class FollowUserRepository {
     public boolean deleteFollowUser(FollowUser followUser) throws IOException {
         dataBaseDao.deleteFollowUser(followUser);
         return followUserAcess.deleteFollowUser(followUser);
+    }
+
+
+    public List<FollowUser> getFollowUsersByUser(String email) throws IOException {
+        List<FollowUser> list=dataBaseDao.getFollowUserByUser(email);
+        if(list==null){
+            list=followUserAcess.getFollowUsersByUser(email);
+        }
+
+        return list;
     }
 
 

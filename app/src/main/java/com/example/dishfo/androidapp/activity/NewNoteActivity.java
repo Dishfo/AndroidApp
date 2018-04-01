@@ -26,14 +26,9 @@ import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.ExpressionAdapter;
 import com.example.dishfo.androidapp.adapter.PictureAdapter;
-import com.example.dishfo.androidapp.application.TMPclass;
-import com.example.dishfo.androidapp.bean.AreaInfo;
 import com.example.dishfo.androidapp.bean.ExpressionInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.control.BitmapCache;
-import com.example.dishfo.androidapp.mvp.Area.AreaContract;
-import com.example.dishfo.androidapp.mvp.Discuss.DiscussTaskContract;
-import com.example.dishfo.androidapp.mvp.NewNote.NewNoteModelImpl;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNotePresenterImpl;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;
 import com.example.dishfo.androidapp.sqlBean.Area;
@@ -112,7 +107,7 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
         mRecyclerViewPicture.setLayoutManager(new GridLayoutManager(this, 3));
 
         mBitmapCache = new BitmapCache();
-        new NewNotePresenterImpl(this,new NewNoteModelImpl());
+        new NewNotePresenterImpl(this,ModelManager.INSTANCE.getNewNoteModel());
     }
 
     @Override
@@ -237,7 +232,7 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
     }
 
     private ViewNote generateNoteInfo(){
-        User user=TMPclass.tmp.getCurrentUser();
+        User user= ModelManager.INSTANCE.getLoginModel().getCurrentUser();
         ViewNote viewNote=new ViewNote();
         viewNote.setUser(user);
         viewNote.setArea(this.area);

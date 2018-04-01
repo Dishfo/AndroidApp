@@ -1,9 +1,9 @@
 package com.example.dishfo.androidapp.mvp.Setting;
 
-import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
+import com.example.dishfo.androidapp.sqlBean.User;
 
 /**
  * Created by dishfo on 18-3-8.
@@ -18,16 +18,16 @@ public class SettingContract {
 
     public interface SettingPresent extends BasePresenter{
 
-        public void changeHead(UserInfo info,String file);
-        public void changeName(UserInfo info,String name);
+        public void changeHead(User user, String file);
+        public void changeName(User user,String name);
     }
 
     public interface SettingView extends BaseView<SettingPresent>{
     }
 
     public interface SettingModel extends BaseModel<SettingPresent>{
-        public void toChangeHead(UserInfo info,String file);
-        public void toChangeName(UserInfo info,String name);
+        public void toChangeHead(User user,String file);
+        public void toChangeName(User user,String name);
     }
 
 }

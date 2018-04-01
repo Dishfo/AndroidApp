@@ -25,7 +25,7 @@ public class UserInfoTaskContract {
     }
 
     public interface UserInfoView extends BaseView<UserInfoPresent>{
-        public void showUserInfo(MineMessage mineMessage);
+
     }
 
 }

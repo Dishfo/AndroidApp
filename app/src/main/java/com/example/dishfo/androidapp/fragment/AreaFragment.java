@@ -24,14 +24,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
 import com.example.dishfo.androidapp.decoration.GridRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.mvp.Area.AreaContract;
-import com.example.dishfo.androidapp.mvp.Area.AreaModelImpl;
 import com.example.dishfo.androidapp.mvp.Area.AreaPresentImpl;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.viewBean.ViewNote;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     }
 
     private void initData() {
-        new AreaPresentImpl(new AreaModelImpl(),this);
+        new AreaPresentImpl(ModelManager.INSTANCE.getAreaModel(),this);
         mDatas=new ArrayList<>();
         mPresent.start();
     }

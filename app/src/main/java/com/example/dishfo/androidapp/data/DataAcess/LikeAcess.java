@@ -1,8 +1,8 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TableConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.AddAction2;
 import com.example.dishfo.androidapp.netInterface.AddAction3;
 import com.example.dishfo.androidapp.netInterface.InsertValuesAction;
@@ -10,9 +10,8 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netbean.LikeMapping;
+import com.example.dishfo.androidapp.netMapBean.LikeMapping;
 import com.example.dishfo.androidapp.sqlBean.Like;
-import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -26,13 +25,10 @@ import retrofit2.Response;
  * Created by dishfo on 18-3-7.
  */
 
-public class LikeAcess {
-    private NetMethod netMethod;
-    private JsonObjectParse objectParse;
+public class LikeAcess extends DataAcess{
 
     public LikeAcess(NetMethod netMethod){
-        objectParse=new JsonObjectParse();
-        this.netMethod=netMethod;
+        super(netMethod);
     }
 
     public Like getLike(String email,String noteId,String areaId) throws IOException {
@@ -66,6 +62,22 @@ public class LikeAcess {
         Like result=objectParse.getFromInsert(object.get("result").getAsString(),Like.class, LikeMapping.INSTANCE);
         return result;
 
+    }
+
+    public List<Like> getLikeByUser(String email) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeLikeQueryByUser(generator,(String)args[0]);
+        },email);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+
+         if(!netMethod.isSucceed(object)){
+             return null;
+         }
+
+         return objectParse.getBeans(netMethod.getResult(object),
+                 Like.class,LikeMapping.INSTANCE);
     }
 
     public boolean deleteLike(Like like) throws IOException {

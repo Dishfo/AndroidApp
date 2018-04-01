@@ -1,11 +1,10 @@
 package com.example.dishfo.androidapp.mvp.Note;
 
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.application.TMPclass;
-import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.data.repository.DiscussRepository;
 import com.example.dishfo.androidapp.data.repository.FollowUserRepository;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.sqlBean.Discuss;
 import com.example.dishfo.androidapp.sqlBean.FollowUser;
 import com.example.dishfo.androidapp.sqlBean.User;
@@ -67,7 +66,7 @@ public class NoteModelImpl implements NoteTaskContract.NoteModel {
     @Override
     public void getDiscuss(ViewNote viewNote) {
         Observable<List<ViewDiscuss>> observable=Observable.create(emitter -> {
-            FollowUser followUser=followUserRepository.getFollowUserBy(TMPclass.tmp.getCurrentUser()
+            FollowUser followUser=followUserRepository.getFollowUserBy(ModelManager.INSTANCE.getLoginModel().getCurrentUser()
                     ,viewNote.getUser());
             ViewNoteHead viewNoteHead=new ViewNoteHead(viewNote.getNote(),viewNote.getUser(),followUser);
             emitter.onNext(viewNoteHead);
@@ -102,7 +101,7 @@ public class NoteModelImpl implements NoteTaskContract.NoteModel {
     @Override
     public void followUser(ViewNoteHead viewNoteHead) {
         if(viewNoteHead.getFollowUser()==null){
-            insertFollowUser(TMPclass.tmp.getCurrentUser(),viewNoteHead.getUser());
+            insertFollowUser(ModelManager.INSTANCE.getLoginModel().getCurrentUser(),viewNoteHead.getUser());
 
         }else {
            deleteFollowUser(viewNoteHead.getFollowUser());

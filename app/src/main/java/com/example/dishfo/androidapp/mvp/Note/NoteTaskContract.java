@@ -1,19 +1,10 @@
 package com.example.dishfo.androidapp.mvp.Note;
 
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-import com.example.dishfo.androidapp.sqlBean.FollowUser;
-import com.example.dishfo.androidapp.sqlBean.Note;
-import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
-
-import java.util.List;
 
 /**
  * Created by dishfo on 18-2-28.

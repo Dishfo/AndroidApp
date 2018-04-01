@@ -1,15 +1,9 @@
 package com.example.dishfo.androidapp.mvp.Note;
 
-import com.example.dishfo.androidapp.application.TMPclass;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
-
-import java.util.List;
 
 /**
  * Created by dishfo on 18-2-28.
@@ -58,7 +52,7 @@ public class NotePresenterImpl implements NoteTaskContract.NotePresenter{
     }
 
     private boolean isOne(User user){
-        if(user.getEmail().equals(TMPclass.tmp.getCurrentUser().getEmail())){
+        if(user.getEmail().equals(ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail())){
             return true;
         }
         return false;

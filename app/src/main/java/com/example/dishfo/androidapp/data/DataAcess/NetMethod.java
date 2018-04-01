@@ -1,4 +1,4 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -11,13 +11,7 @@ import com.example.dishfo.androidapp.GlideRequest;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.mvp.BaseModel;
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.JsonGenerator;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
 import com.example.dishfo.androidapp.util.JsonAction;
 import com.example.dishfo.androidapp.util.PropertiesReader;
 import com.google.gson.JsonArray;
@@ -61,25 +55,7 @@ public class NetMethod {
     }
 
 
-    void competeDiscussByUser(JsonGenerator generator, String email, String discuss){
-        SelectClassNameAction classname=new SelectClassNameAction();
-        SelectFieldsAction field=new SelectFieldsAction();
-        SelectConditionAction condition=new SelectConditionAction();
 
-        generator.openNode();
-        generator.openArray()
-                .compete(classname,discuss)
-                .closeNode("className");
-
-        generator.openArray()
-                .compete(field,FieldConstant.id,discuss)
-                .closeNode("field");
-
-        generator.openArray()
-                .compete(condition,FieldConstant.email,email,TypeConstant.varchar,discuss,"0")
-                .closeNode("condition");
-        generator.closeNode("");
-    }
 
     public int getResultSize(String result){
         JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
@@ -141,25 +117,7 @@ public class NetMethod {
     }
 
 
-    public void competeFansQueryByUser(JsonGenerator generator, String email) {
-        SelectClassNameAction classname=new SelectClassNameAction();
-        SelectFieldsAction field=new SelectFieldsAction();
-        SelectConditionAction condition=new SelectConditionAction();
 
-        generator.openNode();
-        generator.openArray()
-                .compete(classname,TableConstant.fans)
-                .closeNode("className");
-
-        generator.openArray()
-                .compete(field,FieldConstant.id,TableConstant.fans)
-                .closeNode("field");
-
-        generator.openArray()
-                .compete(condition,FieldConstant.email,email,TypeConstant.varchar,TableConstant.fans,"0")
-                .closeNode("condition");
-        generator.closeNode("");
-    }
 
     public String getUrl(JsonObject object){
         String url=object.get("result").getAsString();

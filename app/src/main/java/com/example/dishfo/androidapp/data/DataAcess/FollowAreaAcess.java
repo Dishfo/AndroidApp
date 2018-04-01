@@ -1,8 +1,8 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TableConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.AddAction2;
 import com.example.dishfo.androidapp.netInterface.AddAction3;
 import com.example.dishfo.androidapp.netInterface.InsertValuesAction;
@@ -10,11 +10,10 @@ import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netbean.FollowAreaMapping;
+import com.example.dishfo.androidapp.netMapBean.FollowAreaMapping;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.FollowArea;
 import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -28,13 +27,28 @@ import retrofit2.Response;
  * Created by dishfo on 18-3-7.
  */
 
-public class FollowAreaAcess {
-    private NetMethod netMethod;
-    private JsonObjectParse jsonObjectParse=new JsonObjectParse();
+public class FollowAreaAcess extends DataAcess{
 
     public FollowAreaAcess(NetMethod netMethod){
-        this.netMethod=netMethod;
+        super(netMethod);
     }
+
+    public List<FollowArea> getFollowAreasByUser(String email) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeFollowAreaByUser(generator,(String)args[0]);
+        },email);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+
+        if(!netMethod.isSucceed(object)){
+            return null;
+        }
+
+        return objectParse.getBeans(netMethod.getResult(object),
+                FollowArea.class,FollowAreaMapping.INSTANCE);
+    }
+
 
     public FollowArea getFollowArea(Area area, User user) throws IOException {
         Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
@@ -47,7 +61,7 @@ public class FollowAreaAcess {
         if(code!=1){
             return null;
         }
-        List<FollowArea> followAreas=jsonObjectParse.getBeans(object.get("result").getAsString(),
+        List<FollowArea> followAreas= objectParse.getBeans(object.get("result").getAsString(),
                 FollowArea.class, FollowAreaMapping.INSTANCE);
 
         return (followAreas==null||followAreas.size()==0)?null:followAreas.get(0);
@@ -79,7 +93,7 @@ public class FollowAreaAcess {
             return null;
         }
 
-        return jsonObjectParse.getFromInsert(object.get("result").getAsString(),
+        return objectParse.getFromInsert(object.get("result").getAsString(),
                 FollowArea.class,FollowAreaMapping.INSTANCE);
     }
 

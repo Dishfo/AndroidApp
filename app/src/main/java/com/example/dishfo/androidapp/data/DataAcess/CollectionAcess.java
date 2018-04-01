@@ -1,33 +1,47 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TableConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.netMapBean.CollectionMapping;
+import com.example.dishfo.androidapp.sqlBean.Collection;
 import com.google.gson.JsonObject;
 
-import io.reactivex.Observable;
-import retrofit2.Retrofit;
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by dishfo on 18-3-7.
  */
 
-public class CollectionAcess {
-    public static CollectionAcess INSTANCE=new CollectionAcess();
+public class CollectionAcess extends DataAcess{
 
-    private CollectionAcess(){
-
+    public CollectionAcess(NetMethod netMethod){
+        super(netMethod);
     }
 
-    public Observable<JsonObject> getCollectionByUser(String email){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            competeCollectionQueryByUser(generator, (String) args[0]);
+    public List<Collection> getCollections(String email) throws IOException {
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeCollectionQueryByUser(generator,(String)args[0]);
         },email);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+        if(!netMethod.isSucceed(object)){
+            return null;
+        }
+
+        return objectParse.getBeans(netMethod.getResult(object),
+                Collection.class, CollectionMapping.INSTANCE);
     }
+
 
     public void competeCollectionQueryByUser(JsonGenerator generator,String email){
         SelectClassNameAction classname=new SelectClassNameAction();

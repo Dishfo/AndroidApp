@@ -7,19 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.constant.ArrayConstant;
 import com.example.dishfo.androidapp.util.ScreenUtils;
 import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 

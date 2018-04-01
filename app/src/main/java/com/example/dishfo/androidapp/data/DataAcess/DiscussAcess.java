@@ -1,53 +1,53 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import com.example.dishfo.androidapp.bean.AreaInfo;
-import com.example.dishfo.androidapp.bean.DiscussInfo;
-import com.example.dishfo.androidapp.bean.NoteInfo;
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TableConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.AddAction2;
 import com.example.dishfo.androidapp.netInterface.InsertValuesAction;
 import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netbean.AreaWithNDMapping;
-import com.example.dishfo.androidapp.netbean.DiscussInfoMapping;
+import com.example.dishfo.androidapp.netMapBean.AreaWithNDMapping;
+import com.example.dishfo.androidapp.netMapBean.DiscussInfoMapping;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.Discuss;
 import com.example.dishfo.androidapp.sqlBean.Note;
-import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.util.JsonObjectParse;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Response;
 
 /**
+ *
  * Created by dishfo on 18-3-7.
  */
 
-public class DiscussAcess {
-    private NetMethod netMethod;
-    private JsonObjectParse objectParse;
-
+public class DiscussAcess extends DataAcess{
     public DiscussAcess(NetMethod netMethod){
-        this.netMethod=netMethod;
-        objectParse=new JsonObjectParse();
+        super(netMethod);
     }
 
 
-    public Observable<JsonObject> getDiscussByUser(String email,String discuss){
-        return NetMethod.INSTANCE.generateObserable("query",(generator, args) -> {
-            NetMethod.INSTANCE.competeDiscussByUser(generator, (String) args[0], (String) args[1]);
-        },email,discuss);
+
+    public List<Discuss> getDissDiscussesByUser(String email,String areaName) throws IOException {
+
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+           competeDiscussByUser(generator, (String) args[0], (String) args[1]);
+        },email,areaName);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+
+        if(netMethod.isSucceed(object)){
+            return null;
+        }
+
+        return objectParse.getBeans(netMethod.getResult(object),Discuss.class,
+                DiscussInfoMapping.INSTANCE);
     }
 
     public List<Discuss> getDiscussByNote(Note note, Area area) throws IOException {
@@ -81,6 +81,12 @@ public class DiscussAcess {
         return objectParse.getFromInsert(object.get("result").getAsString(),Discuss.class,DiscussInfoMapping.INSTANCE);
     }
 
+    /**
+     * 用与生成相关的json
+     *
+     * @param generator
+     * @param discussarea
+     */
 
     private void competeDiscussQueryField(JsonGenerator generator,String discussarea){
         SelectFieldsAction field=new SelectFieldsAction();
@@ -116,6 +122,18 @@ public class DiscussAcess {
         generator.closeNode("");
     }
 
+    void competeDiscussByUser(JsonGenerator generator, String email, String discuss){
+        SelectConditionAction condition=new SelectConditionAction();
+        generator.openNode();
+        competeDiscussQueryClassName(generator,discuss);
+        competeDiscussQueryField(generator,discuss);
+
+        generator.openArray()
+                .compete(condition,FieldConstant.email,email,TypeConstant.varchar,discuss,"0")
+                .closeNode("condition");
+        generator.closeNode("");
+    }
+
     private void competeDiscussInsertClassName(JsonGenerator generator,String discuss){
         generator.compete(new AddAction2(),"className",discuss);
     }
@@ -143,6 +161,8 @@ public class DiscussAcess {
         competeDiscussInsertField(generator,discuss);
         generator.closeNode("");
     }
+
+
 
 
 }

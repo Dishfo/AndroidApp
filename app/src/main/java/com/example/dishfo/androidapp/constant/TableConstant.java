@@ -1,4 +1,4 @@
-package com.example.dishfo.androidapp.mvp;
+package com.example.dishfo.androidapp.constant;
 
 /**
  * Created by dishfo on 18-2-22.

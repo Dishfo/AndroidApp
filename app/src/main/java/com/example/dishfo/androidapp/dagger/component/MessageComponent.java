@@ -3,6 +3,7 @@ package com.example.dishfo.androidapp.dagger.component;
 import com.example.dishfo.androidapp.dagger.module.MessageDataBaseModule;
 import com.example.dishfo.androidapp.dagger.module.NetWorkModule;
 import com.example.dishfo.androidapp.data.repository.AreaRepository;
+import com.example.dishfo.androidapp.data.repository.CollectionRepository;
 import com.example.dishfo.androidapp.data.repository.DiscussRepository;
 import com.example.dishfo.androidapp.data.repository.FollowAreaRepository;
 import com.example.dishfo.androidapp.data.repository.FollowUserRepository;
@@ -26,4 +27,5 @@ public interface MessageComponent {
     public void inject(FollowAreaRepository repository);
     public void inject(FollowUserRepository repository);
     public void inject(DiscussRepository repository);
+    public void inject(CollectionRepository repository);
 }

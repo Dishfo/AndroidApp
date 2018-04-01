@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import com.example.dishfo.androidapp.DataAcess.FollowAreaAcess;
+import com.example.dishfo.androidapp.data.DataAcess.FollowAreaAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.Area;
@@ -8,6 +8,7 @@ import com.example.dishfo.androidapp.sqlBean.FollowArea;
 import com.example.dishfo.androidapp.sqlBean.User;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,6 +46,14 @@ public class FollowAreaRepository {
             followArea=followAreaAcess.getFollowArea(area,user);
         }
         return followArea;
+    }
+
+    public List<FollowArea> getFollowAreasByUser(String email) throws IOException {
+        List<FollowArea> list=dataBaseDao.getFollowAreasByUser(email);
+        if(list==null||list.size()==0){
+            list=followAreaAcess.getFollowAreasByUser(email);
+        }
+        return list;
     }
 
 }

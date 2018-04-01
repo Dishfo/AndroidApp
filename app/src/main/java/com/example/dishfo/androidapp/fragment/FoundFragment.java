@@ -1,7 +1,6 @@
 package com.example.dishfo.androidapp.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,19 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.ajguan.library.EasyRefreshLayout;
-import com.baoyz.widget.PullRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
-import com.example.dishfo.androidapp.bean.NoteInfo;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +40,7 @@ public class FoundFragment extends Fragment implements
     private String mParam1;
     private String mParam2;
 
-    private List<NoteInfo> mDatas;
+    //private List<NoteInfo> mDatas;
 
     private FragmentSendListener mFragmentSendListener=null;
     private NoteAdapter mNoteAdapter=null;
@@ -99,21 +92,8 @@ public class FoundFragment extends Fragment implements
     }
 
     private void initData() {
-        mDatas=new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            NoteInfo noteInfo = new NoteInfo();
-            noteInfo.setmHeadUrl("http://img3.imgtn.bdimg.com/it/u=4217792878,3100855251&fm=11&gp=0.jpg");
-            noteInfo.setmNickName("pby");
-            noteInfo.setmTime("2017-12-20");
-            noteInfo.setmContent("这是我的第一张帖子");
-        //    noteInfo.setmImageUrl("http://img1.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=27&gp=0.jpg");
-            noteInfo.setmAppreciateNumber("120");
-            noteInfo.setmReadNumber("100");
-            noteInfo.setmDiscussNumber("56");
-            noteInfo.setmAreaName("动漫");
-            mDatas.add(noteInfo);
-          //  mNoteAdapter.notifyItemInserted(mDatas.size() - 1);
-        }
+      //  mDatas=new ArrayList<>();
+
     }
 
 

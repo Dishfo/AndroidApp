@@ -2,7 +2,7 @@ package com.example.dishfo.androidapp.longconnect;
 
 import android.util.Log;
 
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.bean.MessageBean;
 import com.google.gson.Gson;
 

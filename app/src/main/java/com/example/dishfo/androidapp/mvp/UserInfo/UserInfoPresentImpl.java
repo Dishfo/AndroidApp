@@ -1,8 +1,10 @@
 package com.example.dishfo.androidapp.mvp.UserInfo;
 
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.mvp.ModelManager;
+import com.example.dishfo.androidapp.sqlBean.User;
 
 /**
+ *
  * Created by dishfo on 18-3-7.
  */
 
@@ -21,8 +23,8 @@ public class UserInfoPresentImpl implements UserInfoTaskContract.UserInfoPresent
 
     @Override
     public void start(Object... args) {
-
-        model.loadUserInfo(NetMethod.INSTANCE.getUser());
+        User user= ModelManager.INSTANCE.getLoginModel().getCurrentUser();
+        model.loadUserInfo(user.getEmail());
     }
 
     @Override

@@ -22,15 +22,14 @@ import com.ajguan.library.LoadModel;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.DiscussAdapter;
-import com.example.dishfo.androidapp.application.TMPclass;
 import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
-import com.example.dishfo.androidapp.mvp.Note.NoteModelImpl;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.Note.NotePresenterImpl;
 import com.example.dishfo.androidapp.mvp.Note.NoteTaskContract;
 import com.example.dishfo.androidapp.sqlBean.FollowUser;
@@ -45,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by apple on 2017/12/9.
  */
 
@@ -109,7 +109,7 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
         Glide.with(this).load(R.mipmap.imageview_more).into(mImageViewMore);
         Glide.with(this).load(R.mipmap.imageview_head).apply(RequestOptions.circleCropTransform()).into(mImageViewHead);
 
-        this.mPresenter=new NotePresenterImpl(new NoteModelImpl(),this);
+        this.mPresenter=new NotePresenterImpl(ModelManager.INSTANCE.getNoteModel(),this);
         mEasyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             @Override
             public void onLoadMore() {
@@ -232,7 +232,7 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
 
     private void showHead(FollowUser followUser){
         viewNoteHead.setFollowUser(followUser);
-        User cur=TMPclass.tmp.getCurrentUser();
+        User cur= ModelManager.INSTANCE.getLoginModel().getCurrentUser();
         if(viewNoteHead.getUser().getEmail().equals(cur.getEmail())){
             mTextViewFollow.setVisibility(View.GONE);
         }else {

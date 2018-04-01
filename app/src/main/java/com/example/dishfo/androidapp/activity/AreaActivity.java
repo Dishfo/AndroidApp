@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.ajguan.library.EasyRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.example.dishfo.androidapp.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.NoteAdapter;
@@ -23,8 +23,8 @@ import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesContract;
-import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesModelImpl;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesPresentImpl;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.sqlBean.FollowArea;
 import com.example.dishfo.androidapp.viewBean.ViewArea;
 import com.example.dishfo.androidapp.viewBean.ViewNote;
@@ -87,7 +87,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         mRecyclerViewNote.addItemDecoration(new LinearRecyclerViewDecoration(this, R.drawable.recyclerview_divider_dark1,
                 LinearRecyclerViewDecoration.VERTIACL));
 
-        new AreaModulesPresentImpl(new AreaModulesModelImpl(),this);
+        new AreaModulesPresentImpl(ModelManager.INSTANCE.getAreaModulesModel(),this);
         present.start(areaName);
     }
 

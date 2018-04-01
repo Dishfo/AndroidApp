@@ -1,22 +1,22 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import android.util.Log;
+
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.AddAction2;
 import com.example.dishfo.androidapp.netInterface.InsertValuesAction;
 import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
 import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netbean.AreaWithNDMapping;
-import com.example.dishfo.androidapp.netbean.NoteInfoMapping;
+import com.example.dishfo.androidapp.netMapBean.AreaWithNDMapping;
+import com.example.dishfo.androidapp.netMapBean.NoteInfoMapping;
 import com.example.dishfo.androidapp.sqlBean.Area;
 import com.example.dishfo.androidapp.sqlBean.Note;
-import com.example.dishfo.androidapp.util.JsonObjectParse;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.security.acl.NotOwnerException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,12 +28,27 @@ import retrofit2.Response;
  */
 
 public class NoteAcess extends DataAcess{
-    NetMethod netMethod=null;
-    JsonObjectParse objectParse;
+
 
     public  NoteAcess(NetMethod netMethod){
-        this.netMethod=netMethod;
-        objectParse=new JsonObjectParse();
+        super(netMethod);
+    }
+
+    public List<Note> getNoteByUser(String email,String areaName) throws IOException {
+
+        Call<JsonObject> call=netMethod.generateCall("query",(generator, args) -> {
+            competeNoteQueryByUser(generator,email,areaName);
+        },email,areaName);
+
+        Response<JsonObject> response=call.execute();
+        JsonObject object=response.body();
+
+        if(!netMethod.isSucceed(object)){
+            return null;
+        }
+
+        return objectParse.getBeans(netMethod.getResult(object),
+                Note.class,NoteInfoMapping.INSTANCE);
     }
 
 
@@ -98,6 +113,7 @@ public class NoteAcess extends DataAcess{
 
     private void competeNoteQueryClassName(JsonGenerator generator,String table){
         SelectClassNameAction classname=new SelectClassNameAction();
+        Log.d("test","error:" + table);
         generator.openArray()
                 .compete(classname, table)
                 .closeNode(CLASS_NAME);

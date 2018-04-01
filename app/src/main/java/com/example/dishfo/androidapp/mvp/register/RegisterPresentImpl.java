@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.dishfo.androidapp.mvp.BaseModel;
-import com.example.dishfo.androidapp.mvp.FieldConstant;
-import com.example.dishfo.androidapp.mvp.TypeConstant;
+import com.example.dishfo.androidapp.constant.FieldConstant;
+import com.example.dishfo.androidapp.constant.TypeConstant;
 import com.example.dishfo.androidapp.netInterface.AddAction2;
 import com.example.dishfo.androidapp.netInterface.AddAction3;
 import com.example.dishfo.androidapp.netInterface.InsertValuesAction;

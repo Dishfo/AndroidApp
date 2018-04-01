@@ -1,20 +1,11 @@
-package com.example.dishfo.androidapp.DataAcess;
+package com.example.dishfo.androidapp.data.DataAcess;
 
-import android.util.Log;
-
-import com.example.dishfo.androidapp.application.TMPclass;
-import com.example.dishfo.androidapp.util.Action;
-import com.example.dishfo.androidapp.util.CompeteAction;
-import com.example.dishfo.androidapp.util.ErrorAction;
+import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.google.gson.JsonObject;
 
 import java.io.File;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -34,7 +25,7 @@ public class FileAcess {
         Observable<String> observable=Observable.fromArray(files);
         return  observable.flatMap(s -> {
             File file=new File(s);
-            String user= TMPclass.tmp.getCurrentUser().getEmail();
+            String user= ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail();
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body=MultipartBody.Part.createFormData("file",file.getName(),requestFile);
             return NetMethod.INSTANCE.getRetrofitWithRx().create(DataAccessService.class)

@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import com.example.dishfo.androidapp.DataAcess.NoteAcess;
+import com.example.dishfo.androidapp.data.DataAcess.NoteAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
 import com.example.dishfo.androidapp.sqlBean.Area;
@@ -46,5 +46,9 @@ public class NoteRepository {
             notes = noteAcess.getNoteByArea(areaName);
         }
         return notes;
+    }
+
+    public List<Note> getNotesByUser(String email,String areaName) throws IOException {
+        return noteAcess.getNoteByUser(email,areaName);
     }
 }

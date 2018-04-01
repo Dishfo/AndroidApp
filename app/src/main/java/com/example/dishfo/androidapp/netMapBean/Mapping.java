@@ -1,4 +1,4 @@
-package com.example.dishfo.androidapp.netbean;
+package com.example.dishfo.androidapp.netMapBean;
 
 /**
  * Created by dishfo on 18-3-5.
