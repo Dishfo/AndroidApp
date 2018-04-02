@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.data.repository;
 
-import com.example.dishfo.androidapp.sqlBean.Fans;
+import com.example.dishfo.androidapp.bean.sqlBean.Fans;
 
 import java.util.List;
 

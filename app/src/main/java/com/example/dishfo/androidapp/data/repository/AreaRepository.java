@@ -3,7 +3,7 @@ package com.example.dishfo.androidapp.data.repository;
 import com.example.dishfo.androidapp.data.DataAcess.AreaAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
-import com.example.dishfo.androidapp.sqlBean.Area;
+import com.example.dishfo.androidapp.bean.sqlBean.Area;
 
 import java.io.IOException;
 import java.util.List;

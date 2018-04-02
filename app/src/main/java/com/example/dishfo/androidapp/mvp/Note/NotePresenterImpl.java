@@ -1,9 +1,9 @@
 package com.example.dishfo.androidapp.mvp.Note;
 
 import com.example.dishfo.androidapp.mvp.ModelManager;
-import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
-import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNoteHead;
 
 /**
  * Created by dishfo on 18-2-28.

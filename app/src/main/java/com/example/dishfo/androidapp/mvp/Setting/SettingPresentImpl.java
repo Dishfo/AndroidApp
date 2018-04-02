@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.Setting;
 
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 
 /**
  * Created by dishfo on 18-3-8.

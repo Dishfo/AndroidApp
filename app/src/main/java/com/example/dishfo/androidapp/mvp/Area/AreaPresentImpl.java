@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.Area;
 
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 
 /**
  * Created by dishfo on 18-2-14.

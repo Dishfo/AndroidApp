@@ -3,7 +3,7 @@ package com.example.dishfo.androidapp.data.repository;
 import com.example.dishfo.androidapp.data.DataAcess.CollectionAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
-import com.example.dishfo.androidapp.sqlBean.Collection;
+import com.example.dishfo.androidapp.bean.sqlBean.Collection;
 
 import java.util.List;
 

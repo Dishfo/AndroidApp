@@ -3,9 +3,9 @@ package com.example.dishfo.androidapp.data.repository;
 import com.example.dishfo.androidapp.data.DataAcess.DiscussAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
-import com.example.dishfo.androidapp.sqlBean.Area;
-import com.example.dishfo.androidapp.sqlBean.Discuss;
-import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.bean.sqlBean.Area;
+import com.example.dishfo.androidapp.bean.sqlBean.Discuss;
+import com.example.dishfo.androidapp.bean.sqlBean.Note;
 
 import java.io.IOException;
 import java.util.List;

@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 
 import com.example.dishfo.androidapp.R;
+
 import com.example.dishfo.androidapp.dagger.component.AppModuleComponent;
 import com.example.dishfo.androidapp.dagger.component.DaggerAppModuleComponent;
 import com.example.dishfo.androidapp.dagger.component.DaggerMessageComponent;
@@ -12,7 +13,7 @@ import com.example.dishfo.androidapp.dagger.component.DaggerRepositoryComponent;
 import com.example.dishfo.androidapp.dagger.component.MessageComponent;
 import com.example.dishfo.androidapp.dagger.component.RepositoryComponent;
 import com.example.dishfo.androidapp.data.message.MessageDatebase;
-import com.example.dishfo.androidapp.listener.MessageHandler;
+import com.example.dishfo.androidapp.longconnect.bean.MessageHandler;
 import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.util.PropertiesReader;
@@ -43,8 +44,6 @@ public class MyApplication extends Application {
     }
 
     private void init(){
-        Intent intent=new Intent(this, LongConService.class);
-        startService(intent);
         PropertiesReader.init();
         PropertiesReader.add(getResources().openRawResource(R.raw.reverse_maps),REVERSE_MAP);
         PropertiesReader.add(getResources().openRawResource(R.raw.maps),MAP);
@@ -56,6 +55,10 @@ public class MyApplication extends Application {
         ModelManager.INSTANCE.init();
 
         handlers=new HashMap<>();
+
+        //初始化长链接
+        Intent intent=new Intent(this, LongConService.class);
+        startService(intent);
     }
 
     public static AppModuleComponent getAppModuleComponent() {
@@ -81,4 +84,6 @@ public class MyApplication extends Application {
     public static MessageHandler getHandler(Class key){
         return handlers.get(key);
     }
+
+
 }

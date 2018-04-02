@@ -4,6 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.example.dishfo.androidapp.mvp.BaseModel;
+
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.extensions.IExtension;
 import org.java_websocket.protocols.IProtocol;
@@ -15,11 +17,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class LongConService extends Service {
-    private static String url="ws://172.16.0.121:8080/test/websocket";
+    private static String url="ws://"+ BaseModel.HOST_IP+":8080/test/websocket";
     private static UserClient client;
     private static boolean opened=false;
 
     public LongConService() {
+
     }
 
     @Override
@@ -104,5 +107,9 @@ public class LongConService extends Service {
     public void onDestroy() {
         super.onDestroy();
         close();
+    }
+
+    public static UserClient getClient() {
+        return client;
     }
 }

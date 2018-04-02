@@ -32,7 +32,7 @@ import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.mvp.Area.AreaContract;
 import com.example.dishfo.androidapp.mvp.Area.AreaPresentImpl;
 import com.example.dishfo.androidapp.mvp.ModelManager;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 
 import java.util.ArrayList;
 import java.util.List;

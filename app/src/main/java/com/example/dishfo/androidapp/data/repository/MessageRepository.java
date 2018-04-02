@@ -2,12 +2,11 @@ package com.example.dishfo.androidapp.data.repository;
 
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.MessageDao;
-import com.example.dishfo.androidapp.sqlBean.Message;
+import com.example.dishfo.androidapp.bean.sqlBean.Message;
 
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by dishfo on 18-3-19.

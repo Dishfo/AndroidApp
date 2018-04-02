@@ -3,7 +3,7 @@ package com.example.dishfo.androidapp.mvp.Discuss;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.bean.viewBean.ViewDiscuss;
 
 /**
  * Created by dishfo on 18-3-1.

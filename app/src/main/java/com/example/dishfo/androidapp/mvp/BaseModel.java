@@ -6,11 +6,11 @@ package com.example.dishfo.androidapp.mvp;
  */
 
 public interface BaseModel<T>{
-    public static final String HOST_IP="182.148.133.157";
+    public static final String HOST_IP="172.16.188.1";
     public static final String HOST="http://"+HOST_IP+":8080/test/";
-    public void setPresent(T present);
-    public void setArgs(Object...args);
-    public void stop();
-    public void compete(Object...args);
-    public void error(Object...args);
+    void setPresent(T present);
+    void setArgs(Object...args);
+    void stop();
+    void compete(Object...args);
+    void error(Object...args);
 }

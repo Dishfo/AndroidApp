@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.Discuss;
 
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.bean.viewBean.ViewDiscuss;
 
 /**
  * Created by dishfo on 18-3-3.

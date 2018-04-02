@@ -7,8 +7,8 @@ import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.repository.DiscussRepository;
 import com.example.dishfo.androidapp.mvp.NewNote.NewNoteTaskContract;
-import com.example.dishfo.androidapp.sqlBean.Discuss;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.bean.sqlBean.Discuss;
+import com.example.dishfo.androidapp.bean.viewBean.ViewDiscuss;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;

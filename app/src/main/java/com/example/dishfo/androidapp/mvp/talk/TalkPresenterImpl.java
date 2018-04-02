@@ -1,8 +1,10 @@
 package com.example.dishfo.androidapp.mvp.talk;
 
-import com.example.dishfo.androidapp.bean.TalkInfo;
+import com.example.dishfo.androidapp.bean.sqlBean.Message;
+import com.example.dishfo.androidapp.bean.viewBean.ViewTalk;
 
 /**
+ *
  * Created by dishfo on 18-3-18.
  */
 
@@ -39,13 +41,14 @@ public class TalkPresenterImpl implements TalkContract.TalkPresenter {
         view.error(args[0]);
     }
 
+
     @Override
-    public void onSend(TalkInfo message) {
-        model.saveMessage(message);
+    public void onSend(ViewTalk message) {
+        model.sendMessage(message);
     }
 
     @Override
-    public void onRecevier(TalkInfo message) {
-        model.saveMessage(message);
+    public void onRecevier(Message message) {
+
     }
 }

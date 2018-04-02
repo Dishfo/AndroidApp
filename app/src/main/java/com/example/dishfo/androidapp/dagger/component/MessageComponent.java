@@ -10,6 +10,7 @@ import com.example.dishfo.androidapp.data.repository.FollowUserRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
 import com.example.dishfo.androidapp.data.repository.MessageRepository;
 import com.example.dishfo.androidapp.data.repository.NoteRepository;
+import com.example.dishfo.androidapp.data.repository.TalkRepository;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
 
 import dagger.Component;
@@ -28,4 +29,5 @@ public interface MessageComponent {
     public void inject(FollowUserRepository repository);
     public void inject(DiscussRepository repository);
     public void inject(CollectionRepository repository);
+    public void inject(TalkRepository repository);
 }

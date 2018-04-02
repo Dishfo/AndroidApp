@@ -5,7 +5,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.example.dishfo.androidapp.sqlBean.Message;
+import com.example.dishfo.androidapp.bean.sqlBean.Message;
 
 import java.util.List;
 

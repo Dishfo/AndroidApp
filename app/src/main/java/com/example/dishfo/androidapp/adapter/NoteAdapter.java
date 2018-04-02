@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.R;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 
 import java.util.List;
 

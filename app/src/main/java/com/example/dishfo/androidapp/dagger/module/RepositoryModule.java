@@ -9,6 +9,7 @@ import com.example.dishfo.androidapp.data.repository.FollowUserRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
 import com.example.dishfo.androidapp.data.repository.MessageRepository;
 import com.example.dishfo.androidapp.data.repository.NoteRepository;
+import com.example.dishfo.androidapp.data.repository.TalkRepository;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
 
 import javax.inject.Singleton;
@@ -24,53 +25,58 @@ import dagger.Provides;
 public class RepositoryModule {
 
     @Provides
-    public  AreaRepository provideAreaRepository(){
+    AreaRepository provideAreaRepository(){
         return new AreaRepository();
     }
 
     @Provides
-    public LikeRepository provideLikeRepository(){
+    LikeRepository provideLikeRepository(){
         return new LikeRepository();
     }
 
     @Provides
-    public MessageRepository provideMessageRepository(){
+    MessageRepository provideMessageRepository(){
         return new MessageRepository();
     }
 
     @Provides
-    public NoteRepository provideNoteRepository(){
+    NoteRepository provideNoteRepository(){
         return new NoteRepository();
     }
 
     @Provides
-    public UserRepository provideUserRepository(){
+    UserRepository provideUserRepository(){
         return new UserRepository();
     }
 
     @Provides
-    public FollowAreaRepository provideFollowAreaRepository(){
+    FollowAreaRepository provideFollowAreaRepository(){
         return new FollowAreaRepository();
     }
 
     @Provides
-    public FollowUserRepository provideFollowUserRepository(){
+    FollowUserRepository provideFollowUserRepository(){
         return new FollowUserRepository();
     }
 
     @Provides
-    public DiscussRepository provideDiscussRepository(){
+    DiscussRepository provideDiscussRepository(){
         return new DiscussRepository();
     }
 
     @Provides
-    public FansRepository provideFansRepository(){
+    FansRepository provideFansRepository(){
         return new FansRepository();
     }
 
     @Provides
-    public CollectionRepository provideCollectionRepository(){
+    CollectionRepository provideCollectionRepository(){
         return new CollectionRepository();
+    }
+
+    @Provides
+    TalkRepository talkRepository(){
+        return new TalkRepository();
     }
 
 }

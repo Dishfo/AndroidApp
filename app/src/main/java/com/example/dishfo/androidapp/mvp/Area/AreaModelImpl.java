@@ -7,11 +7,11 @@ import com.example.dishfo.androidapp.data.repository.AreaRepository;
 import com.example.dishfo.androidapp.data.repository.LikeRepository;
 import com.example.dishfo.androidapp.data.repository.NoteRepository;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
-import com.example.dishfo.androidapp.sqlBean.Area;
-import com.example.dishfo.androidapp.sqlBean.Like;
-import com.example.dishfo.androidapp.sqlBean.Note;
-import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.sqlBean.Area;
+import com.example.dishfo.androidapp.bean.sqlBean.Like;
+import com.example.dishfo.androidapp.bean.sqlBean.Note;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 
 import javax.inject.Inject;
 

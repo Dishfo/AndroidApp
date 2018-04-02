@@ -1,5 +1,6 @@
 package com.example.dishfo.androidapp.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,14 +19,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.MessageAdpter;
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.bean.MessageBean;
-import com.example.dishfo.androidapp.bean.MessageInfo;
-import com.example.dishfo.androidapp.bean.UserInfo;
+import com.example.dishfo.androidapp.bean.viewBean.ViewMessage;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
-import com.example.dishfo.androidapp.listener.MessageHandler;
-import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.longconnect.LongConService;
+import com.example.dishfo.androidapp.longconnect.bean.InstanceMessage;
+import com.example.dishfo.androidapp.longconnect.bean.MessageHandler;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.message.MessageContract;
 import com.example.dishfo.androidapp.mvp.message.MessagePresenterImpl;
@@ -35,21 +35,22 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TalkFragment extends Fragment implements
-        BaseQuickAdapter.OnItemClickListener,MessageContract.MessageView,
+        MessageContract.MessageView,
         MessageHandler{
     public static final int START_TALK=0X78;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+    private String mParam1="";
+    private String mParam2="";
     private RecyclerView mRecyclerView;
     private MessageAdpter messageAdpter;
     private EasyRefreshLayout mEasyRefreshLayout;
     private FragmentSendListener fragmentSendListener;
-    private List<MessageInfo> messageInfos=null;
+    private List<ViewMessage> messageInfos=null;
     private OnFragmentInteractionListener mListener;
     private MessageContract.MessagePresenter presenter;
+    private MyDataAdapter dataAdapter;
 
 
     public TalkFragment() {
@@ -73,6 +74,7 @@ public class TalkFragment extends Fragment implements
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        LongConService.getClient().addHandler(this);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class TalkFragment extends Fragment implements
 
     private void initData() {
         messageInfos=new ArrayList<>();
-
+        dataAdapter=new MyDataAdapter();
     }
 
     private void initView(View view){
@@ -94,7 +96,6 @@ public class TalkFragment extends Fragment implements
         mEasyRefreshLayout.setLoadMoreModel(null);
         mEasyRefreshLayout.setRefreshHeadView(new RefreshHeaderView(getContext()));
         mEasyRefreshLayout.addEasyEvent(this.easyEvent);
-
 
         mRecyclerView=view.findViewById(R.id.fragment_talk_recyclerview);
         messageAdpter=new MessageAdpter(R.layout.recylerview_talk_item,messageInfos);
@@ -104,7 +105,7 @@ public class TalkFragment extends Fragment implements
                 R.drawable.recyclerview_divider_dark1, LinearLayoutManager.VERTICAL));
         messageAdpter.setOnItemClickListener(itemClickListener);
         new MessagePresenterImpl(ModelManager.INSTANCE.getMessageModel(),this);
-        presenter.start(NetMethod.INSTANCE.getUser());
+        presenter.start(ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail());
     }
 
     @Override
@@ -148,22 +149,15 @@ public class TalkFragment extends Fragment implements
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     if(fragmentSendListener!=null){
-                        MessageInfo info=messageInfos.get(position);
-                        UserInfo userInfo=new UserInfo();
-                        userInfo.name=info.userName;
-                        userInfo.head=info.headUrl;
-                        userInfo.email=info.email;
-                        fragmentSendListener.action(START_TALK,userInfo);
+                        ViewMessage viewMessage=messageInfos.get(position);
+                        fragmentSendListener.action(START_TALK,viewMessage.getSend());
                     }
                 }
             };
 
 
 
-    @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-    }
 
     @Override
     public void setPresent(MessageContract.MessagePresenter present) {
@@ -178,7 +172,6 @@ public class TalkFragment extends Fragment implements
     @Override
     public void compete(Object... args) {
         sendMessage((int)args[0],MessageContract.SUCCEED,args[1]);
-
     }
 
     @Override
@@ -186,49 +179,59 @@ public class TalkFragment extends Fragment implements
         sendMessage((int)args[0],MessageContract.FAILED,null);
     }
 
-    @Override
-    public void AfterRecevier(com.example.dishfo.androidapp.sqlBean.Message message) {
-        presenter.onRecevier(message);
-    }
 
-    private void addMessage(MessageInfo info){
+
+    private void addMessage(ViewMessage info){
         if(messageAdpter!=null){
-            Iterator<MessageInfo> iterator=messageInfos.iterator();
+            Iterator<ViewMessage> iterator=messageInfos.iterator();
             int i=0;
             while(iterator.hasNext()){
-                MessageInfo next=iterator.next();
-                if(next.email==info.email){
+                ViewMessage next=iterator.next();
+                if(next.getSend().getName().equals(info.getSend().getName())){
                     break;
+                }else {
+                    i++;
                 }
-                i++;
             }
             if(i==messageInfos.size()){
                 messageAdpter.addData(info);
             }else {
                 messageInfos.set(i,info);
             }
-
         }
+        messageAdpter.notifyDataSetChanged();
     }
 
-    private void addMessages(List<MessageInfo> infos){
+    private void addMessages(List<ViewMessage> infos){
         if(messageAdpter!=null){
             messageAdpter.addData(infos);
         }
     }
 
+
+
     @Override
-    public void dispatchMessage(Message message) {
-        switch (message.what){
-            case MessageBean.GETUSERS:
-                    com.example.dishfo.androidapp.sqlBean.Message bean= (com.example.dishfo.androidapp.sqlBean.Message) message.obj;
-                presenter.onRecevier(bean);
-                break;
-        }
+    public com.example.dishfo.androidapp.bean.sqlBean.Message dispatchMessage(Object message) {
+        Message message1=handler.obtainMessage();
+        message1.what=MessageContract.SAVE;
+        message1.arg1=MessageContract.SUCCEED;
+        message1.obj=message;
+        handler.sendMessage(message1);
+        return (com.example.dishfo.androidapp.bean.sqlBean.Message) message;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LongConService.getClient().removeHandler(this.getClass());
+    }
+
+    @Override
+    public void AfterRecevier(InstanceMessage message) {
+
     }
 
     public interface OnFragmentInteractionListener {
-
         void onFragmentInteraction(Uri uri);
     }
 
@@ -240,7 +243,7 @@ public class TalkFragment extends Fragment implements
 
         @Override
         public void onRefreshing() {
-            mEasyRefreshLayout.refreshComplete();
+            presenter.start(ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail());
         }
     };
 
@@ -254,27 +257,62 @@ public class TalkFragment extends Fragment implements
 
     private MyHandler handler=new MyHandler();
 
+    @SuppressLint("HandlerLeak")
     private class MyHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
+            mEasyRefreshLayout.refreshComplete();
             switch (msg.what){
                 case MessageContract.MESSAGELOAD:
                     if(msg.arg1==MessageContract.SUCCEED){
-                        TalkFragment.this.addMessages((List<MessageInfo>) msg.obj);
+                        addMessage(dataAdapter.convert((com.example.dishfo.androidapp.bean.sqlBean.Message) msg.obj));
                     }else {
                         Toast.makeText(TalkFragment.this.getContext(),"error",Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case MessageContract.MESSAGEGET:
                     if(msg.arg1==MessageContract.SUCCEED){
-                        TalkFragment.this.addMessage((MessageInfo) msg.obj);
+
+                        List<ViewMessage> list=dataAdapter.convert((List<com.example.dishfo.androidapp.bean.sqlBean.Message>) msg.obj);
+                        addMessages(list);
                     }else {
                         Toast.makeText(TalkFragment.this.getContext(),"error",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case MessageContract.SAVE:
+                    if(msg.arg1==MessageContract.SUCCEED){
+                        addMessage(dataAdapter.convert((com.example.dishfo.androidapp.bean.sqlBean.Message) msg.obj));
+                    }else {
+
                     }
                     break;
             }
         }
     }
 
+    private class MyDataAdapter implements DataAdapter<com.example.dishfo.androidapp.bean.sqlBean.Message,ViewMessage>{
 
+        public List<ViewMessage> convert(List<com.example.dishfo.androidapp.bean.sqlBean.Message> messages){
+            List<ViewMessage> list=new ArrayList<>();
+            for(com.example.dishfo.androidapp.bean.sqlBean.Message message:messages){
+                list.add(convert(message));
+            }
+            return list;
+        }
+
+        @Override
+        public ViewMessage convert(com.example.dishfo.androidapp.bean.sqlBean.Message message) {
+            ViewMessage result=new ViewMessage();
+            result.setContent(message.getMessage());
+            result.setEmail(message.getAcceptUser().getEmail());
+            result.setSend(message.getSendUser());
+            result.setTime(message.getTime()==null?"":message.getTime().toString());
+            return result;
+
+        }
+    }
+
+    public interface DataAdapter<F,T>{
+        T convert(F f);
+    }
 }

@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.NewNote;
 
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 
 /**
  *

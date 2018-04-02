@@ -4,7 +4,7 @@ import com.example.dishfo.androidapp.data.DataAcess.FileAcess;
 import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;

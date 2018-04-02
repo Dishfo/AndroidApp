@@ -3,12 +3,12 @@ package com.example.dishfo.androidapp.data.DataAcess;
 import com.example.dishfo.androidapp.constant.FieldConstant;
 import com.example.dishfo.androidapp.constant.TableConstant;
 import com.example.dishfo.androidapp.constant.TypeConstant;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netMapBean.CollectionMapping;
-import com.example.dishfo.androidapp.sqlBean.Collection;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectClassNameAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectConditionAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.util.netMapBean.CollectionMapping;
+import com.example.dishfo.androidapp.bean.sqlBean.Collection;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;

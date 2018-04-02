@@ -3,8 +3,8 @@ package com.example.dishfo.androidapp.mvp.Note;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
-import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNoteHead;
 
 /**
  * Created by dishfo on 18-2-28.

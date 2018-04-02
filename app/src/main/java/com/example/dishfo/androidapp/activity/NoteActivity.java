@@ -25,20 +25,20 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.adapter.DiscussAdapter;
+import com.example.dishfo.androidapp.bean.sqlBean.FollowUser;
+import com.example.dishfo.androidapp.bean.sqlBean.Note;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
+import com.example.dishfo.androidapp.bean.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNoteHead;
 import com.example.dishfo.androidapp.customview.LoadMoreFooterView;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
-import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.data.DataAcess.NetMethod;
+import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.Note.NotePresenterImpl;
 import com.example.dishfo.androidapp.mvp.Note.NoteTaskContract;
-import com.example.dishfo.androidapp.sqlBean.FollowUser;
-import com.example.dishfo.androidapp.sqlBean.Note;
-import com.example.dishfo.androidapp.sqlBean.User;
 import com.example.dishfo.androidapp.util.ScreenUtils;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
-import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -289,17 +289,7 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
             new BaseQuickAdapter.OnItemChildClickListener() {
                 @Override
                 public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//                    ViewDiscuss =mDatas.get(position);
-//                    if(NetMethod.INSTANCE.getUser().equals(info.email)){
-//                        return;
-//                    }
-//                    UserInfo userInfo=new UserInfo();
-//                    userInfo.name=info.mNickName;
-//                    userInfo.email=info.email;
-//                    userInfo.head=info.mHeadUrl;
-//                    Intent intent=new Intent(NoteActivity.this,TalkActivity.class);
-//                    intent.putExtra(USERINFO,userInfo);
-//                    startActivity(intent);
+
                 }
             };
 

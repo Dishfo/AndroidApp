@@ -6,12 +6,13 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.request.RequestOptions;
+
 import com.example.dishfo.androidapp.GlideApp;
 import com.example.dishfo.androidapp.GlideRequest;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.application.MyApplication;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.mvp.BaseModel;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.util.JsonAction;
 import com.example.dishfo.androidapp.util.PropertiesReader;
 import com.google.gson.JsonArray;
@@ -24,7 +25,6 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -37,41 +37,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Singleton
 public class NetMethod {
 
-    private String user;
     private String RESULT="result";
     public static  final NetMethod INSTANCE=new NetMethod();
     private JsonParser mParser;
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getUser(){
-        return user;
-    }
 
     public NetMethod() {
         this.mParser = new JsonParser();
     }
 
-
-
-
-    public int getResultSize(String result){
-        JsonObject jsonObject=mParser.parse(result).getAsJsonObject();
-        JsonArray array=jsonObject.get("result").getAsJsonArray();
-        return array.size();
-    }
-
-    Observable<JsonObject> generateObserable(String action, JsonAction jaction, Object... args){
-        Retrofit retrofit=NetMethod.INSTANCE.getRetrofitWithRx();
-        JsonGenerator generator=new JsonGenerator();
-        jaction.competeJson(generator,args);
-        DataAccessService service=retrofit.create(DataAccessService.class);
-        String json=generator.toJson();
-        Log.d("test",json);
-        return service.accessDatarx(action,json);
-    }
 
     Call<JsonObject> generateCall(String action, JsonAction jaction, Object... args){
         Retrofit retrofit=NetMethod.INSTANCE.getRetrofitWithRx();
@@ -136,12 +109,11 @@ public class NetMethod {
                 .get(RESULT)
                 .getAsJsonArray();
 
-        Iterator<JsonElement> elements=array.iterator();
-        while (elements.hasNext()){
-            JsonObject object=elements.next().getAsJsonObject();
+        for (JsonElement anArray : array) {
+            JsonObject object = anArray.getAsJsonObject();
             String name = object.get("name").getAsString();
             String realname =
-                   PropertiesReader.strTurn(name, MyApplication.MAP);
+                    PropertiesReader.strTurn(name, MyApplication.MAP);
             if (realname.endsWith("id")) {
                 id = object.get("value").getAsString();
             }
@@ -167,7 +139,7 @@ public class NetMethod {
         return id;
     }
 
-    public void useGlide(Context context, String url, RequestOptions options, ImageView view,int placeholder,int error){
+    private void useGlide(Context context, String url, RequestOptions options, ImageView view, int placeholder, int error){
         GlideRequest<Drawable> request= GlideApp.with(context).load(urlHandle(url));
         if(options!=null){
             request=request.apply(options);
@@ -181,7 +153,7 @@ public class NetMethod {
         request.into(view);
     }
 
-    public void useGlide(Context context, int res, RequestOptions options, ImageView view,int placeholder,int error){
+    private void useGlide(Context context, int res, RequestOptions options, ImageView view, int placeholder, int error){
         GlideRequest<Drawable> request= GlideApp.with(context).load(res);
         if(options!=null){
             request=request.apply(options);
@@ -209,6 +181,9 @@ public class NetMethod {
 
 
     private String urlHandle(String url){
+        if(url==null){
+            return "";
+        }
         return url.replaceAll("localhost",BaseModel.HOST_IP);
     }
 
@@ -225,7 +200,6 @@ public class NetMethod {
 
     String getResult(JsonObject object){
         JsonElement element=object==null?null:object.get(RESULT);
-        String json=element==null?"{}":element.getAsString();
-        return json;
+        return element==null?"{}":element.getAsString();
     }
 }

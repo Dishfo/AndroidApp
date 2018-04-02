@@ -1,6 +1,7 @@
 package com.example.dishfo.androidapp.bean;
 
 /**
+ *
  * Created by dishfo on 18-3-7.
  */
 

@@ -2,17 +2,17 @@ package com.example.dishfo.androidapp.data.DataAcess;
 
 import com.example.dishfo.androidapp.constant.FieldConstant;
 import com.example.dishfo.androidapp.constant.TypeConstant;
-import com.example.dishfo.androidapp.netInterface.AddAction2;
-import com.example.dishfo.androidapp.netInterface.InsertValuesAction;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.netMapBean.AreaWithNDMapping;
-import com.example.dishfo.androidapp.netMapBean.DiscussInfoMapping;
-import com.example.dishfo.androidapp.sqlBean.Area;
-import com.example.dishfo.androidapp.sqlBean.Discuss;
-import com.example.dishfo.androidapp.sqlBean.Note;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.AddAction2;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.InsertValuesAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectClassNameAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectConditionAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.util.netMapBean.AreaWithNDMapping;
+import com.example.dishfo.androidapp.util.netMapBean.DiscussInfoMapping;
+import com.example.dishfo.androidapp.bean.sqlBean.Area;
+import com.example.dishfo.androidapp.bean.sqlBean.Discuss;
+import com.example.dishfo.androidapp.bean.sqlBean.Note;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;

@@ -3,7 +3,7 @@ package com.example.dishfo.androidapp.mvp.Setting;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 
 /**
  * Created by dishfo on 18-3-8.

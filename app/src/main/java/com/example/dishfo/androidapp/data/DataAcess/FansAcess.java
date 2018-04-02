@@ -3,10 +3,10 @@ package com.example.dishfo.androidapp.data.DataAcess;
 import com.example.dishfo.androidapp.constant.FieldConstant;
 import com.example.dishfo.androidapp.constant.TableConstant;
 import com.example.dishfo.androidapp.constant.TypeConstant;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectClassNameAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectConditionAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectFieldsAction;
 
 /**
  * Created by dishfo on 18-3-7.

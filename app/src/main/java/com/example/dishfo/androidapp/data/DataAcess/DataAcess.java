@@ -1,9 +1,9 @@
 package com.example.dishfo.androidapp.data.DataAcess;
 
 import com.example.dishfo.androidapp.constant.FieldConstant;
-import com.example.dishfo.androidapp.netInterface.AddAction2;
-import com.example.dishfo.androidapp.netInterface.AddAction3;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.AddAction2;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.AddAction3;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
 import com.example.dishfo.androidapp.util.JsonObjectParse;
 
 /**

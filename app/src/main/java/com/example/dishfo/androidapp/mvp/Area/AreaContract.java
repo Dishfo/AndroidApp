@@ -3,7 +3,7 @@ package com.example.dishfo.androidapp.mvp.Area;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.mvp.BasePresenter;
 import com.example.dishfo.androidapp.mvp.BaseView;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 
 /**
  * Created by dishfo on 18-2-12.

@@ -9,14 +9,14 @@ import android.widget.PopupWindow;
 
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.activity.base.BaseActivity;
-import com.example.dishfo.androidapp.bean.UserInfo;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 import com.example.dishfo.androidapp.fragment.AreaFragment;
 import com.example.dishfo.androidapp.fragment.FoundFragment;
 import com.example.dishfo.androidapp.fragment.MineFragment;
 import com.example.dishfo.androidapp.fragment.TalkFragment;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.longconnect.LongConService;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.OnTabSelectListener;
 import com.jpeng.jptabbar.animate.AnimationType;
@@ -155,9 +155,9 @@ public class MainActivity extends BaseActivity implements
                 startActivity(intent);
                 break;
             case TalkFragment.START_TALK:
-                UserInfo minfo= (UserInfo) arg;
+                User user= (User) arg;
                 intent=new Intent(this,TalkActivity.class);
-                intent.putExtra(USERINFO,minfo);
+                intent.putExtra(USERINFO,user);
                 startActivity(intent);
                 break;
             case DARKWINDOW:

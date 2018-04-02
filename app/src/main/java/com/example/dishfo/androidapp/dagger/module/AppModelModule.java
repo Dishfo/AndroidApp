@@ -84,4 +84,5 @@ public class AppModelModule {
         return new TalkModelImpl();
     }
 
+
 }

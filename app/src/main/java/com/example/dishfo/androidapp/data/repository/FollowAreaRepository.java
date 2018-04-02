@@ -3,9 +3,9 @@ package com.example.dishfo.androidapp.data.repository;
 import com.example.dishfo.androidapp.data.DataAcess.FollowAreaAcess;
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.message.DataBaseDao;
-import com.example.dishfo.androidapp.sqlBean.Area;
-import com.example.dishfo.androidapp.sqlBean.FollowArea;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.bean.sqlBean.Area;
+import com.example.dishfo.androidapp.bean.sqlBean.FollowArea;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 
 import java.io.IOException;
 import java.util.List;

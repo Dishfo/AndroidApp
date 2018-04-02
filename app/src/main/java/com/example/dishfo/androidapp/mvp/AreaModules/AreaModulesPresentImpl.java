@@ -1,6 +1,6 @@
 package com.example.dishfo.androidapp.mvp.AreaModules;
 
-import com.example.dishfo.androidapp.viewBean.ViewArea;
+import com.example.dishfo.androidapp.bean.viewBean.ViewArea;
 
 /**
  *

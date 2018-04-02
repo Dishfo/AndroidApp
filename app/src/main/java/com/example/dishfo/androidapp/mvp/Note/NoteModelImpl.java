@@ -5,12 +5,12 @@ import com.example.dishfo.androidapp.data.repository.DiscussRepository;
 import com.example.dishfo.androidapp.data.repository.FollowUserRepository;
 import com.example.dishfo.androidapp.data.repository.UserRepository;
 import com.example.dishfo.androidapp.mvp.ModelManager;
-import com.example.dishfo.androidapp.sqlBean.Discuss;
-import com.example.dishfo.androidapp.sqlBean.FollowUser;
-import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.viewBean.ViewDiscuss;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
-import com.example.dishfo.androidapp.viewBean.ViewNoteHead;
+import com.example.dishfo.androidapp.bean.sqlBean.Discuss;
+import com.example.dishfo.androidapp.bean.sqlBean.FollowUser;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
+import com.example.dishfo.androidapp.bean.viewBean.ViewDiscuss;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNoteHead;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -25,7 +25,7 @@ import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.Note.NoteTaskContract;
 import com.example.dishfo.androidapp.mvp.Setting.SettingContract;
 import com.example.dishfo.androidapp.mvp.Setting.SettingPresentImpl;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;

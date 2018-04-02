@@ -1,7 +1,7 @@
 package com.example.dishfo.androidapp.mvp.UserInfo;
 
 import com.example.dishfo.androidapp.mvp.ModelManager;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 
 /**
  *

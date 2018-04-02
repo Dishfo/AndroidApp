@@ -25,9 +25,9 @@ import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesContract;
 import com.example.dishfo.androidapp.mvp.AreaModules.AreaModulesPresentImpl;
 import com.example.dishfo.androidapp.mvp.ModelManager;
-import com.example.dishfo.androidapp.sqlBean.FollowArea;
-import com.example.dishfo.androidapp.viewBean.ViewArea;
-import com.example.dishfo.androidapp.viewBean.ViewNote;
+import com.example.dishfo.androidapp.bean.sqlBean.FollowArea;
+import com.example.dishfo.androidapp.bean.viewBean.ViewArea;
+import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

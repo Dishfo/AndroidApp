@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.data.Converts;
-import com.example.dishfo.androidapp.netMapBean.Mapping;
+import com.example.dishfo.androidapp.util.netMapBean.Mapping;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

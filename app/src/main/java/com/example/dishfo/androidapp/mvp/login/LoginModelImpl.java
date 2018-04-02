@@ -8,11 +8,11 @@ import com.example.dishfo.androidapp.data.repository.UserRepository;
 import com.example.dishfo.androidapp.constant.FieldConstant;
 import com.example.dishfo.androidapp.constant.TableConstant;
 import com.example.dishfo.androidapp.constant.TypeConstant;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectClassNameAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectConditionAction;
-import com.example.dishfo.androidapp.netInterface.SelectAction.SelectFieldsAction;
-import com.example.dishfo.androidapp.sqlBean.User;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectClassNameAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectConditionAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.SelectAction.SelectFieldsAction;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
 import com.google.gson.JsonObject;
 
 import javax.inject.Inject;

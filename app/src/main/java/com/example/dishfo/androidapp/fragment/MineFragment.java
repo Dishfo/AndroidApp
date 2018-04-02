@@ -28,8 +28,8 @@ import com.example.dishfo.androidapp.listener.FragmentSendListener;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.UserInfo.UserInfoPresentImpl;
 import com.example.dishfo.androidapp.mvp.UserInfo.UserInfoTaskContract;
-import com.example.dishfo.androidapp.sqlBean.User;
-import com.example.dishfo.androidapp.viewBean.ViewMine;
+import com.example.dishfo.androidapp.bean.sqlBean.User;
+import com.example.dishfo.androidapp.bean.viewBean.ViewMine;
 
 import java.util.ArrayList;
 import java.util.List;

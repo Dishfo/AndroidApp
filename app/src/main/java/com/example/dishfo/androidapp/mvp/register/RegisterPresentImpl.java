@@ -7,10 +7,10 @@ import android.util.Log;
 import com.example.dishfo.androidapp.mvp.BaseModel;
 import com.example.dishfo.androidapp.constant.FieldConstant;
 import com.example.dishfo.androidapp.constant.TypeConstant;
-import com.example.dishfo.androidapp.netInterface.AddAction2;
-import com.example.dishfo.androidapp.netInterface.AddAction3;
-import com.example.dishfo.androidapp.netInterface.InsertValuesAction;
-import com.example.dishfo.androidapp.netInterface.JsonGenerator;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.AddAction2;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.AddAction3;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.InsertValuesAction;
+import com.example.dishfo.androidapp.data.DataAcess.netInterface.JsonGenerator;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
