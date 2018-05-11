@@ -2,65 +2,177 @@ package com.example.dishfo.androidapp.longconnect;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.dishfo.androidapp.bean.sqlBean.Message;
-import com.example.dishfo.androidapp.bean.sqlBean.Talk;
 import com.example.dishfo.androidapp.longconnect.bean.InstanceMessage;
-import com.example.dishfo.androidapp.longconnect.bean.MessageHandler;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.message.MessageModelImpl;
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * 用于处理接受消息的回调
+ * 作为单例
  * Created by dishfo on 18-3-16.
  */
 
+
+
 class ReveiverHandler extends Handler {
 
-    private LinkedHashMap<Class,MessageHandler> handlers;
+    private LinkedHashMap<Class, AbstractHandler> handlers;
+
+    private final static Object LOCK = new Object();
+    private HandlerThread thread;
+
+    private Handler handler;
+
 
     ReveiverHandler() {
         super(Looper.getMainLooper());
-        handlers=new LinkedHashMap<>();
-        handlers.put(MessageHandler.class,message -> {
-            MessageModelImpl model=ModelManager.INSTANCE.getMessageModel();
-            InstanceMessage bean=new Gson().fromJson((String) message,InstanceMessage.class);
-            try {
-                return model.saveInstanceMessage(bean);
-            } catch (IOException e) {
-                return null;
-            }
-        });
-
-        handlers.put(Talk.class,message -> {
-           Message arg= (Message) message;
-           ModelManager.INSTANCE.getTalkModel().saveMessage(arg);
-           return message;
-        });
-
+        handlers = new LinkedHashMap<>();
+        thread=new HandlerThread();
+        thread.start();
+        synchronized (LOCK) {
+            addHandler(new FirstHandler());
+            addHandler(new SecondHandler());
+        }
     }
 
-    void onRecevier(String message){
-        Set<Map.Entry<Class,MessageHandler>> set=handlers.entrySet();
-        Object arg=message;
-        for(Map.Entry entry:set){
-            MessageHandler handler= (MessageHandler) entry.getValue();
-            arg=handler.dispatchMessage(arg);
+    void onRecevier(String message) {
+        sendMesssage(message);
+    }
+
+    void addHandler(AbstractHandler handler) {
+            if (handlers.containsValue(handler)) {
+                handler.active = true;
+            } else {
+                sendMesssage(new QueueMessage<>(QueueMessage.ADD_HANDLER,handler));
+            }
+    }
+
+    void removeHandler(Class key, boolean delete) {
+        Log.d("handlerme","remove" + key);
+        AbstractHandler handler;
+        if((handler=handlers.get(key))!=null){
+            handler.active=false;
+        }
+        if (delete) {
+            sendMesssage(new QueueMessage<>(QueueMessage.DELETE_HANDLER,key));
+        }
+    }
+
+    private void sendMesssage(Object msg){
+        if(!thread.isReady){
+            while (!thread.isReady);
+        }
+        android.os.Message message=handler.obtainMessage();
+        message.obj=msg;
+        handler.sendMessage(message);
+    }
+
+    private final class HandlerThread extends Thread{
+        private Looper looper;
+        private volatile boolean isReady=false;
+        @Override
+        public void run() {
+            init();
+            if(looper!=null){
+                Looper.loop();
+            }
+        }
+
+        private void init(){
+            Looper.prepare();
+            looper=Looper.myLooper();
+            handler=new Handler(looper){
+                @Override
+                public void dispatchMessage(android.os.Message msg) {
+                    super.dispatchMessage(msg);
+                    Object arg;
+                    if((arg=msg.obj)!=null){
+                        if(arg instanceof QueueMessage){
+                            handMessage((QueueMessage) arg);
+                        }else {
+                            handNetMessage(arg);
+                        }
+                    }
+                }
+            };
+            isReady=true;
+        }
+
+        private void handNetMessage(Object message){
+            Set<Map.Entry<Class, AbstractHandler>> set = handlers.entrySet();
+            for (Map.Entry entry : set) {
+                AbstractHandler handler = (AbstractHandler) entry.getValue();
+                message = handler.dispatchMessage(message);
+            }
+        }
+
+        private void handMessage(QueueMessage queueMessage){
+
+            switch (queueMessage.getMessage()){
+                case QueueMessage.DELETE_HANDLER:
+                    handlers.remove(queueMessage.getArg());
+                    break;
+                case QueueMessage.ADD_HANDLER:
+                    AbstractHandler handler= (AbstractHandler) queueMessage.getArg();
+                    if(handler!=null){
+                        handlers.put(handler.getClass(),handler);
+                        handler.active=true;
+                    }
+                    break;
+            }
         }
 
     }
 
-    void addHandler(MessageHandler handler){
-        handlers.put(handler.getClass(),handler);
+    private final class FirstHandler extends AbstractHandler {
+        @Override
+        public Object dispatchMessage(Object message) {
+            if (!check(message)) {
+                return null;
+            } else {
+                MessageModelImpl model = ModelManager.INSTANCE.getMessageModel();
+                try {
+                    if (active) {
+                        InstanceMessage bean =
+                                new Gson().fromJson((String) message, InstanceMessage.class);
+                        return model.saveInstanceMessage(bean);
+                    } else {
+                        return message;
+                    }
+                } catch (Throwable e) {
+                    Log.d("handlerme",e.toString());
+                    return null;
+                }
+            }
+        }
     }
 
-    void removeHandler(Class key){
-        handlers.remove(key);
+    private final class SecondHandler extends AbstractHandler {
+        @Override
+        public Object dispatchMessage(Object message) {
+            if (!check(message)) {
+                return null;
+            } else if (!(message instanceof Message)) {
+                return message;
+            } else {
+                if (active) {
+                    Message arg = (Message) message;
+                    ModelManager.INSTANCE.getTalkModel().saveMessage(arg);
+                }
+                return message;
+            }
+        }
     }
+
+
 }

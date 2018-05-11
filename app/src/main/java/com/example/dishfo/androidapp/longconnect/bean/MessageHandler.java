@@ -7,5 +7,5 @@ import android.os.Message;
  */
 
 public interface MessageHandler {
-    public Object dispatchMessage(Object message);
+    Object dispatchMessage(Object message);
 }

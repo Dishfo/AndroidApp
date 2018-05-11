@@ -41,6 +41,7 @@ import java.util.List;
 public class AreaActivity extends BaseActivity implements View.OnClickListener
         ,AreaModulesContract.AreaModulesView,BaseQuickAdapter.OnItemClickListener{
 
+
     private ImageView mImageViewAreaHead = null;
     private TextView mTextViewAreaName = null;
 
@@ -64,6 +65,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
         Intent intent=getIntent();
         areaName=intent.getStringExtra(AREANAME);
         setContentView(R.layout.activity_area);
+
     }
 
     @Override

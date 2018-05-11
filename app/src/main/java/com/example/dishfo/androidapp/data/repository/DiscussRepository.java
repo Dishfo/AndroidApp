@@ -33,6 +33,9 @@ public class DiscussRepository {
         List<Discuss> discusses=dataBaseDao.getDiscuss(note.getId(),area.getId());
         if(discusses==null||discusses.size()==0){
             discusses = discussAcess.getDiscussByNote(note,area);
+            if(discusses==null){
+                return null;
+            }
             dataBaseDao.insertDiscusses(discusses);
         }
         return discusses;

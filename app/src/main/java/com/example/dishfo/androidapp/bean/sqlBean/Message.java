@@ -4,8 +4,13 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.dishfo.androidapp.data.Converts;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -2,9 +2,7 @@ package com.example.dishfo.androidapp.longconnect;
 
 import android.util.Log;
 
-import com.example.dishfo.androidapp.bean.sqlBean.User;
 import com.example.dishfo.androidapp.longconnect.bean.InstanceMessage;
-import com.example.dishfo.androidapp.longconnect.bean.MessageHandler;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.google.gson.Gson;
 
@@ -21,22 +19,19 @@ import java.net.URI;
 
 public class UserClient extends WebSocketClient{
 
-    public static final String OPEN="open";
-    public static final String MESSAGE="message";
-    public static final String CLOSE="close";
 
     /**
      * close code
      */
 
-    public static final int NORMAL=0X3000;
+    private static final int NORMAL=0X3000;
 
 
     private static final String TAG="websocket";
-    private Throwable  throwable=null;
+
     private ReveiverHandler handler;
 
-    public UserClient(URI serverUri, Draft protocolDraft) {
+    UserClient(URI serverUri, Draft protocolDraft) {
         super(serverUri, protocolDraft);
         handler=new ReveiverHandler();
     }
@@ -62,21 +57,21 @@ public class UserClient extends WebSocketClient{
 
     @Override
     public void onError(Exception ex) {
-        throwable=ex;
+
     }
 
-    public void closeNormal(){
+    void closeNormal(){
         if(!isClosed()&&!isClosing()){
             close(NORMAL);
         }
     }
 
-    public void addHandler(MessageHandler handler){
+    public void addHandler(AbstractHandler handler){
         this.handler.addHandler(handler);
     }
 
-    public void removeHandler(Class key){
-        this.handler.removeHandler(key);
+    public void removeHandler(Class key,boolean delete){
+        this.handler.removeHandler(key,delete);
     }
 
 }

@@ -18,6 +18,7 @@ import com.example.dishfo.androidapp.activity.base.BaseActivity;
 import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.login.LoginPresentImpl;
+import com.example.dishfo.androidapp.mvp.login.LoginService;
 import com.example.dishfo.androidapp.mvp.login.LoginTaskContract;
 
 import javax.inject.Inject;
@@ -148,6 +149,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         },1000);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(LongConService.isConnection()){
+            LongConService.close();
+        }
     }
 
     private void loadUser(){

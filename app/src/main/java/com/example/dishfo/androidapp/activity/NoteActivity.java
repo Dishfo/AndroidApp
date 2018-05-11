@@ -128,9 +128,10 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     public View getHeadView() {
-        View headView = getLayoutInflater().inflate(R.layout.recyclerview_head_note, null);
+        @SuppressLint("InflateParams") View headView = getLayoutInflater().inflate(R.layout.recyclerview_head_note, null);
         mViewGroupImages=headView.findViewById(R.id.activity_note_head_images);
         mImageViewHead = headView.findViewById(R.id.recyclerView_head_note_imageView_head);
+        mImageViewHead.setOnClickListener(this);
         mTextViewNickName = headView.findViewById(R.id.recyclerView_head_note_textView_nickName);
 
         mTextViewFollow = headView.findViewById(R.id.recyclerView_head_note_textView_follow);
@@ -154,8 +155,21 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
                 break;
             case R.id.recyclerView_head_note_textView_follow:
                 mPresenter.onFollowUser(viewNoteHead);
+                break;
+            case R.id.recyclerView_head_note_imageView_head:
+                User user;
+                if((user=(note!=null?note.getUser():null))!=null){
+                    openTalkActivity(user);
+                }
+                break;
         }
 
+    }
+
+    private void openTalkActivity(User user){
+        Intent intent=new Intent(this,TalkActivity.class);
+        intent.putExtra(USERINFO,user);
+        startActivity(intent);
     }
 
     @Override
@@ -286,10 +300,15 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
     };
 
     private BaseQuickAdapter.OnItemChildClickListener childClickListener=
-            new BaseQuickAdapter.OnItemChildClickListener() {
-                @Override
-                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-
+            (adapter, view, position) -> {
+                switch (view.getId()){
+                    case R.id.recyclerView_item_discuss_imageView_head:
+                        User user;
+                        ViewDiscuss discuss=mDatas.get(position);
+                        if((user=(discuss!=null?discuss.getUser():null))!=null){
+                            openTalkActivity(user);
+                        }
+                        break;
                 }
             };
 

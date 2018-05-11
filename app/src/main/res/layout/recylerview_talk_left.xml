@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+    android:gravity="left"
+    android:layout_margin="@dimen/talk_bumb_margin"
+    >
 
-    <TextView
-        android:id="@+id/recylerview_item_talk_text"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="67dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:text="TextView"
-        android:paddingLeft="5dp"
-        android:textAlignment="viewStart"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        android:background="@mipmap/image_talk_pumb_left">
+        <TextView
+            android:id="@+id/recylerview_item_talk_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="TextView"
+            android:textAlignment="viewStart"
+            android:textSize="24sp"
+            />
+    </LinearLayout>
+</LinearLayout>

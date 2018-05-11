@@ -33,7 +33,6 @@ public class MyApplication extends Application {
 
     private static MessageDatebase messageDataBase;
     private static RepositoryComponent repositoryComponent;
-    private static HashMap<Class,MessageHandler> handlers;
     private static MessageComponent component;
     public static AppModuleComponent appModuleComponent;
 
@@ -54,7 +53,6 @@ public class MyApplication extends Application {
         appModuleComponent= DaggerAppModuleComponent.create();
         ModelManager.INSTANCE.init();
 
-        handlers=new HashMap<>();
 
         //初始化长链接
         Intent intent=new Intent(this, LongConService.class);
@@ -76,14 +74,4 @@ public class MyApplication extends Application {
     public static MessageComponent getComponent(){
         return component;
     }
-
-    public static void putHandler(Class key,MessageHandler handler){
-        handlers.put(key,handler);
-    }
-
-    public static MessageHandler getHandler(Class key){
-        return handlers.get(key);
-    }
-
-
 }

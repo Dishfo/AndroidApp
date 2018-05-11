@@ -6,8 +6,8 @@ package com.example.dishfo.androidapp.mvp;
  */
 
 public interface BaseModel<T>{
-    public static final String HOST_IP="172.16.188.1";
-    public static final String HOST="http://"+HOST_IP+":8080/test/";
+    String HOST_IP="192.168.1.119";
+    String HOST="http://"+HOST_IP+":8080/test/";
     void setPresent(T present);
     void setArgs(Object...args);
     void stop();

@@ -168,15 +168,15 @@ public class NetMethod {
     }
 
     public void useGlide(Context context,String url,ImageView view){
-        useGlide(context,url,RequestOptions.circleCropTransform(),view, R.mipmap.placeholder,R.mipmap.placeholder);
+        useGlide(context,url,RequestOptions.circleCropTransform(),view, R.mipmap.placeholder,R.mipmap.image_default_head);
     }
 
     public void useGlideWithoutCircle(Context context,String url,ImageView view){
-        useGlide(context,url,null,view, R.mipmap.placeholder,R.mipmap.placeholder);
+        useGlide(context,url,null,view, R.mipmap.placeholder,R.mipmap.image_group_load_f);
     }
 
     public void useGlideWithoutCircle(Context context,int res,ImageView view){
-        useGlide(context,res,null,view, R.mipmap.placeholder,R.mipmap.placeholder);
+        useGlide(context,res,null,view, R.mipmap.placeholder,R.mipmap.image_group_load_f);
     }
 
 

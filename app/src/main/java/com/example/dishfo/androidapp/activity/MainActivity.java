@@ -2,6 +2,7 @@ package com.example.dishfo.androidapp.activity;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -50,17 +51,22 @@ public class MainActivity extends BaseActivity implements
 
         mJpTabBar=findViewById(R.id.activity_main_tabbar);
         mJpTabBar.setTitles("专区","发现","消息","我的");
-        mJpTabBar.setSelectedIcons(R.mipmap.icon_level_01,
-                R.mipmap.icon_level_01,
-                R.mipmap.icon_level_01,
-                R.mipmap.icon_level_01);
-        mJpTabBar.setNormalIcons(R.mipmap.ic_launcher_round
-                ,R.mipmap.ic_launcher_round,
-                R.mipmap.ic_launcher_round,
-                R.mipmap.ic_launcher_round
+
+
+        mJpTabBar.setSelectedIcons(R.mipmap.image_home_select,
+                R.mipmap.image_find_select,
+                R.mipmap.image_message_select,
+                R.mipmap.image_person_select);
+        mJpTabBar.setNormalIcons(R.mipmap.image_home
+                ,R.mipmap.image_find,
+                R.mipmap.image_message,
+                R.mipmap.image_person
         );
 
+
         mJpTabBar.generate();
+        mJpTabBar.setNormalColor(Color.BLACK);
+        mJpTabBar.setSelectedColor(Color.BLACK);
         mJpTabBar.setAnimation(AnimationType.SCALE2);
         mJpTabBar.setTabListener(this);
         mJpTabBar.setSelectTab(0);
@@ -171,6 +177,8 @@ public class MainActivity extends BaseActivity implements
                 break;
         }
     }
+
+
 
     @Override
     protected void onDestroy() {

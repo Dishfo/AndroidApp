@@ -18,14 +18,13 @@ import com.ajguan.library.EasyRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.dishfo.androidapp.R;
 import com.example.dishfo.androidapp.adapter.MessageAdpter;
-import com.example.dishfo.androidapp.application.MyApplication;
 import com.example.dishfo.androidapp.bean.viewBean.ViewMessage;
 import com.example.dishfo.androidapp.customview.RefreshHeaderView;
 import com.example.dishfo.androidapp.decoration.LinearRecyclerViewDecoration;
 import com.example.dishfo.androidapp.listener.FragmentSendListener;
+import com.example.dishfo.androidapp.longconnect.AbstractHandler;
 import com.example.dishfo.androidapp.longconnect.LongConService;
 import com.example.dishfo.androidapp.longconnect.bean.InstanceMessage;
-import com.example.dishfo.androidapp.longconnect.bean.MessageHandler;
 import com.example.dishfo.androidapp.mvp.ModelManager;
 import com.example.dishfo.androidapp.mvp.message.MessageContract;
 import com.example.dishfo.androidapp.mvp.message.MessagePresenterImpl;
@@ -35,8 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TalkFragment extends Fragment implements
-        MessageContract.MessageView,
-        MessageHandler{
+        MessageContract.MessageView{
     public static final int START_TALK=0X78;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -55,7 +53,6 @@ public class TalkFragment extends Fragment implements
 
     public TalkFragment() {
         messageInfos=new ArrayList<>();
-        MyApplication.putHandler(TalkFragment.class,this);
     }
 
     public static TalkFragment newInstance(String param1, String param2) {
@@ -74,7 +71,7 @@ public class TalkFragment extends Fragment implements
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        LongConService.getClient().addHandler(this);
+        LongConService.getClient().addHandler(mhandler);
     }
 
     @Override
@@ -210,21 +207,31 @@ public class TalkFragment extends Fragment implements
 
 
 
-    @Override
-    public com.example.dishfo.androidapp.bean.sqlBean.Message dispatchMessage(Object message) {
-        Message message1=handler.obtainMessage();
-        message1.what=MessageContract.SAVE;
-        message1.arg1=MessageContract.SUCCEED;
-        message1.obj=message;
-        handler.sendMessage(message1);
-        return (com.example.dishfo.androidapp.bean.sqlBean.Message) message;
+    private final class MyMessageHandler extends AbstractHandler{
+
+        @Override
+        public com.example.dishfo.androidapp.bean.sqlBean.Message dispatchMessage(Object message) {
+            if(message==null)
+                return null;
+            Message message1=handler.obtainMessage();
+            message1.what=MessageContract.SAVE;
+            message1.arg1=MessageContract.SUCCEED;
+            message1.obj=message;
+            handler.sendMessage(message1);
+            return (com.example.dishfo.androidapp.bean.sqlBean.Message) message;
+        }
+
     }
+    private MyMessageHandler mhandler=new MyMessageHandler();
 
     @Override
     public void onPause() {
         super.onPause();
-        LongConService.getClient().removeHandler(this.getClass());
+        LongConService.getClient().removeHandler(mhandler.getClass(),false);
     }
+
+
+
 
     @Override
     public void AfterRecevier(InstanceMessage message) {
@@ -315,4 +322,7 @@ public class TalkFragment extends Fragment implements
     public interface DataAdapter<F,T>{
         T convert(F f);
     }
+
+
+
 }

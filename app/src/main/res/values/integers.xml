@@ -9,4 +9,5 @@
     <dimen name="mine_view_height">50dp</dimen>
     <dimen name="setting_view_height">60dp</dimen>
     <dimen name="tabbar_height">60dp</dimen>
+    <dimen name="talk_bumb_margin">7dp</dimen>
 </resources>

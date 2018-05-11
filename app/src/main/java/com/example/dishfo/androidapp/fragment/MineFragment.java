@@ -252,7 +252,15 @@ public class MineFragment extends Fragment implements View.OnClickListener,UserI
             }
             mDatas.add(mineInfo);
         }
+        addEmptyLine();
+        addEmptyLine();
         mMineMultipleAdapter.notifyDataSetChanged();
+    }
+
+
+    private void addEmptyLine(){
+        MineInfo mineInfo=new MineInfo(3);
+        mDatas.add(mineInfo);
     }
 
     private int getField(String label, ViewMine msg){
