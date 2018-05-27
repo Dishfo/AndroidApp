@@ -26,7 +26,7 @@ public class FileAcess {
         return  observable.flatMap(s -> {
             File file=new File(s);
             String user= ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail();
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),file);
             MultipartBody.Part body=MultipartBody.Part.createFormData("file",file.getName(),requestFile);
             return NetMethod.INSTANCE.getRetrofitWithRx().create(DataAccessService.class)
                     .uploadFilerx(user,body);

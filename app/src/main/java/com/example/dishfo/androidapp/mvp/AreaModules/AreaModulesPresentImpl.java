@@ -1,5 +1,7 @@
 package com.example.dishfo.androidapp.mvp.AreaModules;
 
+import android.support.annotation.NonNull;
+
 import com.example.dishfo.androidapp.bean.viewBean.ViewArea;
 
 /**
@@ -11,11 +13,13 @@ public class AreaModulesPresentImpl implements AreaModulesContract.AreaModulesPr
 
     private AreaModulesContract.AreaModulesModel model;
     private AreaModulesContract.AreaModulesView view;
+    private boolean viewAlive;
 
-    public AreaModulesPresentImpl(AreaModulesContract.AreaModulesModel model,
-                                  AreaModulesContract.AreaModulesView view) {
+    public AreaModulesPresentImpl(@NonNull  AreaModulesContract.AreaModulesModel model,
+                                  @NonNull  AreaModulesContract.AreaModulesView view) {
         this.model = model;
         this.view = view;
+        viewAlive=true;
         model.setPresent(this);
         view.setPresent(this);
     }
@@ -27,17 +31,20 @@ public class AreaModulesPresentImpl implements AreaModulesContract.AreaModulesPr
 
     @Override
     public void stop() {
+        viewAlive=false;
         model.stop();
     }
 
     @Override
     public void onCompete(Object... args) {
-        view.compete(args[0],args[1]);
+        if(viewAlive)
+            view.compete(args[0],args[1]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if(viewAlive)
+            view.error(args[0]);
     }
 
     @Override

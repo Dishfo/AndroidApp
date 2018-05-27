@@ -117,6 +117,7 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initData() {
+
         Glide.with(this).load(R.mipmap.imageview_back).into(mImageViewBack);
     }
 
@@ -249,6 +250,12 @@ public class DiscussActivity extends BaseActivity implements View.OnClickListene
         viewDiscuss.setArea(area);
 
         return viewDiscuss;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.stop();
     }
 
     @Override

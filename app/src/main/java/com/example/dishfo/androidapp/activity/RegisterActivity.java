@@ -117,7 +117,7 @@ public class RegisterActivity extends
         paint.getTextBounds(mRandomNum,0,mRandomNum.length(),bound);
 
         int x= (int) ((bound.left+20)*metrics.density);
-        int y= (int) ((height/2)*metrics.density);
+        int y= (int) ((height/2)*metrics.density/2);
         canvas.drawText(mRandomNum,x,y,paint);
         return bitmap;
     }
@@ -150,6 +150,12 @@ public class RegisterActivity extends
     @Override
     public void showRegisterSucceed() {
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.stop();
     }
 
     @Override

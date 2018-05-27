@@ -168,6 +168,12 @@ public class MineFragment extends Fragment implements View.OnClickListener,UserI
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        present.stop();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;

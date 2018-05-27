@@ -159,6 +159,12 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        present.stop();
+    }
+
+    @Override
     public void compete(Object... args) {
         int code= (int) args[0];
         sendMessage(code,AreaModulesContract.SUCCEED,args[1]);

@@ -34,6 +34,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
+            style=""
             android:background="@drawable/linearlayout_background_round"
             android:gravity="center"
             android:text="关注"

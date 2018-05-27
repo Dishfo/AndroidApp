@@ -13,11 +13,12 @@ public class NotePresenterImpl implements NoteTaskContract.NotePresenter{
 
     private NoteTaskContract.NoteModel model;
     private NoteTaskContract.NoteView view;
+    private boolean viewAlive;
 
     public NotePresenterImpl(NoteTaskContract.NoteModel model, NoteTaskContract.NoteView view) {
         this.model = model;
         this.view = view;
-
+        viewAlive=true;
         model.setPresent(this);
         view.setPresent(this);
     }
@@ -29,17 +30,19 @@ public class NotePresenterImpl implements NoteTaskContract.NotePresenter{
 
     @Override
     public void stop() {
-
+        viewAlive=false;
     }
 
     @Override
     public void onCompete(Object... args) {
-        view.compete(args[0],args[1]);
+        if (viewAlive)
+            view.compete(args[0],args[1]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if (viewAlive)
+            view.error(args[0]);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.dishfo.androidapp.mvp.message;
 
+import android.support.annotation.NonNull;
+
 import com.example.dishfo.androidapp.bean.sqlBean.Message;
 import com.example.dishfo.androidapp.longconnect.bean.InstanceMessage;
 
@@ -11,11 +13,13 @@ public class MessagePresenterImpl implements MessageContract.MessagePresenter{
 
     private MessageContract.MessageModel model;
     private MessageContract.MessageView view;
+    private boolean viewAlive;
 
-    public MessagePresenterImpl(MessageContract.MessageModel model, MessageContract.MessageView view) {
+    public MessagePresenterImpl(@NonNull  MessageContract.MessageModel model,@NonNull MessageContract.MessageView view) {
         this.model = model;
         this.view = view;
 
+        viewAlive=true;
         model.setPresent(this);
         view.setPresent(this);
     }
@@ -27,21 +31,24 @@ public class MessagePresenterImpl implements MessageContract.MessagePresenter{
 
     @Override
     public void stop() {
-
+        viewAlive=false;
     }
 
     @Override
-    public void onCompete(Object... args) {
-        view.compete(args[0],args[1]);
+    public void onCompete(Object... args){
+        if (viewAlive)
+            view.compete(args[0],args[1]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if (viewAlive)
+            view.error(args[0]);
     }
 
     @Override
     public void onRecevier(InstanceMessage message) {
+
         //view.compete(args[0],args[1]);
     }
 }

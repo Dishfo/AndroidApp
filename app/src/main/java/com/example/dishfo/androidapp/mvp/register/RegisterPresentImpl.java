@@ -32,6 +32,7 @@ public class RegisterPresentImpl implements RegisterTaskContract.RegisterPresent
     private RegisterTaskContract.RegisterView mRegisterView;
     private Pattern mEmailPattern;
 
+
     public RegisterPresentImpl(@NonNull RegisterTaskContract.RegisterView mRegisterView) {
         this.mRegisterView = mRegisterView;
         mEmailPattern=Pattern.compile("^[a-z0-9A-Z_]+@[a-z0-9A-Z_]+\\.com$");
@@ -96,7 +97,7 @@ public class RegisterPresentImpl implements RegisterTaskContract.RegisterPresent
                 .compete(new InsertValuesAction(), FieldConstant.email,email, TypeConstant.varchar,"primarykey")
                 .compete(new InsertValuesAction(),FieldConstant.password,password,TypeConstant.varchar,"")
                 .compete(new InsertValuesAction(),FieldConstant.time,"",TypeConstant.varchar,"")
-                .compete(new InsertValuesAction(),FieldConstant.name,"",TypeConstant.varchar,"")
+                .compete(new InsertValuesAction(),FieldConstant.name,"",TypeConstant.varchar,email)
                 .compete(new InsertValuesAction(),FieldConstant.autograph,"",TypeConstant.varchar,"")
                 .compete(new InsertValuesAction(),FieldConstant.head,"",TypeConstant.varchar,"")
                 .closeNode("values")

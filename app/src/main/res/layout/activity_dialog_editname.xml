@@ -14,7 +14,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="昵称"
+        android:hint="@string/edit_nick_label"
         android:inputType="text"
         android:lineSpacingExtra="@dimen/activity_horizontal_margin"
         android:selectAllOnFocus="false"

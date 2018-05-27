@@ -86,6 +86,13 @@ public class SetPasswordActivity extends BaseActivity
         }
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.stop();
+    }
+
     @Override
     public void setPresent(RegisterTaskContract.RegisterPresenter present) {
         this.mPresenter=present;

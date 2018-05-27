@@ -10,11 +10,12 @@ public class SettingPresentImpl implements SettingContract.SettingPresent{
 
     private SettingContract.SettingModel model;
     private SettingContract.SettingView view;
+    private boolean viewAlive;
 
     public SettingPresentImpl(SettingContract.SettingModel model, SettingContract.SettingView view) {
         this.model = model;
         this.view = view;
-
+        viewAlive=true;
         view.setPresent(this);
         model.setPresent(this);
     }
@@ -23,7 +24,9 @@ public class SettingPresentImpl implements SettingContract.SettingPresent{
     public void start(Object... args) {}
 
     @Override
-    public void stop() {}
+    public void stop() {
+        viewAlive=false;
+    }
 
     @Override
     public void changeHead(User info, String file) {
@@ -37,11 +40,13 @@ public class SettingPresentImpl implements SettingContract.SettingPresent{
 
     @Override
     public void onCompete(Object... args) {
-        view.compete(args[0],args[1]);
+        if(viewAlive)
+            view.compete(args[0],args[1]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if (viewAlive)
+            view.error(args[0]);
     }
 }

@@ -11,11 +11,12 @@ public class NewNotePresenterImpl implements NewNoteTaskContract.NewNotePresente
 
     private NewNoteTaskContract.NewNoteView view;
     private NewNoteTaskContract.NewNoteModel model;
+    private boolean viewAlive;
 
     public NewNotePresenterImpl(NewNoteTaskContract.NewNoteView view, NewNoteTaskContract.NewNoteModel model) {
         this.view = view;
         this.model = model;
-
+        viewAlive=true;
         view.setPresent(this);
         model.setPresent(this);
     }

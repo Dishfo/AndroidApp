@@ -74,18 +74,21 @@ public class DiscussModelImpl implements DiscussTaskContract.DiscusssModel{
             if(jsonObject.get("code").getAsInt()==1){
 
                 fileUrls.add(NetMethod.INSTANCE.getUrl(jsonObject));
-                info.getDiscuss().setImages(fileUrls);dicussNote(info);
             }else {
                 observable.unsubscribeOn(Schedulers.io());
                 error(NewNoteTaskContract.UPFILE);
             }
         }
         ,throwable -> {
+
                             try {
                                 throw throwable;
                             } catch (Throwable throwable1) {
                                 throwable1.printStackTrace();
                             }
+                        },() -> {
+                            info.getDiscuss().setImages(fileUrls);
+                            dicussNote(info);
                         });
     }
 

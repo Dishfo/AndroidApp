@@ -71,7 +71,7 @@ public class TalkFragment extends Fragment implements
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        LongConService.getClient().addHandler(mhandler);
+
     }
 
     @Override
@@ -102,7 +102,7 @@ public class TalkFragment extends Fragment implements
                 R.drawable.recyclerview_divider_dark1, LinearLayoutManager.VERTICAL));
         messageAdpter.setOnItemClickListener(itemClickListener);
         new MessagePresenterImpl(ModelManager.INSTANCE.getMessageModel(),this);
-        presenter.start(ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail());
+
     }
 
     @Override
@@ -201,11 +201,23 @@ public class TalkFragment extends Fragment implements
 
     private void addMessages(List<ViewMessage> infos){
         if(messageAdpter!=null){
+            messageAdpter.getData().clear();
             messageAdpter.addData(infos);
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        LongConService.getClient().addHandler(mhandler);
+        presenter.start(ModelManager.INSTANCE.getLoginModel().getCurrentUser().getEmail());
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.stop();
+    }
 
     private final class MyMessageHandler extends AbstractHandler{
 

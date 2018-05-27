@@ -225,6 +225,12 @@ public class NewNoteActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.stop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mBitmapCache.recycle();

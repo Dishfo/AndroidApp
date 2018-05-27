@@ -26,11 +26,12 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/text_msg_fragment"
-            android:textColor="?android:attr/detailsElementBackground"
+            android:textColor="@color/colorActionBar_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
     <com.ajguan.library.EasyRefreshLayout
@@ -54,25 +55,27 @@
 
     <EditText
         android:id="@+id/activity_talk_edit_text"
-        android:layout_width="276dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
-        android:theme="@style/MyEditText"
         android:inputType="textPersonName"
+        android:theme="@style/MyEditText"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/activity_talk_button_send"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/activity_talk_button_send"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/button_background_round"
         android:text="发送"
-        android:textColor="@color/white"
+        android:textColor="@color/colorActionBar_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/activity_talk_edit_text" />

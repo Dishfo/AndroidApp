@@ -1,5 +1,7 @@
 package com.example.dishfo.androidapp.mvp.Discuss;
 
+import android.support.annotation.NonNull;
+
 import com.example.dishfo.androidapp.bean.viewBean.ViewDiscuss;
 
 /**
@@ -10,12 +12,13 @@ public class DiscussPresenterImpl implements DiscussTaskContract.DiscussPresente
 
     private DiscussTaskContract.DiscusssModel model;
     private DiscussTaskContract.DiscussView view;
+    private boolean viewAlive;
 
-    public DiscussPresenterImpl(DiscussTaskContract.DiscusssModel model,
-                                DiscussTaskContract.DiscussView view) {
+    public DiscussPresenterImpl(@NonNull DiscussTaskContract.DiscusssModel model,
+                                @NonNull DiscussTaskContract.DiscussView view) {
         this.model = model;
         this.view = view;
-
+        viewAlive=true;
         model.setPresent(this);
         view.setPresent(this);
     }
@@ -25,17 +28,19 @@ public class DiscussPresenterImpl implements DiscussTaskContract.DiscussPresente
 
     @Override
     public void stop() {
-
+        viewAlive=false;
     }
 
     @Override
     public void onCompete(Object... args) {
-        view.compete(args[0]);
+        if(viewAlive)
+            view.compete(args[0]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if(viewAlive)
+            view.error(args[0]);
     }
 
     @Override

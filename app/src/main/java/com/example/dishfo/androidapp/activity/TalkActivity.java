@@ -89,6 +89,7 @@ public class TalkActivity extends BaseActivity implements TalkContract.TalkView{
         }
     };
 
+
     @Override
     public void setPresent(TalkContract.TalkPresenter present) {
         this.presenter=present;
@@ -159,6 +160,7 @@ public class TalkActivity extends BaseActivity implements TalkContract.TalkView{
     @Override
     protected void onStop() {
         super.onStop();
+        presenter.stop();
         LongConService.getClient().removeHandler(this.getClass(),true);
     }
 

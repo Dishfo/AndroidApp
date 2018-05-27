@@ -1,17 +1,21 @@
 package com.example.dishfo.androidapp.mvp.Area;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.example.dishfo.androidapp.application.MyApplication;
-import com.example.dishfo.androidapp.data.repository.AreaRepository;
-import com.example.dishfo.androidapp.data.repository.LikeRepository;
-import com.example.dishfo.androidapp.data.repository.NoteRepository;
-import com.example.dishfo.androidapp.data.repository.UserRepository;
 import com.example.dishfo.androidapp.bean.sqlBean.Area;
 import com.example.dishfo.androidapp.bean.sqlBean.Like;
 import com.example.dishfo.androidapp.bean.sqlBean.Note;
 import com.example.dishfo.androidapp.bean.sqlBean.User;
 import com.example.dishfo.androidapp.bean.viewBean.ViewNote;
+import com.example.dishfo.androidapp.data.repository.AreaRepository;
+import com.example.dishfo.androidapp.data.repository.LikeRepository;
+import com.example.dishfo.androidapp.data.repository.NoteRepository;
+import com.example.dishfo.androidapp.data.repository.UserRepository;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -20,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
+ *
  * Created by dishfo on 18-2-14.
  */
 

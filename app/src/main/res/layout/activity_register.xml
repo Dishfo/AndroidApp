@@ -27,8 +27,8 @@
             android:layout_marginStart="8dp"
             android:layout_toRightOf="@id/activity_register_imageView_back"
             android:gravity="center"
-            android:text="返回"
-            android:textColor="#FFFFFF"
+            android:text="@string/str_back"
+            android:textColor="@color/colorActionBar_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/activity_register_imageView_back" />
 

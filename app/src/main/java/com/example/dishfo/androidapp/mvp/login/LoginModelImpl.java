@@ -90,7 +90,9 @@ public class LoginModelImpl implements LoginTaskContract.LoginModel{
     public void setArgs(Object... args) {}
 
     @Override
-    public void stop() {}
+    public void stop() {
+
+    }
 
     @Override
     public void compete(Object... args) {
@@ -104,7 +106,10 @@ public class LoginModelImpl implements LoginTaskContract.LoginModel{
                             Log.d("login",throwable.toString());
                             error(LoginTaskContract.LOGIN);
                         },
-                        () -> mLoginPresent.onCompete(args[0]));
+                        () -> {
+                            mLoginPresent.onCompete(args[0]);
+                            Log.d("test","has enter ");
+                        });
 
     }
 

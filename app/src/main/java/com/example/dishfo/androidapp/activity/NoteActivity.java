@@ -154,6 +154,7 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(intent);
                 break;
             case R.id.recyclerView_head_note_textView_follow:
+
                 mPresenter.onFollowUser(viewNoteHead);
                 break;
             case R.id.recyclerView_head_note_imageView_head:
@@ -210,6 +211,12 @@ public class NoteActivity extends BaseActivity implements View.OnClickListener,N
         if(mEasyRefreshLayout.isRefreshing()){
             mEasyRefreshLayout.refreshComplete();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.stop();
     }
 
     private void showNoteHead(ViewNoteHead viewNoteHead) {

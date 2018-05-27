@@ -79,38 +79,10 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onTabSelect(int index) {
-        if(mPosition!=-1){
-            changeFrament(index);
-        }
-        else{
-            addFragment(index);
-        }
+        addFragment(index);
     }
 
     private void addFragment(int index){
-        switch (index){
-            case 0:
-                fragments[index]=AreaFragment.newInstance("","");
-                break;
-            case 1:
-                fragments[index]= FoundFragment.newInstance("","");
-                break;
-            case 2:
-                fragments[index]= TalkFragment.newInstance("","");
-                break;
-            case 3:
-                fragments[index]= MineFragment.newInstance("","");
-                break;
-        }
-
-        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.activity_main_fragment_container,fragments[index]);
-        mPosition=index;
-        transaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
-        transaction.commit();
-    }
-
-    private void changeFrament(int index){
         if(fragments[index]==null){
             switch (index){
                 case 0:
@@ -126,14 +98,26 @@ public class MainActivity extends BaseActivity implements
                     fragments[index]= MineFragment.newInstance("","");
                     break;
             }
+            FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+            if(mPosition>=0){
+                transaction.hide(fragments[mPosition]);
+            }
+
+            transaction.add(R.id.activity_main_fragment_container,fragments[index]);
+            mPosition=index;
+            transaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
+            transaction.commit();
+        }else{
+            FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+            transaction.hide(fragments[mPosition]);
+            transaction.show(fragments[index]);
+            mPosition=index;
+            transaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
+            transaction.commit();
         }
 
-        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-        transaction.hide(fragments[mPosition]);
-        transaction.replace(R.id.activity_main_fragment_container,fragments[index]);
-        mPosition=index;
-        transaction.commit();
     }
+
 
     @Override
     public void action(int tag,Object arg) {

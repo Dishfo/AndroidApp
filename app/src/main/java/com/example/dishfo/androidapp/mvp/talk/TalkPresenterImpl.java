@@ -1,5 +1,7 @@
 package com.example.dishfo.androidapp.mvp.talk;
 
+import android.support.annotation.NonNull;
+
 import com.example.dishfo.androidapp.bean.sqlBean.Message;
 import com.example.dishfo.androidapp.bean.viewBean.ViewTalk;
 
@@ -12,11 +14,13 @@ public class TalkPresenterImpl implements TalkContract.TalkPresenter {
 
     private TalkContract.TalkModel model;
     private TalkContract.TalkView view;
+    private boolean viewAlive;
 
-    public TalkPresenterImpl(TalkContract.TalkModel model, TalkContract.TalkView view) {
+    public TalkPresenterImpl(@NonNull  TalkContract.TalkModel model,@NonNull TalkContract.TalkView view) {
         this.model = model;
         this.view = view;
 
+        viewAlive=true;
         model.setPresent(this);
         view.setPresent(this);
     }
@@ -28,17 +32,19 @@ public class TalkPresenterImpl implements TalkContract.TalkPresenter {
 
     @Override
     public void stop() {
-
+        viewAlive=false;
     }
 
     @Override
     public void onCompete(Object... args) {
-        view.compete(args[0],args[1]);
+        if (viewAlive)
+            view.compete(args[0],args[1]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if (viewAlive)
+            view.error(args[0]);
     }
 
 

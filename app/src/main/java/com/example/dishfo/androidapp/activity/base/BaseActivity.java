@@ -107,7 +107,4 @@ public abstract class BaseActivity extends AppCompatActivity{
         getWindow().setAttributes(lp);
     }
 
-
-
-
 }

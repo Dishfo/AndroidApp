@@ -9,5 +9,12 @@
     <string name="text_msg_fragment">消息</string>
     <string name="loginActivityEditTextPassword_inputType">poiuytrewqlkjhgfdsamnbvcxzPOIUYTREWQLKJHGFDSAMNBVCXZ0987654321,.?:;[]{!@#$%^*()}-=_+</string>
     <string name="text_mine_fragment">我的</string>
+    <string name="edit_nick_label">昵称</string>
+    <string name="str_back">返回</string>
+    <string name="str_forget_pwd">忘记密码</string>
+    <string name="str_signin">新用户注册</string>
+    <string name="str_image">图片</string>
+    <string name="str_input_hiht">输入内容,5~200个字符</string>
+    <string name="str_discuss">评论</string>
 
 </resources>

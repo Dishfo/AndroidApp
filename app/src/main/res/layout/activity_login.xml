@@ -39,7 +39,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/button_background_round"
         android:text="登录"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorActionBar_text"
         android:textSize="15sp" />
 
     <RelativeLayout
@@ -53,13 +53,15 @@
             android:id="@+id/activity_login_textview_forget_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="忘记密码" />
+            android:textColor="@color/colorTextBalck"
+            android:text="@string/str_forget_pwd" />
 
         <TextView
             android:id="@+id/activity_login_textview_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="新用户注册" />
+            android:textColor="@color/colorTextBalck"
+            android:text="@string/str_signin" />
     </RelativeLayout>
 </LinearLayout>

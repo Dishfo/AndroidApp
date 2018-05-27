@@ -12,11 +12,12 @@ public class UserInfoPresentImpl implements UserInfoTaskContract.UserInfoPresent
 
     private UserInfoTaskContract.UserInfoModel model;
     private UserInfoTaskContract.UserInfoView view;
+    private boolean viewAlive;
 
     public UserInfoPresentImpl(UserInfoTaskContract.UserInfoModel model, UserInfoTaskContract.UserInfoView view) {
         this.model = model;
         this.view = view;
-
+        viewAlive=true;
         model.setPresent(this);
         view.setPresent(this);
     }
@@ -29,17 +30,19 @@ public class UserInfoPresentImpl implements UserInfoTaskContract.UserInfoPresent
 
     @Override
     public void stop() {
-
+        viewAlive=false;
     }
 
     @Override
     public void onCompete(Object... args) {
-        view.compete(args[0],args[1]);
+        if (viewAlive)
+            view.compete(args[0],args[1]);
     }
 
     @Override
     public void onError(Object... args) {
-        view.error(args[0]);
+        if (viewAlive)
+            view.error(args[0]);
     }
 
 }

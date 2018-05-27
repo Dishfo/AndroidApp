@@ -96,6 +96,11 @@ public class FoundFragment extends Fragment implements
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
 
     private void initContent(View view){
 

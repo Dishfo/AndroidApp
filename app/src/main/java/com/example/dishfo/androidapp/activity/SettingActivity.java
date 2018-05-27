@@ -151,6 +151,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        present.stop();
+    }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

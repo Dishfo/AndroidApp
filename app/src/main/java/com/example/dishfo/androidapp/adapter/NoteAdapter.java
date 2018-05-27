@@ -44,7 +44,8 @@ public class NoteAdapter extends BaseQuickAdapter<ViewNote, BaseViewHolder> {
         helper.setText(R.id.recyclerView_item_note_textView_time, item.getNote().getTime());
         helper.setText(R.id.recyclerView_item_note_textView_content, item.getNote().getContent());
 
-        netMethod.useGlideWithoutCircle(mContext,item.getNote().getImages().get(0),
+        if(item.getNote().getImages()!=null&&item.getNote().getImages().size()>0)
+            netMethod.useGlideWithoutCircle(mContext,item.getNote().getImages().get(0),
                 helper.getView(R.id.recyclerView_item_note_imageView_image));
 
         netMethod.useGlideWithoutCircle(mContext

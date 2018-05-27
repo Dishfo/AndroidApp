@@ -56,8 +56,11 @@ public class DiscussAcess extends DataAcess{
             competeDiscussQueryByNote(generator,(String) args[0] , (String) args[1]);
         },note.getId(),discuss);
 
+
         Response<JsonObject> response=call.execute();
         JsonObject object=response.body();
+
+
 
         int code=object==null?-1:object.get("code").getAsInt();
         if(code!=1){

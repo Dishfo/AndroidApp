@@ -1,5 +1,6 @@
 package com.example.dishfo.androidapp.mvp.login;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import javax.inject.Inject;
@@ -13,37 +14,42 @@ public class LoginPresentImpl implements LoginTaskContract.LoginPresent{
     private LoginTaskContract.LoginModel mLoginModel;
     private LoginTaskContract.LoginView mLoginView;
 
+    private boolean viewAlive;
+
     private String currentName;
     private String currentPwd;
 
     @Inject
     public LoginPresentImpl
-            (LoginTaskContract.LoginModel loginModel, LoginTaskContract.LoginView loginView) {
+            (@NonNull  LoginTaskContract.LoginModel loginModel,@NonNull LoginTaskContract.LoginView loginView) {
         this.mLoginModel = loginModel;
         this.mLoginView = loginView;
+        viewAlive=true;
         mLoginModel.setPresent(this);
         mLoginView.setPresent(this);
     }
 
     @Override
     public void start(Object... args) {
+        viewAlive=true;
     }
 
     @Override
     public void stop() {
         mLoginModel.stop();
+        viewAlive=false;
     }
 
     @Override
     public void onCompete(Object... args) {
-        int code= (int) args[0];
-        mLoginView.compete(code);
+        if(viewAlive)
+            mLoginView.compete(args[0]);
     }
 
     @Override
     public void onError(Object... args) {
-        int code= (int) args[0];
-        mLoginView.error(code);
+        if(viewAlive)
+            mLoginView.error(args[0]);
     }
 
     @Override

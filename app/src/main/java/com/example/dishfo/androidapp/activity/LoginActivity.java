@@ -152,6 +152,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mLoginPresent.start();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mLoginPresent.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mLoginPresent.stop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(LongConService.isConnection()){

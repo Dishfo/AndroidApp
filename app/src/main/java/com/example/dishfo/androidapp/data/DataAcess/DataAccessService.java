@@ -15,7 +15,7 @@ import retrofit2.http.Part;
  * Created by dishfo on 18-3-1.
  */
 
-public interface DataAccessService {
+public interface  DataAccessService {
     @POST("dataServlet.jsp")
     @FormUrlEncoded
     public Observable<JsonObject> accessDatarx(@Field("action") String action, @Field("json") String josn);

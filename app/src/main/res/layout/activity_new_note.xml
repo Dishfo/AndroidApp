@@ -20,7 +20,7 @@
             android:background="@drawable/edittext_no_border"
             android:lineSpacingMultiplier="1.4"
             android:gravity="left"
-            android:hint="输入内容,5~200个字符"
+            android:hint="@string/str_input_hiht"
             android:paddingLeft="5dp"
             android:paddingTop="5dp" />
 
@@ -35,7 +35,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:text="图片" />
+            android:text="@string/str_image" />
 
         <View
             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_background_round"
                 android:text="确定"
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/colorActionBar_text" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView

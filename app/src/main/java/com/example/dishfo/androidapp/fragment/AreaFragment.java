@@ -213,6 +213,11 @@ public class AreaFragment extends Fragment implements View.OnClickListener
     }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresent.stop();
+    }
 
     @Override
     public void setPresent(AreaContract.AreaPresent present) {

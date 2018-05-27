@@ -53,6 +53,7 @@ public class DiscussAdapter extends BaseQuickAdapter<ViewDiscuss, BaseViewHolder
         NetMethod netMethod=new NetMethod();
 
         helper.addOnClickListener(R.id.recyclerView_item_discuss_imageView_head);
+
         netMethod.useGlide(mContext,item.getUser().getHeadUrl(),helper.getView(R.id.recyclerView_item_discuss_imageView_head));
         helper.setText(R.id.recyclerView_item_discuss_textView_nickName, item.getUser().getName());
         if (item.getDiscuss().getContent() != null) {
